@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GTA VI - Starting Soon</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body {
+        height: 100vh;
+        background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.65)),
+                    url('https://images.hdqwalls.com/download/gta-6-2026-game-3v-2560x1440.jpg') center/cover no-repeat;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        font-family: 'Impact', Arial Black, sans-serif;
+    }
+
+    .container {
+        text-align: center;
+        z-index: 10;
+        padding: 50px 80px;
+        border: 4px solid transparent;
+        border-image: linear-gradient(90deg, #ff00ff, #00ffff, #ff00ff) 1;
+        background: rgba(0, 0, 0, 0.35);
+        border-radius: 16px;
+        box-shadow: 0 0 70px rgba(255, 0, 255, 0.5);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Smooth shine effect */
+    .container::before {
+        content: '';
+        position: absolute;
+        top: -100%;
+        left: -100%;
+        width: 60%;
+        height: 300%;
+        background: linear-gradient(
+            120deg,
+            transparent 30%,
+            rgba(255,255,255,0.25) 50%,
+            transparent 70%
+        );
+        animation: shine 6s linear infinite;
+        pointer-events: none;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) translateY(-100%); }
+        100% { transform: translateX(300%) translateY(300%); }
+    }
+
+    .live-in {
+        font-size: 24px;
+        letter-spacing: 8px;
+        color: #ff99ff;
+        text-shadow: 0 0 15px #00ffff;
+        margin-bottom: 12px;
+        animation: pulse-live 3s ease-in-out infinite;
+    }
+
+    .title {
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: 8px;
+        text-transform: uppercase;
+        color: #ffffff;
+        text-shadow:
+            0 0 15px #ff00ff,
+            0 0 30px #ff00ff,
+            0 0 55px #00ffff,
+            0 0 80px #00ffff;
+        animation: flicker 2s infinite alternate, subtle-drip 4.5s linear infinite;
+        margin-bottom: 8px;
+    }
+
+    .subtitle {
+        font-size: 32px;
+        font-weight: bold;
+        letter-spacing: 12px;
+        color: #ffffff;
+        text-shadow:
+            0 0 18px #00ffff,
+            0 0 40px #ff00ff;
+        animation: flicker 2.4s infinite alternate;
+        margin-bottom: 35px;
+    }
+
+    @keyframes flicker {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.94; }
+    }
+
+    @keyframes subtle-drip {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(3px); }
+    }
+
+    @keyframes pulse-live {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.75; transform: scale(1.02); }
+    }
+
+    .countdown {
+        font-size: 82px;
+        font-weight: bold;
+        letter-spacing: 15px;
+        color: #ffffff;
+        text-shadow: 
+            0 0 25px #ff00ff,
+            0 0 50px #00ffff,
+            0 0 70px #ff00ff;
+        margin-bottom: 25px;
+    }
+
+    .loading {
+        font-size: 23px;
+        letter-spacing: 6px;
+        color: #00ffff;
+        text-shadow: 0 0 15px #ff00ff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+        animation: loading-pulse 2.8s ease-in-out infinite;
+    }
+
+    @keyframes loading-pulse {
+        0%, 100% { 
+            opacity: 0.85; 
+            transform: scale(1); 
+        }
+        50% { 
+            opacity: 1; 
+            transform: scale(1.03); 
+        }
+    }
+
+    .name {
+        position: absolute;
+        bottom: 48px;
+        width: 100%;
+        text-align: center;
+        font-size: 24px;
+        color: #ffffff;
+        letter-spacing: 6px;
+        text-shadow: 0 0 12px #00ffff;
+    }
+
+    .particles {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 4;
+        overflow: hidden;
+    }
+
+    .particle {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        box-shadow: 0 0 12px #00ffff, 0 0 24px #ff00ff;
+        animation: float-particle linear infinite;
+        opacity: 0.7;
+    }
+
+    @keyframes float-particle {
+        0% {
+            transform: translateY(110vh) scale(0.4);
+            opacity: 0;
+        }
+        15% { opacity: 0.9; }
+        85% { opacity: 0.9; }
+        100% {
+            transform: translateY(-30vh) scale(1.3);
+            opacity: 0;
+        }
+    }
+
+    .vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at center, transparent 55%, rgba(0,0,0,0.82) 100%);
+        pointer-events: none;
+        z-index: 6;
+    }
+
+    .glow {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle, rgba(255, 0, 255, 0.08) 32%, transparent 78%);
+        animation: slow-glow 14s ease-in-out infinite;
+        pointer-events: none;
+        z-index: 5;
+    }
+
+    @keyframes slow-glow {
+        0%, 100% { opacity: 0.55; }
+        50% { opacity: 1; }
+    }
+
+    .footer-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(to right, transparent, #ff00ff, #00ffff, transparent);
+        box-shadow: 0 0 25px #ff00ff;
+        z-index: 10;
+    }
+</style>
+</head>
+<body>
+
+    <div class="glow"></div>
+    <div class="vignette"></div>
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <div class="live-in">LIVE IN</div>
+        <div class="title">STARTING SOON</div>
+        <div class="subtitle">GTA VI</div>
+        <div class="countdown" id="timer">05:00</div>
+        <div class="loading">LOADING</div>
+    </div>
+
+    <div class="name">LEONIDAGTA • ROCKSTAR GAMES • NOVEMBER 19, 2026</div>
+    <div class="footer-bar"></div>
+
+    <!-- Clock ticking sound -->
+    <audio id="tick" loop autoplay>
+        <source src="https://www.soundjay.com/buttons/clock-ticking-1.mp3" type="audio/mpeg">
+    </audio>
+
+<script>
+    // Countdown
+    let time = 300; // ← Change this for different starting time (in seconds)
+
+    function updateTimer() {
+        let minutes = Math.floor(time / 60);
+        let seconds = time % 60;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        document.getElementById("timer").innerText = minutes + ":" + seconds;
+        if (time > 0) time--;
+    }
+
+    setInterval(updateTimer, 1000);
+    updateTimer();
+
+    // Floating neon particles (smoother)
+    const particlesContainer = document.getElementById('particles');
+    const colors = ['#00ffff', '#ff00ff', '#ff88ff'];
+
+    for (let i = 0; i < 28; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        const left = Math.random() * 100;
+        const size = Math.random() * 8 + 4;
+        const duration = Math.random() * 22 + 16;
+        const delay = Math.random() * -30;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+
+        particle.style.left = `${left}vw`;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.background = color;
+        particle.style.boxShadow = `0 0 14px ${color}, 0 0 28px #ff00ff`;
+        particle.style.animationDuration = `${duration}s`;
+        particle.style.animationDelay = `${delay}s`;
+        
+        particlesContainer.appendChild(particle);
+    }
+
+    // Ticking sound
+    const audio = document.getElementById('tick');
+    audio.volume = 0.14;
+</script>
+</body>
+</html>
