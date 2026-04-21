@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Starting Soon</title>
+<link href="https://fonts.googleapis.com/css2?family=Prosto+One&family=Bebas+Neue&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --neon-pink: #ff2d6b;
+    --neon-cyan: #00f5d4;
+    --gold: #f7c948;
+    --dark: #0a0507;
+    --mid: #180d14;
+    --purple: #6b1f4a;
+  }
+
+  html, body {
+    width: 1920px; height: 1080px;
+    overflow: hidden;
+    background: var(--dark);
+    font-family: 'Rajdhani', sans-serif;
+  }
+
+  /* ── BACKGROUND LAYERS ── */
+  .bg-gradient {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 120% 80% at 80% 60%, #2a0a1e 0%, transparent 60%),
+      radial-gradient(ellipse 80% 60% at 20% 30%, #0a1a2e 0%, transparent 55%),
+      linear-gradient(160deg, #0a0507 0%, #12080e 50%, #070a12 100%);
+  }
+
+  .bg-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,245,212,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,245,212,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridDrift 20s linear infinite;
+  }
+  @keyframes gridDrift {
+    0%   { background-position: 0 0; }
+    100% { background-position: 60px 60px; }
+  }
+
+  /* Scanlines */
+  .scanlines {
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0,0,0,0.18) 3px,
+      rgba(0,0,0,0.18) 4px
+    );
+    pointer-events: none; z-index: 50;
+  }
+
+  /* ── HORIZON GLOW ── */
+  .horizon {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 420px;
+    background: linear-gradient(
+      to top,
+      rgba(255,45,107,0.22) 0%,
+      rgba(107,31,74,0.10) 30%,
+      transparent 70%
+    );
+  }
+
+  /* ── CITY SILHOUETTE ── */
+  .city {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 320px;
+    display: flex; align-items: flex-end;
+  }
+
+  .city svg { width: 100%; height: 100%; }
+
+  /* ── PALM TREES ── */
+  .palm {
+    position: absolute;
+    bottom: 0;
+    opacity: 0.7;
+  }
+  .palm-left  { left:  60px; }
+  .palm-right { right: 60px; transform: scaleX(-1); }
+
+  /* ── NEON ROAD LINES ── */
+  .road {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 200px;
+    perspective: 800px;
+  }
+  .road-lines {
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%) rotateX(60deg);
+    width: 800px; height: 400px;
+    overflow: hidden;
+  }
+  .road-line {
+    position: absolute;
+    left: 50%; width: 8px;
+    background: linear-gradient(to bottom, transparent, var(--neon-cyan), transparent);
+    transform: translateX(-50%);
+    animation: roadScroll 1.6s linear infinite;
+    box-shadow: 0 0 12px var(--neon-cyan);
+  }
+  .road-line:nth-child(1)  { height: 80px; top:  10px; animation-delay:  0s;   }
+  .road-line:nth-child(2)  { height: 80px; top: 120px; animation-delay: -0.5s; }
+  .road-line:nth-child(3)  { height: 80px; top: 230px; animation-delay: -1.0s; }
+  .road-line:nth-child(4)  { height: 80px; top: 330px; animation-delay: -1.4s; }
+
+  @keyframes roadScroll {
+    0%   { top: -90px; opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { top: 420px; opacity: 0; }
+  }
+
+  /* ── FLOATING PARTICLES ── */
+  .particles { position: absolute; inset: 0; overflow: hidden; }
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    animation: floatUp linear infinite;
+    opacity: 0;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(0)   scale(1);   opacity: 0; }
+    10%  { opacity: 0.8; }
+    90%  { opacity: 0.4; }
+    100% { transform: translateY(-900px) scale(0.3); opacity: 0; }
+  }
+
+  /* ── SUN / RETROWAVE CIRCLE ── */
+  .retro-sun {
+    position: absolute;
+    left: 50%; bottom: 180px;
+    transform: translateX(-50%);
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: linear-gradient(to bottom, var(--gold) 0%, var(--neon-pink) 50%, transparent 50%);
+    box-shadow:
+      0 0 60px rgba(247,201,72,0.6),
+      0 0 120px rgba(255,45,107,0.4);
+    overflow: hidden;
+    animation: sunPulse 4s ease-in-out infinite;
+  }
+  @keyframes sunPulse {
+    0%,100% { box-shadow: 0 0 60px rgba(247,201,72,0.6), 0 0 120px rgba(255,45,107,0.4); }
+    50%      { box-shadow: 0 0 100px rgba(247,201,72,0.9), 0 0 200px rgba(255,45,107,0.6); }
+  }
+  .sun-lines {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 50%;
+    display: flex; flex-direction: column;
+    justify-content: space-evenly;
+    background: var(--dark);
+  }
+  .sun-line {
+    height: 2px;
+    background: rgba(247,201,72,0.5);
+  }
+
+  /* ── MAIN CONTAINER ── */
+  .wrapper {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 0;
+    z-index: 10;
+  }
+
+  /* ── CHANNEL TAG ── */
+  .channel-tag {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 0.35em;
+    color: var(--neon-cyan);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeSlideDown 1s 0.4s forwards;
+    text-shadow: 0 0 20px var(--neon-cyan);
+  }
+
+  /* ── BIG TITLE ── */
+  .title-wrap {
+    position: relative;
+    text-align: center;
+    margin-bottom: 6px;
+    opacity: 0;
+    animation: fadeSlideDown 1s 0.7s forwards;
+  }
+
+  .title-main {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 160px;
+    line-height: 0.9;
+    letter-spacing: 0.06em;
+    color: transparent;
+    -webkit-text-stroke: 2px var(--neon-pink);
+    text-shadow:
+      0 0 40px rgba(255,45,107,0.7),
+      0 0 80px rgba(255,45,107,0.4);
+    animation: titleGlitch 8s 2s infinite;
+    position: relative;
+  }
+
+  /* Glitch layers */
+  .title-main::before,
+  .title-main::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    color: transparent;
+  }
+  .title-main::before {
+    -webkit-text-stroke: 2px var(--neon-cyan);
+    clip-path: polygon(0 30%, 100% 30%, 100% 50%, 0 50%);
+    animation: glitchTop 8s 2s infinite;
+    opacity: 0;
+  }
+  .title-main::after {
+    -webkit-text-stroke: 2px var(--gold);
+    clip-path: polygon(0 60%, 100% 60%, 100% 75%, 0 75%);
+    animation: glitchBot 8s 2s infinite;
+    opacity: 0;
+  }
+
+  @keyframes titleGlitch {
+    0%, 94%, 100%  { transform: none; }
+    95%  { transform: translateX(-4px) skewX(-1deg); }
+    96%  { transform: translateX(4px)  skewX(1deg); }
+    97%  { transform: none; }
+    98%  { transform: translateX(-2px); }
+  }
+  @keyframes glitchTop {
+    0%, 93%, 100%  { opacity: 0; transform: none; }
+    94%  { opacity: 1; transform: translateX(-8px); }
+    95%  { opacity: 0; }
+    97%  { opacity: 1; transform: translateX(6px); }
+    98%  { opacity: 0; }
+  }
+  @keyframes glitchBot {
+    0%, 93%, 100%  { opacity: 0; transform: none; }
+    94.5%  { opacity: 1; transform: translateX(6px); }
+    95.5%  { opacity: 0; }
+    97.5%  { opacity: 1; transform: translateX(-4px); }
+    98.5%  { opacity: 0; }
+  }
+
+  .title-sub {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+    text-shadow:
+      0 0 30px rgba(247,201,72,0.8),
+      0 0 60px rgba(247,201,72,0.4);
+    line-height: 1;
+    margin-top: -10px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    display: flex; align-items: center; gap: 20px;
+    width: 700px;
+    margin: 28px 0;
+    opacity: 0;
+    animation: fadeSlideDown 1s 1.0s forwards;
+  }
+  .div-line {
+    flex: 1; height: 2px;
+    background: linear-gradient(to right, transparent, var(--neon-pink), transparent);
+    box-shadow: 0 0 8px var(--neon-pink);
+  }
+  .div-diamond {
+    width: 12px; height: 12px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    box-shadow: 0 0 16px var(--gold);
+    animation: diamondSpin 4s linear infinite;
+  }
+  @keyframes diamondSpin {
+    0%   { transform: rotate(45deg); }
+    100% { transform: rotate(405deg); }
+  }
+
+  /* ── STARTING SOON LABEL ── */
+  .starting-label {
+    font-family: 'Prosto One', sans-serif;
+    font-size: 36px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #fff;
+    opacity: 0;
+    animation: fadeSlideDown 1s 1.2s forwards;
+    margin-bottom: 20px;
+  }
+
+  /* ── TIMER BAR ── */
+  .timer-row {
+    display: flex; align-items: center; gap: 30px;
+    opacity: 0;
+    animation: fadeSlideDown 1s 1.5s forwards;
+    margin-bottom: 36px;
+  }
+  .timer-label {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 0.2em;
+    color: var(--neon-cyan);
+    text-transform: uppercase;
+  }
+  .timer-display {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    color: var(--neon-pink);
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 20px rgba(255,45,107,0.8);
+    min-width: 200px;
+    text-align: center;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 680px;
+    opacity: 0;
+    animation: fadeSlideDown 1s 1.7s forwards;
+  }
+  .progress-bar {
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--neon-cyan), var(--neon-pink));
+    box-shadow: 0 0 12px var(--neon-pink);
+    border-radius: 2px;
+    animation: progressFill 300s linear forwards;
+    width: 0%;
+  }
+  @keyframes progressFill {
+    0%   { width: 0%; }
+    100% { width: 100%; }
+  }
+  .progress-glow {
+    position: absolute;
+    top: -6px; right: 0;
+    width: 20px; height: 16px;
+    background: var(--neon-pink);
+    border-radius: 50%;
+    box-shadow: 0 0 20px 6px var(--neon-pink);
+    filter: blur(2px);
+    animation: progressFill 300s linear forwards;
+  }
+
+  /* ── SOCIAL TAGS ── */
+  .social-strip {
+    position: absolute;
+    bottom: 50px;
+    display: flex; gap: 60px;
+    align-items: center;
+    opacity: 0;
+    animation: fadeSlideDown 1s 2s forwards;
+    z-index: 20;
+  }
+  .social-tag {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.7);
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .social-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--neon-pink);
+    box-shadow: 0 0 10px var(--neon-pink);
+    animation: blink 1.6s ease-in-out infinite;
+  }
+  @keyframes blink {
+    0%,100% { opacity: 1; } 50% { opacity: 0.2; }
+  }
+
+  /* ── CORNER DECORATIONS ── */
+  .corner {
+    position: absolute;
+    width: 80px; height: 80px;
+    z-index: 20;
+  }
+  .corner::before, .corner::after {
+    content: '';
+    position: absolute;
+    background: var(--neon-cyan);
+    box-shadow: 0 0 10px var(--neon-cyan);
+  }
+  .corner::before { width: 100%; height: 3px; top: 0; left: 0; }
+  .corner::after  { width: 3px; height: 100%; top: 0; left: 0; }
+  .corner-tl { top: 30px; left: 30px; }
+  .corner-tr { top: 30px; right: 30px; transform: scaleX(-1); }
+  .corner-bl { bottom: 30px; left: 30px; transform: scaleY(-1); }
+  .corner-br { bottom: 30px; right: 30px; transform: scale(-1); }
+
+  /* ── SIDE ACCENTS ── */
+  .side-accent {
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+    width: 3px; height: 200px;
+    background: linear-gradient(to bottom, transparent, var(--neon-pink), transparent);
+    box-shadow: 0 0 16px var(--neon-pink);
+    opacity: 0;
+    animation: fadeIn 1.5s 2s forwards;
+    z-index: 20;
+  }
+  .sa-left  { left: 70px; }
+  .sa-right { right: 70px; }
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  /* ── LIVE BADGE ── */
+  .live-badge {
+    position: absolute;
+    top: 44px; right: 80px;
+    background: var(--neon-pink);
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.2em;
+    padding: 6px 22px;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    box-shadow: 0 0 30px rgba(255,45,107,0.7);
+    animation: livePulse 2s ease-in-out infinite;
+    z-index: 30;
+    opacity: 0;
+    animation: fadeIn 0.5s 0.3s forwards, livePulse 2s 0.8s ease-in-out infinite;
+  }
+  @keyframes livePulse {
+    0%,100% { box-shadow: 0 0 30px rgba(255,45,107,0.7); }
+    50%      { box-shadow: 0 0 60px rgba(255,45,107,1.0), 0 0 100px rgba(255,45,107,0.5); }
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeSlideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── LIGHTNING FLASH ── */
+  .flash-overlay {
+    position: absolute; inset: 0;
+    background: white;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
+    animation: flashIn 0.08s 0.2s steps(1) forwards;
+  }
+  @keyframes flashIn {
+    0%   { opacity: 0.15; }
+    100% { opacity: 0; }
+  }
+
+</style>
+</head>
+<body>
+
+<div class="flash-overlay"></div>
+
+<!-- BG layers -->
+<div class="bg-gradient"></div>
+<div class="bg-grid"></div>
+<div class="horizon"></div>
+
+<!-- Retro sun -->
+<div class="retro-sun">
+  <div class="sun-lines">
+    <div class="sun-line"></div><div class="sun-line"></div><div class="sun-line"></div>
+    <div class="sun-line"></div><div class="sun-line"></div><div class="sun-line"></div>
+    <div class="sun-line"></div><div class="sun-line"></div>
+  </div>
+</div>
+
+<!-- Road -->
+<div class="road">
+  <div class="road-lines">
+    <div class="road-line"></div>
+    <div class="road-line"></div>
+    <div class="road-line"></div>
+    <div class="road-line"></div>
+  </div>
+</div>
+
+<!-- City Silhouette -->
+<div class="city">
+  <svg viewBox="0 0 1920 320" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="cityGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#3a0a28" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#1a0510" stop-opacity="1"/>
+      </linearGradient>
+    </defs>
+    <!-- Buildings silhouette path -->
+    <path fill="url(#cityGrad)" d="
+      M0,320 L0,200 L30,200 L30,160 L60,160 L60,120 L80,120 L80,80 L100,80 L100,60 L120,60 L120,80 L140,80 L140,100 L160,100 L160,70 L180,70 L180,50 L200,50 L200,70 L210,70 L210,40 L230,40 L230,70 L250,70 L250,90 L270,90 L270,60 L290,60 L290,30 L310,30 L310,60 L320,60 L320,80 L340,80 L340,50 L360,50 L360,20 L380,20 L380,50 L400,50 L400,80 L420,80 L420,60 L440,60 L440,100 L460,100 L460,70 L480,70 L480,140 L500,140 L500,100 L520,100 L520,80 L540,80 L540,110 L560,110 L560,90 L580,90 L580,60 L600,60 L600,30 L620,30 L620,60 L640,60 L640,90 L660,90 L660,70 L680,70 L680,50 L700,50 L700,30 L720,30 L720,50 L740,50 L740,80 L760,80 L760,50 L780,50 L780,20 L800,20 L800,50 L820,50 L820,80 L840,80 L840,60 L860,60 L860,100 L880,100 L880,70 L900,70 L900,40 L920,40 L920,70 L940,70 L940,100 L960,100 L960,80 L980,80 L980,50 L1000,50 L1000,80 L1020,80 L1020,110 L1040,110 L1040,80 L1060,80 L1060,50 L1080,50 L1080,30 L1100,30 L1100,60 L1120,60 L1120,90 L1140,90 L1140,60 L1160,60 L1160,80 L1180,80 L1180,50 L1200,50 L1200,70 L1220,70 L1220,100 L1240,100 L1240,80 L1260,80 L1260,50 L1280,50 L1280,30 L1300,30 L1300,50 L1320,50 L1320,80 L1340,80 L1340,60 L1360,60 L1360,100 L1380,100 L1380,70 L1400,70 L1400,50 L1420,50 L1420,80 L1440,80 L1440,100 L1460,100 L1460,60 L1480,60 L1480,40 L1500,40 L1500,60 L1520,60 L1520,90 L1540,90 L1540,70 L1560,70 L1560,50 L1580,50 L1580,80 L1600,80 L1600,60 L1620,60 L1620,100 L1640,100 L1640,80 L1660,80 L1660,110 L1680,110 L1680,80 L1700,80 L1700,60 L1720,60 L1720,100 L1740,100 L1740,130 L1760,130 L1760,160 L1780,160 L1780,200 L1800,200 L1800,220 L1920,220 L1920,320 Z
+    "/>
+    <!-- Window lights -->
+    <g fill="rgba(255,200,80,0.6)">
+      <rect x="85" y="90" width="6" height="8"/>
+      <rect x="105" y="70" width="6" height="8"/>
+      <rect x="215" y="55" width="6" height="8"/>
+      <rect x="295" y="40" width="6" height="8"/>
+      <rect x="365" y="30" width="6" height="8"/>
+      <rect x="605" y="40" width="6" height="8"/>
+      <rect x="705" y="40" width="6" height="8"/>
+      <rect x="785" y="30" width="6" height="8"/>
+      <rect x="905" y="50" width="6" height="8"/>
+      <rect x="1085" y="40" width="6" height="8"/>
+      <rect x="1285" y="40" width="6" height="8"/>
+      <rect x="1485" y="50" width="6" height="8"/>
+    </g>
+    <g fill="rgba(0,245,212,0.5)">
+      <rect x="92" y="105" width="5" height="7"/>
+      <rect x="370" y="60" width="5" height="7"/>
+      <rect x="800" y="60" width="5" height="7"/>
+      <rect x="1100" y="45" width="5" height="7"/>
+      <rect x="1300" y="45" width="5" height="7"/>
+      <rect x="1565" y="65" width="5" height="7"/>
+    </g>
+  </svg>
+</div>
+
+<!-- Palm trees -->
+<div class="palm palm-left">
+  <svg width="120" height="340" viewBox="0 0 120 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M55 340 L65 200 L60 100" stroke="#1a0a10" stroke-width="14" stroke-linecap="round"/>
+    <ellipse cx="60" cy="95" rx="8" ry="10" fill="#1a0a10"/>
+    <path d="M60 95 Q10 60 5 30 Q30 55 60 70" fill="#0d1a0a" opacity="0.9"/>
+    <path d="M60 95 Q110 50 115 20 Q90 55 60 70" fill="#0d1a0a" opacity="0.9"/>
+    <path d="M60 95 Q20 100 0 90 Q28 90 58 88" fill="#0d1a0a" opacity="0.8"/>
+    <path d="M60 95 Q100 105 118 98 Q90 92 62 88" fill="#0d1a0a" opacity="0.8"/>
+    <path d="M60 95 Q40 130 30 145 Q46 118 60 100" fill="#0d1a0a" opacity="0.75"/>
+    <path d="M60 95 Q80 130 90 145 Q74 118 60 100" fill="#0d1a0a" opacity="0.75"/>
+  </svg>
+</div>
+<div class="palm palm-right">
+  <svg width="120" height="340" viewBox="0 0 120 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M55 340 L65 200 L60 100" stroke="#1a0a10" stroke-width="14" stroke-linecap="round"/>
+    <ellipse cx="60" cy="95" rx="8" ry="10" fill="#1a0a10"/>
+    <path d="M60 95 Q10 60 5 30 Q30 55 60 70" fill="#0d1a0a" opacity="0.9"/>
+    <path d="M60 95 Q110 50 115 20 Q90 55 60 70" fill="#0d1a0a" opacity="0.9"/>
+    <path d="M60 95 Q20 100 0 90 Q28 90 58 88" fill="#0d1a0a" opacity="0.8"/>
+    <path d="M60 95 Q100 105 118 98 Q90 92 62 88" fill="#0d1a0a" opacity="0.8"/>
+    <path d="M60 95 Q40 130 30 145 Q46 118 60 100" fill="#0d1a0a" opacity="0.75"/>
+    <path d="M60 95 Q80 130 90 145 Q74 118 60 100" fill="#0d1a0a" opacity="0.75"/>
+  </svg>
+</div>
+
+<!-- Particles -->
+<div class="particles" id="particles"></div>
+
+<!-- Scanlines -->
+<div class="scanlines"></div>
+
+<!-- Corner decorations -->
+<div class="corner corner-tl"></div>
+<div class="corner corner-tr"></div>
+<div class="corner corner-bl"></div>
+<div class="corner corner-br"></div>
+
+<!-- Side accents -->
+<div class="side-accent sa-left"></div>
+<div class="side-accent sa-right"></div>
+
+<!-- Live badge -->
+<div class="live-badge">● SOON</div>
+
+<!-- Main content -->
+<div class="wrapper">
+  <div class="channel-tag">&#x2764; Leonidas Streams</div>
+
+  <div class="title-wrap">
+    <div class="title-main" data-text="LEONIDAS">LEONIDAS</div>
+    <div class="title-sub">Vice City</div>
+  </div>
+
+  <div class="divider">
+    <div class="div-line"></div>
+    <div class="div-diamond"></div>
+    <div class="div-line"></div>
+  </div>
+
+  <div class="starting-label">Starting Soon</div>
+
+  <div class="timer-row">
+    <div class="timer-label">Stream begins in</div>
+    <div class="timer-display" id="timer">05:00</div>
+    <div class="timer-label">minutes</div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+      <div class="progress-glow"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Social strip -->
+<div class="social-strip">
+  <div class="social-tag"><div class="social-dot"></div>twitch.tv/leonidas</div>
+  <div class="social-tag" style="color:rgba(255,255,255,0.4)">•</div>
+  <div class="social-tag"><div class="social-dot" style="background:var(--neon-cyan);box-shadow:0 0 10px var(--neon-cyan);animation-delay:.5s"></div>@leonidas_gg</div>
+  <div class="social-tag" style="color:rgba(255,255,255,0.4)">•</div>
+  <div class="social-tag"><div class="social-dot" style="background:var(--gold);box-shadow:0 0 10px var(--gold);animation-delay:1s"></div>GTA 6 Early Access</div>
+</div>
+
+<script>
+  // ── Particle generator
+  const container = document.getElementById('particles');
+  const colors = ['#ff2d6b','#00f5d4','#f7c948','#c86fff'];
+  for (let i = 0; i < 60; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 5 + 2;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    p.style.cssText = `
+      width:${size}px; height:${size}px;
+      background:${color};
+      box-shadow: 0 0 ${size*3}px ${color};
+      left:${Math.random()*100}%;
+      bottom:${Math.random()*30}%;
+      animation-duration:${Math.random()*12+8}s;
+      animation-delay:${Math.random()*10}s;
+    `;
+    container.appendChild(p);
+  }
+
+  // ── Countdown timer (5 minutes)
+  let total = 5 * 60;
+  const timerEl = document.getElementById('timer');
+  const interval = setInterval(() => {
+    total--;
+    if (total <= 0) { clearInterval(interval); timerEl.textContent = 'LIVE!'; return; }
+    const m = String(Math.floor(total/60)).padStart(2,'0');
+    const s = String(total % 60).padStart(2,'0');
+    timerEl.textContent = `${m}:${s}`;
+  }, 1000);
+</script>
+</body>
+</html>
