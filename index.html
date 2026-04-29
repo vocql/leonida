@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GTA VI: State of Leonida</title>
+
+  <!-- ═══════════════════════════════════════════════
+       PRIMARY SEO
+  ═══════════════════════════════════════════════ -->
+  <meta name="description" content="Live countdown timer, both official trailers, the full Leonida interactive map, character bios, location breakdowns & more. Don't miss a second.">
+  <link rel="canonical" href="https://voqcl.xyz">
+
+  <!-- ═══════════════════════════════════════════════
+       OPEN GRAPH  (Discord · Facebook · iMessage · Slack · LinkedIn)
+  ═══════════════════════════════════════════════ -->
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://voqcl.xyz">
+  <meta property="og:title"       content="GTA VI — Leonida Awaits 🌊🌅✨">
+  <meta property="og:description" content="Live countdown timer, both official trailers, the full Leonida interactive map, character bios, location breakdowns & more. Don't miss a second.">
+  <meta property="og:image"        content="https://voqcl.xyz/gta/npc/lucia.jpg">
+  <meta property="og:image:width"  content="300">
+  <meta property="og:image:height" content="300">
+  <meta property="og:image:alt"    content="GTA VI countdown — Made By Voqcl">
+  <meta property="og:image:type"   content="image/jpeg">
+  <meta property="og:locale"      content="en_US">
+
+  <!-- ═══════════════════════════════════════════════
+       TWITTER / X  (summary_large_image = big banner)
+  ═══════════════════════════════════════════════ -->
+  <meta name="twitter:card"        content="summary">
+  <meta name="twitter:site"        content="@vocql">
+  <meta name="twitter:title"       content="GTA VI — Leonida Awaits 🌊🌅✨">
+  <meta name="twitter:description" content="Live countdown, both trailers, interactive Leonida map, character bios & more. November 19, 2026.">
+  <meta name="twitter:image"       content="https://voqcl.xyz/gta/npc/lucia.jpg">
+  <meta name="twitter:image:alt"   content="GTA VI countdown — Made By Voqcl">
+
+  <!-- ═══════════════════════════════════════════════
+       DISCORD  (forces accent bar color + large image)
+  ═══════════════════════════════════════════════ -->
+  <meta name="theme-color" content="#ff4dd2">
+
+  <!-- ═══════════════════════════════════════════════
+       MISC PLATFORM HINTS
+  ═══════════════════════════════════════════════ -->
+  <meta name="robots"     content="index, follow">
+  <meta name="keywords"   content="GTA 6, GTA VI, Grand Theft Auto 6, countdown, release date, Leonida, Vice City, trailers, November 2026">
+  <meta name="author"     content="VOCQL">
+
+  <link rel="icon" href="gta/npc/lucia.jpg" type="image/jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;600;900&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
+    html, body { height:100%; overflow:hidden; background:#000; }
+    body { font-family:'Orbitron', sans-serif; color:#fff; position:relative; }
+
+    /* BG */
+    #bg-layer { position:fixed; inset:0; z-index:0; background:url('gta/jason.jpg') center/cover no-repeat; will-change:transform; }
+    #bg-overlay { position:fixed; inset:0; z-index:1; background:linear-gradient(rgba(0,0,0,0.55),rgba(0,0,0,0.35)); pointer-events:none; }
+    html::after { content:""; position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px); z-index:100; pointer-events:none; }
+
+    /* NAV */
+    header { position:fixed; top:14px; left:50%; transform:translateX(-50%); z-index:150; display:flex; gap:5px; padding:5px 10px; border-radius:999px; background:rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.1); box-shadow:0 6px 20px rgba(0,0,0,0.5); flex-wrap:wrap; justify-content:center; }
+    .nav-btn { padding:7px 13px; border-radius:999px; color:#fff; font-size:9px; font-weight:700; text-decoration:none; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); transition:background 0.2s,border-color 0.2s,color 0.2s; letter-spacing:1px; text-transform:uppercase; cursor:pointer; font-family:'Orbitron',sans-serif; }
+    .nav-btn:hover { background:rgba(255,255,255,0.12); border-color:#00ffe0; }
+    .nav-btn.active { border-color:#ff4dd2; color:#ff4dd2; background:rgba(255,77,210,0.08); }
+
+    /* SLIDER */
+    #slider-track { position:fixed; inset:0; z-index:10; display:flex; transition:transform 0.55s cubic-bezier(0.77,0,0.175,1); will-change:transform; }
+    .page-slide { min-width:100vw; height:100vh; overflow-y:auto; overflow-x:hidden; padding-top:68px; display:flex; flex-direction:column; }
+    .page-slide::-webkit-scrollbar { width:4px; }
+    .page-slide::-webkit-scrollbar-thumb { background:#ff4dd2; border-radius:10px; }
+
+    /* HOME */
+    #page-home { flex-direction:row; align-items:center; padding:72px 50px 20px; gap:22px; }
+    .main-hud { position:relative; z-index:10; background:rgba(0,0,0,0.72); border:1px solid rgba(255,255,255,0.12); border-radius:12px; box-shadow:0 8px 30px rgba(0,0,0,0.7); width:310px; flex-shrink:0; display:flex; flex-direction:column; gap:14px; padding:28px; height:calc(100vh - 110px); overflow:hidden; }
+    .hud-line { position:absolute; height:1px; background:#00ffe0; opacity:0.3; }
+    .h-line-1 { width:100px; top:15px; left:-110px; }
+    .h-line-2 { width:150px; bottom:15px; right:-160px; }
+    .title { font-size:30px; font-weight:900; letter-spacing:4px; text-transform:uppercase; margin-bottom:2px; font-family:'Exo 2',sans-serif; }
+    .neon-gta { text-shadow:0 0 5px #ff4dd2,0 0 10px #ff4dd2; }
+    .neon-vi { text-shadow:0 0 5px #00ffe0,0 0 10px #00ffe0; }
+    .subtitle { font-size:9px; letter-spacing:2px; color:#ff4dd2; margin-bottom:8px; font-weight:600; }
+    .clock-label { font-size:8px; opacity:0.6; letter-spacing:1px; text-transform:uppercase; }
+    .integrated-clock { display:flex; gap:7px; margin-bottom:12px; }
+    .unit { padding:7px 0; border-radius:6px; background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.05); width:58px; text-align:center; }
+    .num { font-size:19px; font-weight:600; font-family:'Exo 2',sans-serif; }
+    .unit-label { font-size:7px; opacity:0.45; margin-top:2px; letter-spacing:1px; }
+    .integrated-radio { flex:1; display:flex; flex-direction:column; overflow:hidden; border-top:1px solid rgba(255,255,255,0.1); padding-top:12px; min-height:0; }
+    .radio-header { font-size:8px; opacity:0.5; text-transform:uppercase; letter-spacing:2px; margin-bottom:7px; display:flex; justify-content:space-between; align-items:center; }
+    .shuffle-btn { background:rgba(0,255,224,0.12); border:1px solid #00ffe0; color:#00ffe0; padding:4px 8px; border-radius:5px; font-size:8px; font-weight:900; cursor:pointer; font-family:'Orbitron',sans-serif; }
+    .vol-wrap { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+    input[type=range] { flex:1; accent-color:#ff4dd2; height:3px; cursor:pointer; background:transparent; }
+    .integrated-song-list { overflow-y:auto; flex:1; }
+    .track { padding:9px 11px; border-radius:6px; font-size:9px; font-weight:600; cursor:pointer; color:rgba(255,255,255,0.7); transition:background 0.15s,color 0.15s; border-bottom:1px solid rgba(255,255,255,0.03); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .track:hover { background:rgba(255,77,210,0.1); color:#ff4dd2; }
+    .track.active-song { color:#00ffe0; background:rgba(0,255,224,0.08); border-left:2px solid #00ffe0; font-weight:900; }
+    .integrated-song-list::-webkit-scrollbar { width:3px; }
+    .integrated-song-list::-webkit-scrollbar-thumb { background:#ff4dd2; border-radius:10px; }
+    .mid-col { display:flex; flex-direction:column; gap:18px; width:430px; flex-shrink:0; height:calc(100vh - 110px); }
+    .panel-box { background:rgba(0,0,0,0.72); border:1px solid rgba(255,255,255,0.12); border-radius:12px; box-shadow:0 8px 30px rgba(0,0,0,0.7); }
+    .trailer-panel { flex:0 0 auto; overflow:hidden; background:#000; display:flex; flex-direction:column; }
+    .vid-frame { width:100%; aspect-ratio:16/9; border:none; display:block; }
+    .vid-ctrls { padding:9px 12px; display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.85); border-top:1px solid rgba(255,255,255,0.05); }
+    .desc-panel { flex:1; padding:20px; display:flex; flex-direction:column; gap:10px; overflow-y:auto; border-left:2px solid #ff4dd2; }
+    .desc-content { font-size:12px; line-height:1.8; color:rgba(255,255,255,0.9); font-family:'Exo 2',sans-serif; }
+    .neon-accent { color:#00ffe0; font-weight:600; text-shadow:0 0 5px #00ffe0; }
+    .highlight { color:#ff4dd2; font-weight:600; }
+    .map-home { flex:1; min-width:0; height:calc(100vh - 110px); overflow:hidden; border-radius:12px; background:rgba(0,0,0,0.72); border:1px solid rgba(255,255,255,0.12); box-shadow:0 8px 30px rgba(0,0,0,0.7); }
+    .map-home iframe { width:100%; height:100%; border:none; }
+
+    /* SHARED PAGE LAYOUT */
+    .page-inner { width:clamp(860px,90vw,1440px); margin:0 auto; padding:28px 20px 70px; }
+    .page-title { text-align:center; font-size:clamp(34px,4.5vw,50px); font-weight:900; margin-bottom:44px; text-shadow:0 6px 16px rgba(0,0,0,0.7),0 0 20px rgba(255,77,210,0.3); }
+
+    /* MAP PAGE */
+    #page-map { padding:68px 0 0; }
+    .map-full-wrap { width:clamp(860px,90vw,1400px); height:calc(100vh - 108px); margin:0 auto; border-radius:18px; overflow:hidden; background:rgba(0,0,0,0.72); border:1px solid rgba(255,255,255,0.1); box-shadow:0 20px 60px rgba(0,0,0,0.7); display:flex; flex-direction:column; }
+    .map-full-header { padding:14px 20px; border-bottom:1px solid rgba(255,255,255,0.06); font-size:17px; font-weight:900; }
+    .map-full-frame { flex:1; border:none; width:100%; }
+
+    /* CARD GRIDS */
+    .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:26px; }
+    .char-card { border-radius:18px; overflow:hidden; position:relative; cursor:pointer; box-shadow:0 15px 40px rgba(0,0,0,0.65); transition:transform 0.35s,box-shadow 0.35s; background:#111; aspect-ratio:1/1; }
+    .char-card.place-card { aspect-ratio:4/3; }
+    .char-card:hover { transform:translateY(-10px) scale(1.03); box-shadow:0 30px 60px rgba(0,0,0,0.9),0 0 40px rgba(255,77,210,0.4); }
+    .char-card img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s,filter 0.5s; }
+    .char-card:hover img { transform:scale(1.08); filter:brightness(0.85) contrast(1.1); }
+    .card-label { position:absolute; inset:0; display:flex; align-items:flex-end; padding:22px 18px; background:linear-gradient(to top,rgba(0,0,0,0.92),transparent 50%); }
+    .card-label h2 { font-size:clamp(17px,1.8vw,22px); font-weight:900; text-shadow:0 4px 12px rgba(0,0,0,0.95); letter-spacing:1px; }
+
+    /* MODAL */
+    .char-modal { position:fixed; inset:0; background:rgba(0,0,0,0.85); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.35s; z-index:900; }
+    .char-modal.active { opacity:1; pointer-events:auto; }
+    .modal-box { background:rgba(8,8,18,0.98); border-radius:22px; max-width:940px; width:92%; padding:34px; display:grid; grid-template-columns:1fr 1fr; gap:32px; transform:scale(0.88); transition:transform 0.35s; box-shadow:0 40px 100px rgba(0,0,0,1); position:relative; }
+    .char-modal.active .modal-box { transform:scale(1); }
+    .modal-box img { width:100%; border-radius:14px; object-fit:cover; box-shadow:0 10px 30px rgba(0,0,0,0.6); }
+    .modal-box h2 { font-size:clamp(26px,3vw,36px); margin-bottom:14px; }
+    .modal-box p { font-size:14px; line-height:1.7; opacity:0.9; font-family:'Exo 2',sans-serif; }
+    .modal-close { position:absolute; top:16px; right:20px; font-size:26px; cursor:pointer; opacity:0.7; color:#fff; background:none; border:none; }
+    .modal-close:hover { opacity:1; color:#ff4dd2; }
+    @media(max-width:860px){ .modal-box{grid-template-columns:1fr;} }
+
+    /* SCREENSHOTS */
+    .gallery { display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+    .gallery-item { border-radius:14px; overflow:hidden; box-shadow:0 10px 28px rgba(0,0,0,0.5); opacity:0; transform:translateY(28px); transition:opacity 0.5s,transform 0.5s,box-shadow 0.3s; cursor:pointer; aspect-ratio:16/9; }
+    .gallery-item.visible { opacity:1; transform:translateY(0); }
+    .gallery-item:hover { box-shadow:0 20px 50px rgba(0,0,0,0.8),0 0 28px rgba(255,77,210,0.4); transform:scale(1.04) translateY(-7px); }
+    .gallery-item img { width:100%; height:100%; display:block; object-fit:cover; transition:transform 0.5s; }
+    .gallery-item:hover img { transform:scale(1.08); }
+    @media(max-width:1100px){ .gallery{grid-template-columns:repeat(3,1fr);} }
+    @media(max-width:760px){ .gallery{grid-template-columns:repeat(2,1fr);} }
+
+    .ss-viewer { position:fixed; inset:0; background:rgba(0,0,0,0.94); z-index:950; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.35s; }
+    .ss-viewer.active { opacity:1; pointer-events:auto; }
+    .ss-viewer img { max-width:92%; max-height:92vh; border-radius:16px; object-fit:contain; box-shadow:0 0 60px rgba(255,255,255,0.1); }
+    .ss-close { position:absolute; top:26px; right:26px; font-size:3rem; color:#fff; cursor:pointer; transition:color 0.2s,transform 0.2s; background:none; border:none; }
+    .ss-close:hover { color:#ff4dd2; transform:scale(1.2); }
+    .ss-arrow { position:absolute; top:50%; transform:translateY(-50%); font-size:3.2rem; color:rgba(255,255,255,0.7); cursor:pointer; user-select:none; background:none; border:none; }
+    .ss-arrow:hover { color:#ff4dd2; }
+    .ss-prev { left:22px; }
+    .ss-next { right:22px; }
+
+    /* TRAILERS PAGE */
+    .trailers-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(360px,1fr)); gap:26px; }
+    .trailer-card-big { position:relative; background:rgba(0,0,0,0.65); border:1px solid rgba(255,255,255,0.09); border-radius:20px; overflow:hidden; box-shadow:0 16px 40px rgba(0,0,0,0.7); transition:transform 0.4s,box-shadow 0.4s; cursor:pointer; }
+    .trailer-card-big:hover { transform:translateY(-12px) scale(1.03); box-shadow:0 24px 60px rgba(0,0,0,0.8),0 0 40px rgba(255,77,210,0.4); }
+    .new-badge { position:absolute; top:12px; right:12px; background:#ffeb3b; color:#000; font-size:0.78rem; font-weight:900; padding:5px 12px; border-radius:999px; z-index:5; letter-spacing:1px; pointer-events:none; }
+    .vid-wrap { position:relative; padding-top:56.25%; background:#111; }
+    .vid-wrap iframe { position:absolute; inset:0; width:100%; height:100%; border:none; pointer-events:none; }
+    .vid-wrap .click-blocker { position:absolute; inset:0; z-index:2; cursor:pointer; }
+    .trailer-info { padding:16px; text-align:center; }
+    .trailer-info h2 { font-size:1.2rem; font-weight:700; }
+    .t-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.96); display:flex; align-items:center; justify-content:center; z-index:950; opacity:0; pointer-events:none; transition:opacity 0.35s; }
+    .t-overlay.active { opacity:1; pointer-events:auto; }
+    .t-overlay iframe { width:92vw; max-width:1400px; height:78vh; border:none; border-radius:16px; box-shadow:0 0 80px rgba(255,255,255,0.1); }
+    .t-close { position:absolute; top:20px; right:26px; background:rgba(255,255,255,0.1); color:#fff; font-size:22px; width:46px; height:46px; border:none; border-radius:50%; cursor:pointer; transition:background 0.2s,transform 0.2s; }
+    .t-close:hover { background:rgba(255,77,210,0.4); transform:scale(1.12); }
+  </style>
+</head>
+<body>
+
+<div id="bg-layer"></div>
+<div id="bg-overlay"></div>
+
+<!-- NAV -->
+<header>
+  <button class="nav-btn active" data-page="0">Home</button>
+  <button class="nav-btn" data-page="1">Map</button>
+  <button class="nav-btn" data-page="2">Characters</button>
+  <button class="nav-btn" data-page="3">Places</button>
+  <button class="nav-btn" data-page="4">Screenshots</button>
+  <button class="nav-btn" data-page="5">Trailers</button>
+</header>
+
+<!-- SLIDER -->
+<div id="slider-track">
+
+  <!-- PAGE 0: HOME -->
+  <div class="page-slide" id="page-home">
+    <section class="main-hud">
+      <div class="hud-line h-line-1"></div>
+      <div class="hud-line h-line-2"></div>
+      <div>
+        <h1 class="title"><span class="neon-gta">GTA</span> <span class="neon-vi">VI</span></h1>
+        <div class="subtitle">PREPARING FOR NOVEMBER 19, 2026</div>
+      </div>
+      <div>
+        <div class="clock-label">Time Remaining</div>
+        <div class="integrated-clock">
+          <div class="unit"><div class="num" id="days">000</div><div class="unit-label">DAYS</div></div>
+          <div class="unit"><div class="num" id="hours">00</div><div class="unit-label">HRS</div></div>
+          <div class="unit"><div class="num" id="minutes">00</div><div class="unit-label">MINS</div></div>
+          <div class="unit"><div class="num" id="seconds">00</div><div class="unit-label">SECS</div></div>
+        </div>
+      </div>
+      <div class="integrated-radio">
+        <div class="radio-header">
+          <span>VICE CITY RADIO</span>
+          <button class="shuffle-btn" id="shuffleBtn">Shuffle</button>
+        </div>
+        <div class="vol-wrap"><input type="range" id="volSlider" min="0" max="1" step="0.01" value="0.7"></div>
+        <div class="integrated-song-list" id="songList"></div>
+      </div>
+    </section>
+
+    <div class="mid-col">
+      <div class="panel-box trailer-panel" id="tPanel">
+        <iframe id="vFrame" class="vid-frame" src="https://www.youtube.com/embed/QdBZY2fkU-0?enablejsapi=1&origin=https://voqcl.xyz" allowfullscreen></iframe>
+        <div class="vid-ctrls">
+          <button class="shuffle-btn" onclick="changeT(-1)">Prev</button>
+          <button class="shuffle-btn" onclick="toggleFS()">Full Screen</button>
+          <button class="shuffle-btn" onclick="changeT(1)">Next</button>
+        </div>
+      </div>
+      <div class="panel-box desc-panel">
+        <div class="radio-header"><span>DEVELOPER_LOG // MISSION_INTEL</span></div>
+        <div class="desc-content">
+          I began coding one year ago. When news of Grand Theft Auto VI first surfaced, I became fascinated by the various countdown websites already online and decided to create my own version.
+          <br><br>
+          This site was built as a personal project to track the countdown to release while providing a central space for the community to follow the development and share the anticipation for the next chapter set in Leonida.
+          <br><br>
+          MADE BY VOCQL
+        </div>
+      </div>
+    </div>
+
+    <div class="map-home">
+      <iframe src="https://map.stateofleonida.net/" scrolling="no"></iframe>
+    </div>
+  </div>
+
+  <!-- PAGE 1: MAP -->
+  <div class="page-slide" id="page-map">
+    <div style="display:flex;align-items:center;justify-content:center;height:100%;padding:0 28px;">
+      <div class="map-full-wrap">
+        <div class="map-full-header">Grand Theft Auto VI — State of Leonida Map</div>
+        <iframe class="map-full-frame" src="https://map.stateofleonida.net/" allowfullscreen sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 2: CHARACTERS -->
+  <div class="page-slide">
+    <div class="page-inner">
+      <h1 class="page-title">GTA VI — Characters</h1>
+      <div class="card-grid" id="char-grid">
+        <div class="char-card" data-name="Lucia" data-img="gta/npc/lucia.jpg" data-desc="Lucia Caminos was raised on the unforgiving streets of Liberty City, where her father instilled in her the art of self-defense from a young age — skills that ultimately sent her to Leonida Penitentiary following a brutal confrontation while protecting her family. Released unexpectedly through a rare stroke of fortune, she is now single-minded in her determination to rewrite her future.">
+          <img src="gta/npc/lucia.jpg" alt="Lucia" loading="lazy"><div class="card-label"><h2>Lucia</h2></div>
+        </div>
+        <div class="char-card" data-name="Jason" data-img="gta/npc/jason.jpg" data-desc="Jason Duval grew up surrounded by grifters and crooks in the Keys, joined the army to escape his troubled past, but returned to Leonida and fell back into drug running for local kingpins like Brian Heder. Sharp, deadly, and craving an easier life — meeting Lucia might change everything for better or worse.">
+          <img src="gta/npc/jason.jpg" alt="Jason" loading="lazy"><div class="card-label"><h2>Jason</h2></div>
+        </div>
+        <div class="char-card" data-name="Dre'Quan Preist" data-img="gta/npc/dre.jpg" data-desc="Dre'Quan Priest started as a street hustler but music was always the real dream — he transitioned from gangster life to running Only Raw Records, signing hot talent like Real Dimez to chase Vice City's big stage. Partnered with Boobie Ike, he's booking acts and building an empire, always one track away from making it big.">
+          <img src="gta/npc/dre.jpg" alt="Dre'Quan" loading="lazy"><div class="card-label"><h2>Dre'Quan Preist</h2></div>
+        </div>
+        <div class="char-card" data-name="Stefanie" data-img="gta/npc/stefanie.png" data-desc="Stefanie works as a social worker for Leonida Corrections, dealing daily with a deeply broken prison system. Frustrated by endless bureaucracy, she's reached her breaking point and is ready to bend — or outright break — the rules to actually help those caught in the cycle.">
+          <img src="gta/npc/stefanie.png" alt="Stefanie" loading="lazy"><div class="card-label"><h2>Stefanie</h2></div>
+        </div>
+        <div class="char-card" data-name="Cal Hampton" data-img="gta/npc/cal.png" data-desc="Cal Hampton is Jason's longtime paranoid buddy who rarely leaves home, preferring to monitor Coast Guard radio chatter and crack open beers. His tech-savvy and street smarts make him surprisingly useful when the outside world forces its way in.">
+          <img src="gta/npc/cal.png" alt="Cal Hampton" loading="lazy"><div class="card-label"><h2>Cal Hampton</h2></div>
+        </div>
+        <div class="char-card" data-name="Boobie Ike" data-img="gta/npc/boobie.png" data-desc="Boobie Ike is a Vice City legend who clawed his way from the streets to build a sprawling empire: real estate, the Jack of Hearts strip club, and a recording studio. All smiles on the surface — but cross him, and the grin hides a deadly serious operator.">
+          <img src="gta/npc/boobie.png" alt="Boobie Ike" loading="lazy"><div class="card-label"><h2>Boobie Ike</h2></div>
+        </div>
+        <div class="char-card" data-name="Real Dimez" data-img="gta/npc/dimez.webp" data-desc="Bae-Luxe and Roxy, AKA Real Dimez, turned shaking down local dealers into viral rap tracks and massive social media clout. Signed to Only Raw Records, they're fighting to drop the next big hit while staying relevant in Vice City's cutthroat music scene.">
+          <img src="gta/npc/dimez.webp" alt="Real Dimez" loading="lazy"><div class="card-label"><h2>Real Dimez</h2></div>
+        </div>
+        <div class="char-card" data-name="Raul Bautista" data-img="gta/npc/raul.png" data-desc="Raul Bautista is a veteran bank robber known for ice-cold precision and a reckless streak that keeps jobs exciting — and dangerous. Always scouting for the perfect crew to pull off the next big score, his experience makes him a valuable ally.">
+          <img src="gta/npc/raul.png" alt="Raul Bautista" loading="lazy"><div class="card-label"><h2>Raul Bautista</h2></div>
+        </div>
+        <div class="char-card" data-name="Brian Heder" data-img="gta/npc/brian.png" data-desc="Brian Heder is an old-school drug kingpin from the glory days of Keys smuggling, now running operations from his boat yard. He provides Jason a rent-free spot in exchange for muscle, maintaining a ruthless empire that still pulls strings across Leonida.">
+          <img src="gta/npc/brian.png" alt="Brian Heder" loading="lazy"><div class="card-label"><h2>Brian Heder</h2></div>
+        </div>
+        <div class="char-card" data-name="Luxe" data-img="gta/npc/luxe.webp" data-desc="Luxe is one half of the viral rap duo Real Dimez, turning street-smart dealer shake-downs into bars and a relentless social media presence that caught Dre'Quan Priest's eye. Fiercely ambitious and hungry to claim the throne in Vice City's music game.">
+          <img src="gta/npc/luxe.webp" alt="Luxe" loading="lazy"><div class="card-label"><h2>Luxe</h2></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 3: PLACES -->
+  <div class="page-slide">
+    <div class="page-inner">
+      <h1 class="page-title">GTA VI — Places</h1>
+      <div class="card-grid" id="places-grid">
+        <div class="char-card place-card" data-name="Vice City" data-img="gta/places/vice.jpg" data-desc="Vice City is Leonida's neon-soaked metropolis where America's glamour, hustle, and greed are turned up to eleven. Pastel art deco towers rise alongside Cuban-influenced neighborhoods, bootleg markets, gorgeous beaches, and endless cruise ships docking in the bay.">
+          <img src="gta/places/vice.jpg" alt="Vice City" loading="lazy"><div class="card-label"><h2>Vice City</h2></div>
+        </div>
+        <div class="char-card place-card" data-name="Leonida Keys" data-img="gta/places/leoninda.jpg" data-desc="The Leonida Keys are the tropical gateway to paradise — a laid-back chain of islands where the dress code is flip-flops, the drinks are cold, and life moves at the speed of a slow-rolling wave. The turquoise waters hide strong currents, sharks, and secrets better left undisturbed.">
+          <img src="gta/places/leoninda.jpg" alt="Leonida Keys" loading="lazy"><div class="card-label"><h2>Leonida Keys</h2></div>
+        </div>
+        <div class="char-card place-card" data-name="Grassrivers" data-img="gta/places/grassrivers.jpg" data-desc="Grassrivers is Leonida's wild, primordial swamp — a sprawling maze of mangroves, slow-moving black water, and sawgrass. Gators own these channels, airboats are the only real transportation, and every bend hides something. The deeper you go, the less the normal rules apply.">
+          <img src="gta/places/grassrivers.jpg" alt="Grassrivers" loading="lazy"><div class="card-label"><h2>Grassrivers</h2></div>
+        </div>
+        <div class="char-card place-card" data-name="Port Gellhorn" data-img="gta/places/port.jpg" data-desc="Port Gellhorn is what's left after the tourists stopped coming: a decaying coastal town of abandoned motels, shuttered arcades, and cracked neon signs. The new economy runs on cheap beer, pain pills, and biker gangs. Grimy, desperate, and strangely alive.">
+          <img src="gta/places/port.jpg" alt="Port Gellhorn" loading="lazy"><div class="card-label"><h2>Port Gellhorn</h2></div>
+        </div>
+        <div class="char-card place-card" data-name="Ambrosia" data-img="gta/places/ambrosia.jpg" data-desc="Ambrosia is old-school Florida heartland built on sugar and hard labor. The massive Allied Crystal sugar refinery dominates the skyline. Outside the factory gates, outlaw motorcycle clubs run the roads, the bars, and most of the side hustles.">
+          <img src="gta/places/ambrosia.jpg" alt="Ambrosia" loading="lazy"><div class="card-label"><h2>Ambrosia</h2></div>
+        </div>
+        <div class="char-card place-card" data-name="Mount Kalaga" data-img="gta/places/mount.jpg" data-desc="Mount Kalaga National Park is the remote, rugged backbone of northern Leonida — dense pine forests, deep ravines, fast rivers, and miles of off-road trails. Beautiful during the day, eerie at night, and full of places perfect for hiding… or for never being found.">
+          <img src="gta/places/mount.jpg" alt="Mount Kalaga" loading="lazy"><div class="card-label"><h2>Mount Kalaga</h2></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 4: SCREENSHOTS -->
+  <div class="page-slide">
+    <div class="page-inner">
+      <h1 class="page-title">GTA VI — Screenshots</h1>
+      <div class="gallery" id="gallery"></div>
+    </div>
+  </div>
+
+  <!-- PAGE 5: TRAILERS -->
+  <div class="page-slide">
+    <div class="page-inner">
+      <h1 class="page-title">GTA VI — Trailers</h1>
+      <div class="trailers-grid">
+
+        <div class="trailer-card-big" data-video="https://www.youtube.com/embed/QdBZY2fkU-0?enablejsapi=1&origin=https://voqcl.xyz">
+          <div class="vid-wrap">
+            <div class="click-blocker"></div>
+            <iframe src="https://www.youtube.com/embed/QdBZY2fkU-0?mute=1&controls=0&enablejsapi=1&origin=https://voqcl.xyz" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <div class="trailer-info"><h2>Trailer 1 – Reveal</h2></div>
+        </div>
+
+        <div class="trailer-card-big" data-video="https://www.youtube.com/embed/VQRLujxTm3c?enablejsapi=1&origin=https://voqcl.xyz">
+          <div class="vid-wrap">
+            <div class="click-blocker"></div>
+            <iframe src="https://www.youtube.com/embed/VQRLujxTm3c?mute=1&controls=0&enablejsapi=1&origin=https://voqcl.xyz" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <div class="trailer-info"><h2>Trailer 2 – Jason &amp; Lucia</h2></div>
+        </div>
+
+        <div class="trailer-card-big" data-video="https://www.youtube.com/embed/V?enablejsapi=1&origin=https://voqcl.xyz">
+          <div class="new-badge">NEW</div>
+          <div class="vid-wrap">
+            <div class="click-blocker"></div>
+            <iframe src="https://www.youtube.com/embed/V?mute=1&controls=0&enablejsapi=1&origin=https://voqcl.xyz" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <div class="trailer-info"><h2>Trailer 3 – ???</h2></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div><!-- /slider-track -->
+
+<!-- MODALS -->
+<div class="char-modal" id="charModal">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">✕</button>
+    <img id="modalImg" alt="">
+    <div><h2 id="modalTitle"></h2><p id="modalDesc"></p></div>
+  </div>
+</div>
+
+<div class="ss-viewer" id="ssViewer">
+  <button class="ss-close" id="ssClose">✕</button>
+  <button class="ss-arrow ss-prev" id="ssPrev">&#8249;</button>
+  <img id="ssImg" src="" alt="">
+  <button class="ss-arrow ss-next" id="ssNext">&#8250;</button>
+</div>
+
+<div class="t-overlay" id="tOverlay">
+  <button class="t-close" id="tClose">✕</button>
+  <iframe id="tOverlayFrame" src="" allowfullscreen></iframe>
+</div>
+
+<audio id="musicPlayer"></audio>
+
+<script>
+/* ── SLIDER ── */
+const TOTAL = 6;
+let cur = 0;
+const track = document.getElementById('slider-track');
+const navBtns = document.querySelectorAll('.nav-btn[data-page]');
+
+function goTo(n) {
+  cur = Math.max(0, Math.min(TOTAL - 1, n));
+  track.style.transform = `translateX(-${cur * 100}vw)`;
+  navBtns.forEach(b => b.classList.toggle('active', +b.dataset.page === cur));
+}
+navBtns.forEach(b => b.addEventListener('click', () => goTo(+b.dataset.page)));
+
+/* ── COUNTDOWN ── */
+const target = new Date('2026-11-19T00:00:00');
+const dEl=document.getElementById('days'),hEl=document.getElementById('hours'),mEl=document.getElementById('minutes'),sEl=document.getElementById('seconds');
+function tick() {
+  const diff = Math.floor((target - Date.now()) / 1000);
+  if (diff <= 0) return;
+  const ds=Math.floor(diff/86400).toString().padStart(3,'0');
+  const hs=Math.floor(diff/3600%24).toString().padStart(2,'0');
+  const ms=Math.floor(diff/60%60).toString().padStart(2,'0');
+  const ss=(diff%60).toString().padStart(2,'0');
+  if(dEl.textContent!==ds)dEl.textContent=ds;
+  if(hEl.textContent!==hs)hEl.textContent=hs;
+  if(mEl.textContent!==ms)mEl.textContent=ms;
+  if(sEl.textContent!==ss)sEl.textContent=ss;
+}
+setInterval(tick,1000); tick();
+
+/* ── HOME TRAILER ── */
+const homeTrailers = ["QdBZY2fkU-0","VQRLujxTm3c"];
+let tIdx = 0;
+function changeT(d) {
+  tIdx = (tIdx + d + homeTrailers.length) % homeTrailers.length;
+  document.getElementById('vFrame').src = `https://www.youtube.com/embed/${homeTrailers[tIdx]}?autoplay=1&enablejsapi=1&origin=https://vocql.site`;
+}
+function toggleFS() {
+  const p = document.getElementById('tPanel');
+  if (!document.fullscreenElement) p.requestFullscreen();
+  else document.exitFullscreen();
+}
+
+/* ── PARALLAX ── */
+const bgLayer = document.getElementById('bg-layer');
+let mx=0,my=0,rafP=false,parallaxOn=true;
+document.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; if(!rafP&&parallaxOn){rafP=true;requestAnimationFrame(ap);} },{passive:true});
+function ap(){ rafP=false; bgLayer.style.transform=`translate(${-(window.innerWidth/2-mx)/60}px,${-(window.innerHeight/2-my)/60}px) scale(1.05)`; }
+
+/* ── MUSIC ── */
+const songs=[
+  {n:"Hot Together",s:"music/together.mp3"},{n:"Love Is A Long Road",s:"music/long.mp3"},
+  {n:"Night",s:"music/night.mp3"},{n:"Ocean Breeze",s:"music/ocean.mp3"},
+  {n:"Self Control",s:"music/self.mp3"},{n:"Atomic",s:"music/tomic.mp3"},
+  {n:"Sun Glasses At Night",s:"music/sun.mp3"},{n:"All Night Long",s:"music/all.mp3"},
+  {n:"Shame",s:"music/shame.mp3"},{n:"Vice City",s:"music/vice.mp3"},
+  {n:"I Walk This Earth All By Myself",s:"music/earth.mp3"},{n:"Owner Of A Lonely Heart",s:"music/heart.mp3"},
+  {n:"Tempted",s:"music/tempt.mp3"},{n:"Poison Arrow",s:"music/arrow.mp3"},
+  {n:"Is It A Crime",s:"music/crime.mp3"},{n:"Here We Are",s:"music/are.mp3"},
+  {n:"Through The Fire",s:"music/fire.mp3"},{n:"Heart Of Mine",s:"music/mine.mp3"},
+  {n:"Fly Away",s:"music/fly.mp3"},{n:"Ain't Nobody",s:"music/nobody.mp3"},
+  {n:"Thinking Of You",s:"music/you.mp3"},{n:"Sweet Love",s:"music/love.mp3"},
+  {n:"I Still Remember You",s:"music/remember.mp3"},{n:"Gamble With My Love",s:"music/gamble.mp3"},
+  {n:"Sukiyaki",s:"music/suki.mp3"}
+];
+const player=document.getElementById('musicPlayer');
+const slEl=document.getElementById('songList');
+const sf=document.createDocumentFragment();
+songs.forEach((s,i)=>{ const d=document.createElement('div'); d.className='track'; d.textContent=s.n; d.dataset.idx=i; sf.appendChild(d); });
+slEl.appendChild(sf);
+slEl.addEventListener('click',e=>{ const el=e.target.closest('.track'); if(!el)return; playTrack(songs[+el.dataset.idx].s,el); });
+document.getElementById('volSlider').addEventListener('input',e=>{ player.volume=e.target.value; },{passive:true});
+document.getElementById('shuffleBtn').addEventListener('click',()=>{ const r=Math.floor(Math.random()*songs.length); playTrack(songs[r].s,slEl.children[r]); });
+function playTrack(src,el){
+  const full=new URL(src,location.href).href;
+  if(player.src===full&&!player.paused){player.pause();return;}
+  slEl.querySelectorAll('.track').forEach(t=>t.classList.remove('active-song'));
+  player.src=src; player.volume=document.getElementById('volSlider').value;
+  player.play().catch(()=>{});
+  if(el){el.classList.add('active-song');el.scrollIntoView({behavior:'smooth',block:'nearest'});}
+}
+
+/* ── CARD MODALS ── */
+const charModal=document.getElementById('charModal');
+const modalImg=document.getElementById('modalImg');
+const modalTitle=document.getElementById('modalTitle');
+const modalDesc=document.getElementById('modalDesc');
+document.getElementById('modalClose').onclick=()=>charModal.classList.remove('active');
+charModal.addEventListener('click',e=>{ if(e.target===charModal)charModal.classList.remove('active'); });
+function initCards(id){
+  document.getElementById(id).addEventListener('click',e=>{
+    const c=e.target.closest('[data-name]'); if(!c)return;
+    modalImg.src=c.dataset.img; modalTitle.textContent=c.dataset.name; modalDesc.textContent=c.dataset.desc;
+    charModal.classList.add('active');
+  });
+}
+initCards('char-grid'); initCards('places-grid');
+
+/* ── SCREENSHOTS ── */
+const gallery = document.getElementById('gallery');
+const ssViewer = document.getElementById('ssViewer');
+const ssImg = document.getElementById('ssImg');
+let ssIdx = 0;
+
+for (let i = 1; i <= 70; i++) {
+  const w = document.createElement('div');
+  w.className = 'gallery-item';
+  const img = document.createElement('img');
+  img.alt = `Screenshot ${i}`;
+  img.loading = 'lazy';
+  img.dataset.idx = String(i - 1);
+  img.onerror = function() {
+    this.closest('.gallery-item')?.remove();
+  };
+  img.src = `gta/screenshots/${i}.jpg`;
+  w.appendChild(img);
+  gallery.appendChild(w);
+}
+
+const ssObs = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (en.isIntersecting) {
+      en.target.classList.add('visible');
+      ssObs.unobserve(en.target);
+    }
+  });
+}, { threshold: 0.05 });
+
+document.querySelectorAll('.gallery-item').forEach(el => ssObs.observe(el));
+
+gallery.addEventListener('click', e => {
+  const img = e.target.closest('img[data-idx]');
+  if (!img) return;
+  const visibleImgs = [...gallery.querySelectorAll('img[data-idx]')];
+  ssIdx = visibleImgs.indexOf(img);
+  ssImg.src = img.src;
+  ssViewer.classList.add('active');
+});
+
+function ssClose() { ssViewer.classList.remove('active'); }
+document.getElementById('ssClose').addEventListener('click', ssClose);
+ssViewer.addEventListener('click', e => { if (e.target === ssViewer) ssClose(); });
+
+document.getElementById('ssPrev').addEventListener('click', () => {
+  const imgs = [...gallery.querySelectorAll('img[data-idx]')];
+  if (!imgs.length) return;
+  ssIdx = (ssIdx - 1 + imgs.length) % imgs.length;
+  ssImg.src = imgs[ssIdx].src;
+});
+
+document.getElementById('ssNext').addEventListener('click', () => {
+  const imgs = [...gallery.querySelectorAll('img[data-idx]')];
+  if (!imgs.length) return;
+  ssIdx = (ssIdx + 1) % imgs.length;
+  ssImg.src = imgs[ssIdx].src;
+});
+
+/* ── TRAILERS PAGE ── */
+const tOverlay=document.getElementById('tOverlay');
+const tFrame=document.getElementById('tOverlayFrame');
+document.querySelectorAll('.trailer-card-big').forEach(c=>{ c.addEventListener('click',()=>{ tFrame.src=c.dataset.video+'&autoplay=1&rel=0'; tOverlay.classList.add('active'); }); });
+function closeTOverlay(){ tOverlay.classList.remove('active'); tFrame.src=''; }
+document.getElementById('tClose').addEventListener('click',closeTOverlay);
+tOverlay.addEventListener('click',e=>{ if(e.target===tOverlay)closeTOverlay(); });
+
+/* ── KEYBOARD ── */
+document.addEventListener('keydown',e=>{
+  if(charModal.classList.contains('active')){ if(e.key==='Escape')charModal.classList.remove('active'); return; }
+  if(ssViewer.classList.contains('active')){
+    if(e.key==='Escape')ssClose();
+    if(e.key==='ArrowLeft')document.getElementById('ssPrev').click();
+    if(e.key==='ArrowRight')document.getElementById('ssNext').click();
+    return;
+  }
+  if(tOverlay.classList.contains('active')){ if(e.key==='Escape')closeTOverlay(); return; }
+});
+</script>
+</body>
+</html>
