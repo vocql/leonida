@@ -1,1 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Places — Leonida</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@900&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
+  body {
+    background: #04001a;
+    min-height: 100vh;
+    font-family: 'Nunito', sans-serif;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse at 15% 20%, rgba(0,255,255,0.13) 0%, transparent 45%),
+      radial-gradient(ellipse at 85% 75%, rgba(255,0,200,0.15) 0%, transparent 45%),
+      radial-gradient(ellipse at 50% 50%, rgba(90,0,200,0.07) 0%, transparent 55%);
+    pointer-events: none;
+  }
+
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(0,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,255,0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    pointer-events: none;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 22px 36px;
+    animation: slideDown 0.8s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .nav-links { display: flex; align-items: center; gap: 8px; list-style: none; }
+
+  .nav-links li a {
+    font-family: 'Nunito', sans-serif;
+    font-size: 12px; font-weight: 900;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    text-decoration: none;
+    padding: 10px 22px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(0,255,255,0.18);
+    background: rgba(0,255,255,0.04);
+    color: rgba(255,255,255,0.45);
+    box-shadow: 0 0 10px rgba(0,255,255,0.05), inset 0 1px 0 rgba(255,255,255,0.08);
+    position: relative; overflow: hidden;
+    transition: color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.15s, background 0.2s;
+    display: block;
+  }
+
+  .nav-links li a::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 15%; right: 15%; height: 40%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.1), transparent);
+    border-radius: 0 0 50% 50%;
+    pointer-events: none;
+  }
+
+  .nav-links li a:hover {
+    color: #fff;
+    border-color: rgba(0,255,255,0.45);
+    background: rgba(0,255,255,0.1);
+    box-shadow: 0 0 20px rgba(0,255,255,0.2), inset 0 1px 0 rgba(255,255,255,0.12);
+    transform: translateY(-2px) scale(1.04);
+  }
+
+  .nav-links li a.active {
+    color: #00ffff;
+    border-color: rgba(0,255,255,0.5);
+    background: rgba(0,255,255,0.1);
+    box-shadow: 0 0 22px rgba(0,255,255,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
+  }
+
+  .nav-links li:nth-child(even) a {
+    border-color: rgba(255,0,200,0.18);
+    background: rgba(255,0,200,0.04);
+    box-shadow: 0 0 10px rgba(255,0,200,0.05), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+
+  .nav-links li:nth-child(even) a:hover {
+    color: #fff;
+    border-color: rgba(255,0,200,0.5);
+    background: rgba(255,0,200,0.1);
+    box-shadow: 0 0 20px rgba(255,0,200,0.22), inset 0 1px 0 rgba(255,255,255,0.12);
+  }
+
+  main {
+    position: relative; z-index: 1;
+    padding: 110px 40px 60px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 36px;
+    animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  .eyebrow {
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.35em; text-transform: uppercase;
+    color: rgba(255,255,255,0.28);
+    margin-bottom: 4px;
+  }
+
+  .page-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(36px, 6vw, 72px); font-weight: 900;
+    text-transform: uppercase; line-height: 0.9;
+    background: linear-gradient(90deg, #00ffff, #bf00ff, #ff00c8, #00e5ff, #00ffff);
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: textShimmer 4s linear infinite;
+    filter: drop-shadow(0 0 20px rgba(0,255,255,0.25));
+  }
+
+  @keyframes textShimmer {
+    0%   { background-position: 0% }
+    100% { background-position: 300% }
+  }
+
+  .count-badge {
+    font-size: 11px; font-weight: 900;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(255,255,255,0.22);
+    padding: 8px 16px; border-radius: 999px;
+    border: 1.5px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+  }
+
+  .count-badge span { color: #00ffff; }
+
+  .folder-bar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 20px; border-radius: 12px;
+    border: 1.5px solid rgba(0,255,255,0.12);
+    background: rgba(0,255,255,0.02);
+    margin-bottom: 32px;
+    animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+  }
+
+  .folder-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #00ffff; box-shadow: 0 0 8px #00ffff;
+    flex-shrink: 0; animation: blink 2s ease-in-out infinite;
+  }
+
+  .folder-dot.err { background: #ff3040; box-shadow: 0 0 8px #ff3040; animation: none; }
+
+  .folder-label {
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.2); flex-shrink: 0;
+  }
+
+  .folder-path {
+    font-size: 12px; font-weight: 800;
+    color: rgba(0,255,255,0.55); font-family: monospace;
+  }
+
+  .folder-path.err { color: rgba(255,80,80,0.55); }
+
+  .empty-state {
+    display: none; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 20px; padding: 80px 20px; text-align: center;
+  }
+
+  .empty-icon {
+    width: 72px; height: 72px; border-radius: 50%;
+    border: 2px dashed rgba(0,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; opacity: 0.5;
+  }
+
+  .empty-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px; font-weight: 900; text-transform: uppercase;
+    color: rgba(255,255,255,0.18); letter-spacing: 0.05em;
+  }
+
+  .empty-sub {
+    font-size: 12px; font-weight: 800;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.1); max-width: 360px; line-height: 1.8;
+  }
+
+  .empty-sub code {
+    color: rgba(0,255,255,0.4);
+    background: rgba(0,255,255,0.06);
+    padding: 2px 7px; border-radius: 4px;
+    letter-spacing: 0; text-transform: none;
+  }
+
+  .places-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+  }
+
+  .place-card {
+    border-radius: 14px; overflow: hidden;
+    border: 1.5px solid rgba(0,255,255,0.12);
+    background: rgba(0,255,255,0.03);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    animation: cardIn 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  }
+
+  .place-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    border-color: rgba(0,255,255,0.35);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 20px rgba(0,255,255,0.08);
+  }
+
+  .place-card:nth-child(even) {
+    border-color: rgba(255,0,200,0.12);
+    background: rgba(255,0,200,0.03);
+  }
+
+  .place-card:nth-child(even):hover {
+    border-color: rgba(255,0,200,0.35);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 20px rgba(255,0,200,0.08);
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: scale(0.92) translateY(12px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .card-img-wrap {
+    position: relative; width: 100%;
+    aspect-ratio: 16/9; overflow: hidden;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .card-img-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .place-card:hover .card-img-wrap img { transform: scale(1.06); }
+
+  .card-img-wrap::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(0deg, rgba(4,0,26,0.7) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .card-num {
+    position: absolute; top: 10px; left: 12px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 900;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    background: rgba(4,0,26,0.6);
+    padding: 4px 10px; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(8px); z-index: 2;
+  }
+
+  .card-body { padding: 14px 16px 16px; }
+
+  .card-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px; font-weight: 900;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    color: rgba(255,255,255,0.85);
+    line-height: 1; margin-bottom: 6px;
+  }
+
+  .card-file {
+    font-size: 10px; font-weight: 800;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: rgba(255,255,255,0.18); font-family: monospace;
+  }
+
+  /* lightbox */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 999;
+    background: rgba(4,0,26,0.95);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px; cursor: zoom-out;
+    backdrop-filter: blur(20px);
+    animation: fadeIn 0.2s ease both;
+  }
+
+  .lightbox.hidden { display: none; }
+
+  .lightbox img {
+    max-width: 100%; max-height: 90vh;
+    border-radius: 10px;
+    border: 1.5px solid rgba(0,255,255,0.2);
+    box-shadow: 0 0 60px rgba(0,255,255,0.12);
+    object-fit: contain; cursor: default;
+  }
+
+  .lightbox-close {
+    position: fixed; top: 20px; right: 24px;
+    font-size: 24px; color: rgba(255,255,255,0.4);
+    cursor: pointer; background: none; border: none;
+    transition: color 0.15s;
+    font-family: 'Nunito', sans-serif; font-weight: 900;
+    z-index: 1001;
+  }
+
+  .lightbox-close:hover { color: #fff; }
+
+  .lightbox-label {
+    position: fixed; bottom: 24px;
+    left: 50%; transform: translateX(-50%);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px; font-weight: 900;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.45);
+    pointer-events: none;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.85) translateY(10px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.2; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="#">Map</a></li>
+    <li><a href="places.html" class="active">Places</a></li>
+    <li><a href="#">Characters</a></li>
+    <li><a href="#">Screenshots</a></li>
+    <li><a href="#">Trailers</a></li>
+  </ul>
+</nav>
+
+<div class="lightbox hidden" id="lightbox">
+  <button class="lightbox-close" id="lb-close">✕</button>
+  <img id="lb-img" src="" alt="">
+  <div class="lightbox-label" id="lb-label"></div>
+</div>
+
+<main>
+  <div class="page-header">
+    <div>
+      <div class="eyebrow">Leonida ·</div>
+      <div class="page-title">Places</div>
+    </div>
+    <div class="count-badge"><span id="count">0</span> locations</div>
+  </div>
+
+  <div class="folder-bar">
+    <div class="folder-dot" id="folder-dot"></div>
+    <div class="folder-label">Source</div>
+    <div class="folder-path" id="folder-path-el"></div>
+  </div>
+
+  <div class="empty-state" id="empty-state">
+    <div class="empty-icon">📂</div>
+    <div class="empty-title">No Images Found</div>
+    <div class="empty-sub">
+      Add <code>.jpg</code> files into <code id="hint-path"></code> — they'll show up here automatically
+    </div>
+  </div>
+
+  <div class="places-grid" id="grid"></div>
+</main>
+
+<script>
+  /* ============================================================
+     ✏️  SET THIS to the folder containing your screenshots,
+         relative to this HTML file.
+         e.g.  'places/'   or   'gta/places/'
+  ============================================================ */
+  const IMAGES_FOLDER = 'leonida/places/';
+  /* ============================================================ */
+
+  const IMAGE_EXTS = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
+
+  const grid         = document.getElementById('grid');
+  const emptyState   = document.getElementById('empty-state');
+  const countEl      = document.getElementById('count');
+  const folderDot    = document.getElementById('folder-dot');
+  const folderPathEl = document.getElementById('folder-path-el');
+  const hintPath     = document.getElementById('hint-path');
+
+  folderPathEl.textContent = IMAGES_FOLDER;
+  hintPath.textContent     = IMAGES_FOLDER;
+
+  async function scanFolder() {
+    let html;
+
+    try {
+      const res = await fetch(IMAGES_FOLDER);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      html = await res.text();
+    } catch {
+      folderDot.classList.add('err');
+      folderPathEl.classList.add('err');
+      folderPathEl.textContent = IMAGES_FOLDER + '  ← folder not reachable (open via a local web server, not file://)';
+      emptyState.style.display = 'flex';
+      return;
+    }
+
+    /* parse anchor hrefs from the server's directory listing */
+    const doc   = new DOMParser().parseFromString(html, 'text/html');
+    const files = [...doc.querySelectorAll('a[href]')]
+      .map(a => decodeURIComponent(a.getAttribute('href')))
+      .filter(href => {
+        const low = href.toLowerCase();
+        return (
+          IMAGE_EXTS.some(ext => low.endsWith(ext)) &&
+          !href.startsWith('?') &&
+          !href.startsWith('/') &&
+          !href.startsWith('http')
+        );
+      });
+
+    if (!files.length) {
+      emptyState.style.display = 'flex';
+      folderPathEl.textContent = IMAGES_FOLDER + '  · no images found';
+      return;
+    }
+
+    countEl.textContent = files.length;
+    folderPathEl.textContent = `${IMAGES_FOLDER}  ·  ${files.length} image${files.length !== 1 ? 's' : ''}`;
+
+    files.forEach((filename, i) => {
+      const src   = IMAGES_FOLDER + filename;
+      const name  = filename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+      const label = capitalize(name);
+
+      const card = document.createElement('div');
+      card.className = 'place-card';
+      card.style.animationDelay = (i * 0.05).toFixed(2) + 's';
+
+      card.innerHTML = `
+        <div class="card-img-wrap">
+          <span class="card-num">#${String(i + 1).padStart(2, '0')}</span>
+          <img src="${src}" alt="${label}" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-name">${label}</div>
+          <div class="card-file">${filename}</div>
+        </div>
+      `;
+
+      card.addEventListener('click', () => openLightbox(src, label));
+      grid.appendChild(card);
+    });
+  }
+
+  /* lightbox */
+  const lightbox = document.getElementById('lightbox');
+  const lbImg    = document.getElementById('lb-img');
+  const lbLabel  = document.getElementById('lb-label');
+  const lbClose  = document.getElementById('lb-close');
+
+  function openLightbox(src, label) {
+    lbImg.src = src;
+    lbLabel.textContent = label;
+    lightbox.classList.remove('hidden');
+  }
+
+  function closeLightbox() {
+    lightbox.classList.add('hidden');
+    lbImg.src = '';
+  }
+
+  lbClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+  function capitalize(str) {
+    return str.replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  scanFolder();
+</script>
+</body>
+</html>
