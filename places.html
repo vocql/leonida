@@ -435,22 +435,24 @@
   /* ============================================================
      CONFIG
   ============================================================ */
-  const IMAGES_PATH = 'leonida/places/';
-  const IMAGE_EXTS  = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
-  const MAX_MISSES  = 3; // stop after this many consecutive failures
+  const GITHUB_USER  = 'vocql';
+  const GITHUB_REPO  = 'leonidagta';
+  const BRANCH       = 'main';
+  const IMAGES_PATH  = 'leonida/places';
+  const IMAGE_EXTS   = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
 
   /* ============================================================
      ELEMENTS
   ============================================================ */
-  const gallery      = document.getElementById('gallery');
-  const ssViewer     = document.getElementById('ssViewer');
-  const ssImg        = document.getElementById('ssImg');
-  const countEl      = document.getElementById('count');
-  const statusDot    = document.getElementById('status-dot');
-  const statusText   = document.getElementById('status-text');
-  const lbLabel      = document.getElementById('lbLabel');
+  const gallery       = document.getElementById('gallery');
+  const ssViewer      = document.getElementById('ssViewer');
+  const ssImg         = document.getElementById('ssImg');
+  const countEl       = document.getElementById('count');
+  const statusDot     = document.getElementById('status-dot');
+  const statusText    = document.getElementById('status-text');
+  const lbLabel       = document.getElementById('lbLabel');
   const viewerCurrent = document.getElementById('viewerCurrent');
-  const viewerTotal  = document.getElementById('viewerTotal');
+  const viewerTotal   = document.getElementById('viewerTotal');
 
   let ssIdx = 0;
 
@@ -464,94 +466,91 @@
   }
 
   /* ============================================================
-     PROBE — tries every extension for a given index number.
-     Resolves with the working src string, or null if all fail.
-  ============================================================ */
-  function probeImage(i) {
-    const exts = [...IMAGE_EXTS];
-    return new Promise(resolve => {
-      function tryNext() {
-        if (!exts.length) { resolve(null); return; }
-        const ext = exts.shift();
-        const src = IMAGES_PATH + i + ext;
-        const tester = new Image();
-        tester.onload  = () => resolve({ src, ext, num: i });
-        tester.onerror = tryNext;
-        tester.src = src;
-      }
-      tryNext();
-    });
-  }
-
-  /* ============================================================
-     LOAD — sequential probe, stops after MAX_MISSES consecutive failures
+     LOAD — GitHub API lists the folder, filters to image files
   ============================================================ */
   async function loadImages() {
-    setStatus('loading', 'Scanning ' + IMAGES_PATH + ' …');
+    setStatus('loading', 'Fetching ' + GITHUB_USER + '/' + GITHUB_REPO + '/' + IMAGES_PATH + ' …');
 
-    let i = 1, misses = 0, found = 0;
+    const apiURL = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${IMAGES_PATH}?ref=${BRANCH}`;
 
-    while (misses < MAX_MISSES) {
-      const result = await probeImage(i);
-
-      if (result) {
-        misses = 0;
-        found++;
-
-        const { src, ext, num } = result;
-        const filename = num + ext;
-        const label = 'Place ' + num;
-
-        const card = document.createElement('div');
-        card.className = 'gallery-item';
-        card.style.transitionDelay = ((found - 1) * 0.04).toFixed(2) + 's';
-
-        const imgWrap = document.createElement('div');
-        imgWrap.className = 'card-img-wrap';
-
-        const numBadge = document.createElement('span');
-        numBadge.className = 'card-num';
-        numBadge.textContent = '#' + String(found).padStart(2, '0');
-
-        const img = document.createElement('img');
-        img.alt        = label;
-        img.loading    = 'lazy';
-        img.dataset.idx = String(found - 1);
-        img.src        = src;
-
-        imgWrap.appendChild(numBadge);
-        imgWrap.appendChild(img);
-
-        const cardBody = document.createElement('div');
-        cardBody.className = 'card-body';
-        cardBody.innerHTML = `
-          <div class="card-name">${label}</div>
-          <div class="card-file">${filename}</div>
-        `;
-
-        card.appendChild(imgWrap);
-        card.appendChild(cardBody);
-        gallery.appendChild(card);
-
-        // count badge live update
-        countEl.textContent = found;
-        viewerTotal.textContent = found;
-
-        // reveal animation via IntersectionObserver
-        ssObs.observe(card);
-
-      } else {
-        misses++;
+    let files;
+    try {
+      const res = await fetch(apiURL, { headers: { 'Accept': 'application/vnd.github.v3+json' } });
+      if (res.status === 404) {
+        setStatus('err', 'Folder not found: ' + IMAGES_PATH);
+        document.getElementById('empty').style.display = 'flex';
+        return;
       }
-      i++;
+      if (!res.ok) throw new Error('GitHub API returned ' + res.status);
+      files = await res.json();
+    } catch (err) {
+      setStatus('err', 'GitHub API error — ' + err.message);
+      document.getElementById('empty').style.display = 'flex';
+      return;
     }
 
-    if (found === 0) {
-      setStatus('err', 'No images found in ' + IMAGES_PATH);
+    if (!Array.isArray(files)) {
+      setStatus('err', 'Unexpected response from GitHub API');
       document.getElementById('empty').style.display = 'flex';
-    } else {
-      setStatus('ok', IMAGES_PATH + '  ·  ' + found + ' image' + (found !== 1 ? 's' : '') + ' detected');
+      return;
     }
+
+    const images = files.filter(f =>
+      f.type === 'file' &&
+      IMAGE_EXTS.some(ext => f.name.toLowerCase().endsWith(ext))
+    );
+
+    if (!images.length) {
+      setStatus('ok', IMAGES_PATH + '  ·  no images found yet');
+      document.getElementById('empty').style.display = 'flex';
+      return;
+    }
+
+    setStatus('ok', IMAGES_PATH + '  ·  ' + images.length + ' image' + (images.length !== 1 ? 's' : '') + ' detected');
+    countEl.textContent    = images.length;
+    viewerTotal.textContent = images.length;
+
+    images.forEach((file, i) => {
+      const src      = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${BRANCH}/${IMAGES_PATH}/${file.name}`;
+      const filename = file.name;
+      const label    = file.name
+        .replace(/\.[^.]+$/, '')
+        .replace(/[-_]/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
+
+      const card = document.createElement('div');
+      card.className = 'gallery-item';
+      card.style.transitionDelay = (i * 0.04).toFixed(2) + 's';
+
+      const imgWrap = document.createElement('div');
+      imgWrap.className = 'card-img-wrap';
+
+      const numBadge = document.createElement('span');
+      numBadge.className = 'card-num';
+      numBadge.textContent = '#' + String(i + 1).padStart(2, '0');
+
+      const img = document.createElement('img');
+      img.alt         = label;
+      img.loading     = 'lazy';
+      img.dataset.idx = String(i);
+      img.src         = src;
+
+      imgWrap.appendChild(numBadge);
+      imgWrap.appendChild(img);
+
+      const cardBody = document.createElement('div');
+      cardBody.className = 'card-body';
+      cardBody.innerHTML = `
+        <div class="card-name">${label}</div>
+        <div class="card-file">${filename}</div>
+      `;
+
+      card.appendChild(imgWrap);
+      card.appendChild(cardBody);
+      gallery.appendChild(card);
+
+      ssObs.observe(card);
+    });
   }
 
   /* ============================================================
