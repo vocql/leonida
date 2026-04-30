@@ -203,9 +203,148 @@
     from { opacity: 0; transform: scale(0.75) translateY(12px); }
     to   { opacity: 1; transform: scale(1) translateY(0); }
   }
+
+  /* NAVBAR — no bg, just floating */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 22px 36px;
+    background: none;
+    border: none;
+    animation: slideDown 0.8s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .nav-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: linear-gradient(90deg, #00ffff, #ff00c8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 10px rgba(0,255,255,0.4));
+    cursor: pointer;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+  }
+
+  .nav-links li a {
+    font-family: 'Nunito', sans-serif;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 10px 22px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(0,255,255,0.18);
+    background: rgba(0,255,255,0.04);
+    color: rgba(255,255,255,0.45);
+    box-shadow:
+      0 0 10px rgba(0,255,255,0.05),
+      inset 0 1px 0 rgba(255,255,255,0.08);
+    position: relative;
+    overflow: hidden;
+    transition: color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.15s, background 0.2s;
+    display: block;
+  }
+
+  /* glassy shine on each nav pill */
+  .nav-links li a::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 15%; right: 15%;
+    height: 40%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.1), transparent);
+    border-radius: 0 0 50% 50%;
+    pointer-events: none;
+  }
+
+  .nav-links li a:hover {
+    color: #fff;
+    border-color: rgba(0,255,255,0.45);
+    background: rgba(0,255,255,0.1);
+    box-shadow: 0 0 20px rgba(0,255,255,0.2), inset 0 1px 0 rgba(255,255,255,0.12);
+    transform: translateY(-2px) scale(1.04);
+  }
+
+  .nav-links li a.active {
+    color: #00ffff;
+    border-color: rgba(0,255,255,0.5);
+    background: rgba(0,255,255,0.1);
+    box-shadow: 0 0 22px rgba(0,255,255,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
+  }
+
+  /* alternate pink pills every other item */
+  .nav-links li:nth-child(even) a {
+    border-color: rgba(255,0,200,0.18);
+    background: rgba(255,0,200,0.04);
+    box-shadow:
+      0 0 10px rgba(255,0,200,0.05),
+      inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+
+  .nav-links li:nth-child(even) a:hover {
+    color: #fff;
+    border-color: rgba(255,0,200,0.5);
+    background: rgba(255,0,200,0.1);
+    box-shadow: 0 0 20px rgba(255,0,200,0.22), inset 0 1px 0 rgba(255,255,255,0.12);
+  }
+
+  .nav-badge {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+  }
+
+  .nav-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #00ffff;
+    box-shadow: 0 0 8px #00ffff;
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.25; }
+  }
 </style>
 </head>
 <body>
+
+  <nav>
+    <ul class="nav-links">
+      <li><a href="#" class="active">Home</a></li>
+      <li><a href="#">Map</a></li>
+      <li><a href="#">Places</a></li>
+      <li><a href="#">Characters</a></li>
+      <li><a href="#">Screenshots</a></li>
+      <li><a href="#">Trailers</a></li>
+    </ul>
+  </nav>
 
   <div class="title-wrap">
     <div class="welcome-small">Welcome to</div>
