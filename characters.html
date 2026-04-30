@@ -295,7 +295,7 @@
   /* ── Lightbox ── */
   #ssViewer {
     position: fixed; inset: 0; z-index: 999;
-    background: rgba(4,0,26,0.95);
+    background: rgba(4,0,26,0.97);
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     padding: 20px;
@@ -308,18 +308,48 @@
     opacity: 1; pointer-events: all;
   }
 
+  /* ── Viewer inner two-col layout ── */
+  .viewer-inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+    max-width: 1140px;
+    width: 100%;
+    max-height: 88vh;
+  }
+
+  /* ── Image column ── */
+  .viewer-img-col {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   #ssImg {
-    max-width: 90vw; max-height: 80vh;
-    border-radius: 10px;
+    max-width: 500px;
+    max-height: 500px;
+    width: auto;
+    height: auto;
+    border-radius: 12px;
     border: 1.5px solid rgba(0,255,255,0.2);
     box-shadow: 0 0 60px rgba(0,255,255,0.12);
     object-fit: contain;
     transition: opacity 0.15s;
+    display: block;
+  }
+
+  .lb-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px; font-weight: 900;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.3); margin-top: 12px;
+    text-align: center;
   }
 
   .viewer-controls {
     display: flex; align-items: center; gap: 20px;
-    margin-top: 20px;
+    margin-top: 16px;
   }
 
   .viewer-btn {
@@ -349,6 +379,84 @@
 
   .viewer-counter span { color: #00ffff; }
 
+  /* ── Bio column ── */
+  .viewer-bio-col {
+    flex: 1 1 0;
+    min-width: 0;
+    max-height: 560px;
+    overflow-y: auto;
+    padding-right: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,255,255,0.2) transparent;
+  }
+
+  .viewer-bio-col::-webkit-scrollbar { width: 4px; }
+  .viewer-bio-col::-webkit-scrollbar-track { background: transparent; }
+  .viewer-bio-col::-webkit-scrollbar-thumb { background: rgba(0,255,255,0.2); border-radius: 4px; }
+
+  .bio-wrap {
+    background: rgba(0,255,255,0.035);
+    border: 1.5px solid rgba(0,255,255,0.13);
+    border-radius: 16px;
+    padding: 26px 24px 28px;
+    transition: opacity 0.2s;
+  }
+
+  .bio-eyebrow {
+    font-size: 10px; font-weight: 900;
+    letter-spacing: 0.32em; text-transform: uppercase;
+    color: rgba(0,255,255,0.45); margin-bottom: 6px;
+  }
+
+  .bio-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 34px; font-weight: 900;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    color: #fff; line-height: 1;
+    margin-bottom: 14px;
+  }
+
+  .bio-tag {
+    display: inline-block;
+    font-size: 10px; font-weight: 900;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,200,0,0.75);
+    background: rgba(255,200,0,0.07);
+    border: 1px solid rgba(255,200,0,0.2);
+    border-radius: 999px; padding: 5px 14px;
+    margin-bottom: 18px;
+  }
+
+  .bio-divider {
+    width: 100%; height: 1px;
+    background: linear-gradient(90deg, rgba(0,255,255,0.2), transparent);
+    margin-bottom: 18px;
+  }
+
+  .bio-quote {
+    font-size: 13.5px; font-weight: 800; font-style: italic;
+    color: rgba(0,255,255,0.6);
+    border-left: 2px solid rgba(0,255,255,0.3);
+    padding-left: 14px; margin-bottom: 18px;
+    line-height: 1.65;
+  }
+
+  .bio-text {
+    font-size: 13px; font-weight: 800;
+    color: rgba(255,255,255,0.48);
+    line-height: 1.8;
+  }
+
+  .bio-text p { margin-bottom: 12px; }
+  .bio-text p:last-child { margin-bottom: 0; }
+
+  .bio-no-info {
+    font-size: 12px; font-weight: 800;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 30px 0; text-align: center;
+  }
+
   #ssClose {
     position: fixed; top: 20px; right: 24px;
     font-size: 24px; color: rgba(255,255,255,0.4);
@@ -359,40 +467,57 @@
 
   #ssClose:hover { color: #fff; }
 
-  .lb-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 18px; font-weight: 900;
-    text-transform: uppercase; letter-spacing: 0.1em;
-    color: rgba(255,255,255,0.3); margin-top: 6px;
-  }
-
   /* ── Animations ── */
   @keyframes popIn  { from { opacity: 0; transform: scale(0.85) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
   @keyframes blink  { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+  /* ── Responsive ── */
+  @media (max-width: 800px) {
+    .viewer-inner {
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      max-height: none;
+      overflow-y: auto;
+    }
+    #ssImg { max-width: 90vw; max-height: 50vw; }
+    .viewer-bio-col { max-height: none; width: 100%; }
+  }
 </style>
 </head>
 <body>
 
- <nav>
-    <ul class="nav-links">
-      <li><a href="index" class="active">Home</a></li>
-      <li><a href="map">Map</a></li>
-      <li><a href="places">Places</a></li>
-      <li><a href="#">Characters</a></li>
-      <li><a href="screenshots">Screenshots</a></li>
-      <li><a href="trailers">Trailers</a></li>
-    </ul>
-  </nav>
+<nav>
+  <ul class="nav-links">
+    <li><a href="index">Home</a></li>
+    <li><a href="map">Map</a></li>
+    <li><a href="places">Places</a></li>
+    <li><a href="#" class="active">Characters</a></li>
+    <li><a href="screenshots">Screenshots</a></li>
+    <li><a href="trailers">Trailers</a></li>
+  </ul>
+</nav>
 
 <!-- ── Screenshot viewer ── -->
 <div id="ssViewer">
   <button id="ssClose">✕</button>
-  <img id="ssImg" src="" alt="">
-  <div class="lb-label" id="lbLabel"></div>
-  <div class="viewer-controls">
-    <button class="viewer-btn" id="ssPrev">&#8592;</button>
-    <div class="viewer-counter"><span id="viewerCurrent">1</span> / <span id="viewerTotal">0</span></div>
-    <button class="viewer-btn" id="ssNext">&#8594;</button>
+  <div class="viewer-inner">
+    <!-- Image side -->
+    <div class="viewer-img-col">
+      <img id="ssImg" src="" alt="">
+      <div class="lb-label" id="lbLabel"></div>
+      <div class="viewer-controls">
+        <button class="viewer-btn" id="ssPrev">&#8592;</button>
+        <div class="viewer-counter"><span id="viewerCurrent">1</span> / <span id="viewerTotal">0</span></div>
+        <button class="viewer-btn" id="ssNext">&#8594;</button>
+      </div>
+    </div>
+    <!-- Bio side -->
+    <div class="viewer-bio-col">
+      <div class="bio-wrap" id="bioWrap">
+        <div class="bio-no-info">No bio available</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -434,6 +559,163 @@
   const IMAGE_EXTS   = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
 
   /* ============================================================
+     CHARACTER BIO DATABASE
+     Keys are lowercase filename stems (spaces, hyphens, underscores normalised).
+     Fuzzy matching also checks if the stem contains a key or vice-versa.
+  ============================================================ */
+  const CHARACTER_BIOS = {
+    'lucia': {
+      fullName: 'Lucia Caminos',
+      role: 'Protagonist',
+      quote: 'The only thing that matters is who you know and what you got.',
+      bio: [
+        "Lucia's father taught her to fight as soon as she could walk. Life has been coming at her swinging ever since. Fighting for her family landed her in the Leonida Penitentiary. Sheer luck got her out. Lucia's learned her lesson — only smart moves from here.",
+        "More than anything, Lucia wants the good life her mom has dreamed of since their days in Liberty City — but instead of half-baked fantasies, Lucia is prepared to take matters into her own hands. A life with Jason could be her way out. Fresh out of prison and ready to change the odds in her favor, Lucia's committed to her plan — no matter what it takes."
+      ]
+    },
+    'jason': {
+      fullName: 'Jason Duval',
+      role: 'Protagonist',
+      quote: "If anything happens, I'm right behind you. Another day in paradise, right?",
+      bio: [
+        "Jason wants an easy life, but things just keep getting harder. Jason grew up around grifters and crooks. After a stint in the Army trying to shake off his troubled teens, he found himself in the Keys doing what he knows best, working for local drug runners. It might be time to try something new.",
+        "Meeting Lucia could be the best or worst thing to ever happen to him. Jason knows how he'd like it to turn out but right now, it's hard to tell."
+      ]
+    },
+    'boobie': {
+      fullName: 'Boobie Ike',
+      role: 'Vice City Legend',
+      quote: 'The club money pay for the studio, and the drug money pay for it all.',
+      bio: [
+        "Boobie is a local Vice City legend — and acts like it. One of the few to transform his time in the streets into a legitimate empire spanning real estate, a strip club, and a recording studio — Boobie's all smiles until it's time to talk business.",
+        "Boobie might seem like he's just out for himself, but it's his partnership with the young aspiring music mogul Dre'Quan for Only Raw Records that he's most invested in — now they just need a hit."
+      ]
+    },
+    'cal': {
+      fullName: 'Cal Hampton',
+      role: "Jason's Friend · Conspiracy Theorist",
+      quote: 'There are way too many birds flying around in perfect formation.',
+      bio: [
+        "Jason's friend and a fellow associate of Brian's, Cal feels safest hanging at home, snooping on Coast Guard comms with a few beers and some private browser tabs open.",
+        "Cal is at the low tide of America and happy there. Casual paranoia loves company, but his friend Jason has bigger plans."
+      ]
+    },
+    'drequan': {
+      fullName: "Dre'Quan Priest",
+      role: 'Aspiring Music Mogul · Only Raw Records',
+      quote: "You're with the label now.",
+      bio: [
+        "Dre'Quan was always more of a hustler than a gangster. Even when he was dealing on the streets to make ends meet, breaking into music was the goal.",
+        "Now that he's signed the Real Dimez, Dre'Quan's days of booking acts into Boobie's strip club might be numbered as he sets his sights on the Vice City scene."
+      ]
+    },
+    'dre quan': {
+      fullName: "Dre'Quan Priest",
+      role: 'Aspiring Music Mogul · Only Raw Records',
+      quote: "You're with the label now.",
+      bio: [
+        "Dre'Quan was always more of a hustler than a gangster. Even when he was dealing on the streets to make ends meet, breaking into music was the goal.",
+        "Now that he's signed the Real Dimez, Dre'Quan's days of booking acts into Boobie's strip club might be numbered as he sets his sights on the Vice City scene."
+      ]
+    },
+    'real dimez': {
+      fullName: 'Real Dimez (Bae-Luxe & Roxy)',
+      role: 'Rap Duo · Only Raw Records',
+      quote: 'All my dimes in this club. Meet my twin, make it a dub.',
+      bio: [
+        "Bae-Luxe and Roxy aka Real Dimez have been friends since high school — girls with the savvy to turn their time shaking down local dealers into cold, hard cash via spicy rap tracks and a relentless social media presence.",
+        "An early hit single with local rapper DWNPLY took Real Dimez to new heights. Now, after five years and a whole lot of trouble, they're signed to Only Raw Records, hoping lightning can strike twice."
+      ]
+    },
+    'realdimez': {
+      fullName: 'Real Dimez (Bae-Luxe & Roxy)',
+      role: 'Rap Duo · Only Raw Records',
+      quote: 'All my dimes in this club. Meet my twin, make it a dub.',
+      bio: [
+        "Bae-Luxe and Roxy aka Real Dimez have been friends since high school — girls with the savvy to turn their time shaking down local dealers into cold, hard cash via spicy rap tracks and a relentless social media presence.",
+        "An early hit single with local rapper DWNPLY took Real Dimez to new heights. Now, after five years and a whole lot of trouble, they're signed to Only Raw Records, hoping lightning can strike twice."
+      ]
+    },
+    'bae luxe': {
+      fullName: 'Bae-Luxe',
+      role: 'Real Dimez · Rapper',
+      quote: 'All my dimes in this club. Meet my twin, make it a dub.',
+      bio: [
+        "One half of the rap duo Real Dimez alongside her high-school friend Roxy. Together they turned their time shaking down local dealers into viral rap tracks and a relentless social media presence.",
+        "After an early hit single with DWNPLY launched them to new heights, they found themselves signed to Only Raw Records — hoping lightning can strike twice."
+      ]
+    },
+    'roxy': {
+      fullName: 'Roxy',
+      role: 'Real Dimez · Rapper',
+      quote: 'All my dimes in this club. Meet my twin, make it a dub.',
+      bio: [
+        "One half of the rap duo Real Dimez alongside Bae-Luxe, her friend since high school. The duo rose from shaking down local dealers to going viral with spicy rap tracks.",
+        "After five years and a whole lot of trouble, they're now signed to Only Raw Records, hoping their next single can recapture their early fame."
+      ]
+    },
+    'raul': {
+      fullName: 'Raul Bautista',
+      role: 'Seasoned Bank Robber',
+      quote: "Life is full of surprises, my friend. I think we'd all be wise to remember that.",
+      bio: [
+        "Confidence, charm, and cunning — Raul's a seasoned bank robber always on the hunt for talent ready to take the risks that bring the biggest rewards.",
+        "Raul's recklessness raises the stakes with every score. Sooner or later, his crew will have to double down or pull their chips from the table."
+      ]
+    },
+    'brian': {
+      fullName: 'Brian Heder',
+      role: "Drug Runner · Jason's Landlord",
+      quote: "I hauled so much grass in that plane, I could make the state of Leonida levitate.",
+      bio: [
+        "Brian's a classic drug runner from the golden age of smuggling in the Keys. Still moving product through his boat yard with his third wife, Lori, Brian's been around long enough to let others do his dirty work. Looks like a Leonida beach bum — moves like a great white shark.",
+        "Brian's letting Jason live rent-free at one of his properties — so long as he helps with local shakedowns, and stops by for Lori's sangria once in a while."
+      ]
+  };
+
+  /* ============================================================
+     BIO LOOKUP — normalise filename stem then fuzzy match
+  ============================================================ */
+  function getBio(filename) {
+    const stem = filename
+      .replace(/\.[^.]+$/, '')
+      .toLowerCase()
+      .replace(/[-_]/g, ' ')
+      .trim();
+
+    if (CHARACTER_BIOS[stem]) return CHARACTER_BIOS[stem];
+
+    for (const key of Object.keys(CHARACTER_BIOS)) {
+      if (stem.includes(key) || key.includes(stem)) return CHARACTER_BIOS[key];
+    }
+    return null;
+  }
+
+  /* ============================================================
+     RENDER BIO PANEL
+  ============================================================ */
+  function renderBio(filename, label) {
+    const data = getBio(filename);
+    if (!data) {
+      bioWrap.innerHTML = `
+        <div class="bio-eyebrow">Character File</div>
+        <div class="bio-name">${label}</div>
+        <div class="bio-no-info">No official bio available yet.</div>
+      `;
+      return;
+    }
+    const paragraphs = data.bio.map(p => `<p>${p}</p>`).join('');
+    bioWrap.innerHTML = `
+      <div class="bio-eyebrow">Character File</div>
+      <div class="bio-name">${data.fullName}</div>
+      <div class="bio-tag">${data.role}</div>
+      <div class="bio-divider"></div>
+      ${data.quote ? `<div class="bio-quote">"${data.quote}"</div>` : ''}
+      <div class="bio-text">${paragraphs}</div>
+    `;
+  }
+
+  /* ============================================================
      ELEMENTS
   ============================================================ */
   const gallery       = document.getElementById('gallery');
@@ -445,8 +727,10 @@
   const lbLabel       = document.getElementById('lbLabel');
   const viewerCurrent = document.getElementById('viewerCurrent');
   const viewerTotal   = document.getElementById('viewerTotal');
+  const bioWrap       = document.getElementById('bioWrap');
 
-  let ssIdx = 0;
+  let ssIdx    = 0;
+  let allImages = [];
 
   /* ============================================================
      STATUS HELPER
@@ -458,7 +742,7 @@
   }
 
   /* ============================================================
-     LOAD — GitHub API lists the folder, filters to image files
+     LOAD — GitHub API
   ============================================================ */
   async function loadImages() {
     setStatus('loading', 'Fetching ' + GITHUB_USER + '/' + GITHUB_REPO + '/' + IMAGES_PATH + ' …');
@@ -501,11 +785,11 @@
     setStatus('ok', IMAGES_PATH + '  ·  ' + images.length + ' character' + (images.length !== 1 ? 's' : '') + ' detected');
     countEl.textContent     = images.length;
     viewerTotal.textContent = images.length;
+    allImages = images;
 
     images.forEach((file, i) => {
-      const src      = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${BRANCH}/${IMAGES_PATH}/${file.name}`;
-      const filename = file.name;
-      const label    = file.name
+      const src   = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${BRANCH}/${IMAGES_PATH}/${file.name}`;
+      const label = file.name
         .replace(/\.[^.]+$/, '')
         .replace(/[-_]/g, ' ')
         .replace(/\b\w/g, c => c.toUpperCase());
@@ -534,7 +818,7 @@
       cardBody.className = 'card-body';
       cardBody.innerHTML = `
         <div class="card-name">${label}</div>
-        <div class="card-file">${filename}</div>
+        <div class="card-file">${file.name}</div>
       `;
 
       card.appendChild(imgWrap);
@@ -564,14 +848,24 @@
     return [...gallery.querySelectorAll('img[data-idx]')];
   }
 
+  function labelFromFile(file) {
+    return file.name
+      .replace(/\.[^.]+$/, '')
+      .replace(/[-_]/g, ' ')
+      .replace(/\b\w/g, c => c.toUpperCase());
+  }
+
   function openViewer(idx) {
     const imgs = getVisibleImgs();
     if (!imgs.length) return;
     ssIdx = idx;
-    ssImg.src = imgs[ssIdx].src;
-    lbLabel.textContent = imgs[ssIdx].alt;
+    const file  = allImages[ssIdx];
+    const label = labelFromFile(file);
+    ssImg.src               = imgs[ssIdx].src;
+    lbLabel.textContent     = label;
     viewerCurrent.textContent = ssIdx + 1;
     viewerTotal.textContent   = imgs.length;
+    renderBio(file.name, label);
     ssViewer.classList.add('active');
   }
 
@@ -582,12 +876,17 @@
     if (!imgs.length) return;
     ssIdx = (ssIdx + dir + imgs.length) % imgs.length;
     ssImg.style.opacity = '0';
+    bioWrap.style.opacity = '0';
     setTimeout(() => {
-      ssImg.src = imgs[ssIdx].src;
-      lbLabel.textContent = imgs[ssIdx].alt;
+      const file  = allImages[ssIdx];
+      const label = labelFromFile(file);
+      ssImg.src               = imgs[ssIdx].src;
+      lbLabel.textContent     = label;
       viewerCurrent.textContent = ssIdx + 1;
-      ssImg.style.opacity = '1';
-    }, 120);
+      renderBio(file.name, label);
+      ssImg.style.opacity   = '1';
+      bioWrap.style.opacity = '1';
+    }, 130);
   }
 
   /* ============================================================
