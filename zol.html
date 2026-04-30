@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Characters — Leonida</title>
+<title>Places — Leonida</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@900&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -133,20 +133,17 @@
 
   @keyframes textShimmer { 0% { background-position: 0% } 100% { background-position: 300% } }
 
-  /* ── Count badge ── */
   .count-badge {
     font-size: 11px; font-weight: 900;
     letter-spacing: 0.2em; text-transform: uppercase;
     color: rgba(255,255,255,0.22); padding: 8px 16px;
     border-radius: 999px; border: 1.5px solid rgba(255,255,255,0.08);
     background: rgba(255,255,255,0.03);
-    transition: all 0.3s;
   }
 
   .count-badge span {
     color: #00ffff;
     text-shadow: 0 0 12px rgba(0,255,255,0.6);
-    transition: all 0.3s;
   }
 
   /* ── Status bar ── */
@@ -171,8 +168,7 @@
 
   .status-text {
     font-size: 12px; font-weight: 800; font-family: monospace;
-    color: rgba(255,255,255,0.25); flex: 1;
-    transition: color 0.3s;
+    color: rgba(255,255,255,0.25); flex: 1; transition: color 0.3s;
   }
 
   .status-text.ok  { color: rgba(0,255,255,0.6); }
@@ -213,7 +209,7 @@
   }
 
   /* ── Card ── */
-  .place-card {
+  .gallery-item {
     border-radius: 14px; overflow: hidden;
     border: 1.5px solid rgba(0,255,255,0.12);
     background: rgba(0,255,255,0.03);
@@ -224,26 +220,23 @@
                 opacity 0.45s ease, transform 0.45s cubic-bezier(0.34,1.4,0.64,1);
   }
 
-  .place-card.visible {
-    opacity: 1; transform: scale(1) translateY(0);
-  }
+  .gallery-item.visible { opacity: 1; transform: scale(1) translateY(0); }
 
-  .place-card:hover {
+  .gallery-item:hover {
     transform: translateY(-4px) scale(1.01) !important;
     border-color: rgba(0,255,255,0.35);
     box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 20px rgba(0,255,255,0.08);
   }
 
-  .place-card:nth-child(even) {
+  .gallery-item:nth-child(even) {
     border-color: rgba(255,0,200,0.12); background: rgba(255,0,200,0.03);
   }
 
-  .place-card:nth-child(even):hover {
+  .gallery-item:nth-child(even):hover {
     border-color: rgba(255,0,200,0.35);
     box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 20px rgba(255,0,200,0.08);
   }
 
-  /* ── Card image ── */
   .card-img-wrap {
     position: relative; width: 100%;
     aspect-ratio: 16/9; overflow: hidden;
@@ -256,7 +249,7 @@
     transition: transform 0.4s ease;
   }
 
-  .place-card:hover .card-img-wrap img { transform: scale(1.06); }
+  .gallery-item:hover .card-img-wrap img { transform: scale(1.06); }
 
   .card-img-wrap::after {
     content: ''; position: absolute; inset: 0;
@@ -275,7 +268,6 @@
     backdrop-filter: blur(8px);
   }
 
-  /* ── Card body ── */
   .card-body { padding: 14px 16px 16px; }
 
   .card-name {
@@ -304,11 +296,9 @@
     transition: opacity 0.2s ease;
   }
 
-  #ssViewer.active {
-    opacity: 1; pointer-events: all;
-  }
+  #ssViewer.active { opacity: 1; pointer-events: all; }
 
-  /* ── Viewer inner two-col layout ── */
+  /* ── Two-column inner layout ── */
   .viewer-inner {
     display: flex;
     align-items: flex-start;
@@ -327,8 +317,8 @@
   }
 
   #ssImg {
-    max-width: 500px;
-    max-height: 500px;
+    max-width: 560px;
+    max-height: 520px;
     width: auto;
     height: auto;
     border-radius: 12px;
@@ -379,7 +369,7 @@
 
   .viewer-counter span { color: #00ffff; }
 
-  /* ── Bio column ── */
+  /* ── Info / description column ── */
   .viewer-bio-col {
     flex: 1 1 0;
     min-width: 0;
@@ -467,19 +457,12 @@
 
   #ssClose:hover { color: #fff; }
 
-  /* ── Animations ── */
   @keyframes popIn  { from { opacity: 0; transform: scale(0.85) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
   @keyframes blink  { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+  @keyframes pulse  { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
 
-  /* ── Responsive ── */
-  @media (max-width: 800px) {
-    .viewer-inner {
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-      max-height: none;
-      overflow-y: auto;
-    }
+  @media (max-width: 820px) {
+    .viewer-inner { flex-direction: column; align-items: center; gap: 20px; max-height: none; overflow-y: auto; }
     #ssImg { max-width: 90vw; max-height: 50vw; }
     .viewer-bio-col { max-height: none; width: 100%; }
   }
@@ -491,14 +474,14 @@
   <ul class="nav-links">
     <li><a href="index">Home</a></li>
     <li><a href="map">Map</a></li>
-    <li><a href="places">Places</a></li>
-    <li><a href="#" class="active">Characters</a></li>
+    <li><a href="#" class="active">Places</a></li>
+    <li><a href="characters">Characters</a></li>
     <li><a href="screenshots">Screenshots</a></li>
     <li><a href="trailers">Trailers</a></li>
   </ul>
 </nav>
 
-<!-- ── Screenshot viewer ── -->
+<!-- ── Lightbox ── -->
 <div id="ssViewer">
   <button id="ssClose">✕</button>
   <div class="viewer-inner">
@@ -512,10 +495,10 @@
         <button class="viewer-btn" id="ssNext">&#8594;</button>
       </div>
     </div>
-    <!-- Bio side -->
+    <!-- Description side -->
     <div class="viewer-bio-col">
       <div class="bio-wrap" id="bioWrap">
-        <div class="bio-no-info">No bio available</div>
+        <div class="bio-no-info">No description available</div>
       </div>
     </div>
   </div>
@@ -526,9 +509,9 @@
   <div class="page-header">
     <div>
       <div class="eyebrow">Leonida ·</div>
-      <div class="page-title">Characters</div>
+      <div class="page-title">Places</div>
     </div>
-    <div class="count-badge"><span id="count">0</span> characters</div>
+    <div class="count-badge"><span id="count">0</span> locations</div>
   </div>
 
   <div class="status-bar">
@@ -541,7 +524,7 @@
     <div class="empty-title">No Images Found</div>
     <div class="empty-sub">
       Drop <code>.jpg</code>, <code>.png</code>, <code>.webp</code> or <code>.gif</code> files
-      into <code>leonida/npc/</code> and they'll appear here automatically.
+      into <code>leonida/places/</code> and they'll appear here automatically.
     </div>
   </div>
 
@@ -555,170 +538,143 @@
   const GITHUB_USER  = 'vocql';
   const GITHUB_REPO  = 'leonidagta';
   const BRANCH       = 'main';
-  const IMAGES_PATH  = 'leonida/npc';
+  const IMAGES_PATH  = 'leonida/places';
   const IMAGE_EXTS   = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
 
   /* ============================================================
-     CHARACTER BIO DATABASE
-     Keys are lowercase filename stems (spaces, hyphens, underscores normalised).
-     Fuzzy matching also checks if the stem contains a key or vice-versa.
+     PLACE DESCRIPTIONS DATABASE
+     Keys are lowercase filename stems (hyphens/underscores → spaces).
+     Fuzzy matching checks if stem contains key or vice-versa.
   ============================================================ */
-  const CHARACTER_BIOS = {
-    'lucia': {
-      fullName: 'Lucia Caminos',
-      role: 'Protagonist',
-      quote: 'The only thing that matters is who you know and what you got.',
-      bio: [
-        "Lucia's father taught her to fight as soon as she could walk. Life has been coming at her swinging ever since. Fighting for her family landed her in the Leonida Penitentiary. Sheer luck got her out. Lucia's learned her lesson — only smart moves from here.",
-        "More than anything, Lucia wants the good life her mom has dreamed of since their days in Liberty City — but instead of half-baked fantasies, Lucia is prepared to take matters into her own hands. A life with Jason could be her way out. Fresh out of prison and ready to change the odds in her favor, Lucia's committed to her plan — no matter what it takes."
+  const PLACE_INFO = {
+    'vice city': {
+      fullName: 'Vice City',
+      region: 'Leonida · Main Hub',
+      tagline: 'Gateway to Excess',
+      quote: "We're a long way from the '80s, but Vice City is still the sun and fun capital of America.",
+      desc: [
+        "The glamour, hustle, and greed of America captured in a single city. Each neighborhood has something to offer, from the pastel art deco hotels and bright white sands of Ocean Beach, to the bustling panaderías of Little Cuba and the bootleg brands of the Tisha-Wocka flea market, out to the VC Port, the cruise ship capital of the world.",
+        "When the sun fades and the neon glows, everyone has something to gain — and more to lose."
       ]
     },
-    'jason': {
-      fullName: 'Jason Duval',
-      role: 'Protagonist',
-      quote: "If anything happens, I'm right behind you. Another day in paradise, right?",
-      bio: [
-        "Jason wants an easy life, but things just keep getting harder. Jason grew up around grifters and crooks. After a stint in the Army trying to shake off his troubled teens, he found himself in the Keys doing what he knows best, working for local drug runners. It might be time to try something new.",
-        "Meeting Lucia could be the best or worst thing to ever happen to him. Jason knows how he'd like it to turn out but right now, it's hard to tell."
+    'leonida keys': {
+      fullName: 'Leonida Keys',
+      region: 'Mariana County · Southern Archipelago',
+      tagline: 'Gateway to Paradise',
+      quote: 'The dress code is casual, the bars are loaded.',
+      desc: [
+        "Life in this tropical archipelago isn't flashy but it's easy. Get your buzz on and pull up a deck chair but look out — you are right on the doorstep of some of the most beautiful and dangerous waters in all of America.",
+        "Jason Duval calls these islands home, living rent-free at one of Brian Heder's properties on Key Lento — so long as he keeps doing favors for local drug runners."
       ]
     },
-    'boobie': {
-      fullName: 'Boobie Ike',
-      role: 'Vice City Legend',
-      quote: 'The club money pay for the studio, and the drug money pay for it all.',
-      bio: [
-        "Boobie is a local Vice City legend — and acts like it. One of the few to transform his time in the streets into a legitimate empire spanning real estate, a strip club, and a recording studio — Boobie's all smiles until it's time to talk business.",
-        "Boobie might seem like he's just out for himself, but it's his partnership with the young aspiring music mogul Dre'Quan for Only Raw Records that he's most invested in — now they just need a hit."
+    'keys': {
+      fullName: 'Leonida Keys',
+      region: 'Mariana County · Southern Archipelago',
+      tagline: 'Gateway to Paradise',
+      quote: 'The dress code is casual, the bars are loaded.',
+      desc: [
+        "Life in this tropical archipelago isn't flashy but it's easy. Get your buzz on and pull up a deck chair but look out — you are right on the doorstep of some of the most beautiful and dangerous waters in all of America.",
+        "Jason Duval calls these islands home, living rent-free at one of Brian Heder's properties on Key Lento — so long as he keeps doing favors for local drug runners."
       ]
     },
-    'cal': {
-      fullName: 'Cal Hampton',
-      role: "Jason's Friend · Conspiracy Theorist",
-      quote: 'There are way too many birds flying around in perfect formation.',
-      bio: [
-        "Jason's friend and a fellow associate of Brian's, Cal feels safest hanging at home, snooping on Coast Guard comms with a few beers and some private browser tabs open.",
-        "Cal is at the low tide of America and happy there. Casual paranoia loves company, but his friend Jason has bigger plans."
+    'grassrivers': {
+      fullName: 'Grassrivers',
+      region: 'Vice-Dale & Kelly County · Wetlands',
+      tagline: 'The Untamable Jewel',
+      quote: "You never know what lies beneath the surface of this primordial expanse.",
+      desc: [
+        "The untamable jewel of Leonida's crown. The gators may be the most famous attraction, but there are far deadlier predators and weirder discoveries among the mangroves.",
+        "Inspired by the Florida Everglades, Grassrivers is the state's only true wetland biome — murky channels, mangrove thickets, and a flat, hostile terrain that no other region in Leonida replicates."
       ]
     },
-    'drequan': {
-      fullName: "Dre'Quan Priest",
-      role: 'Aspiring Music Mogul · Only Raw Records',
-      quote: "You're with the label now.",
-      bio: [
-        "Dre'Quan was always more of a hustler than a gangster. Even when he was dealing on the streets to make ends meet, breaking into music was the goal.",
-        "Now that he's signed the Real Dimez, Dre'Quan's days of booking acts into Boobie's strip club might be numbered as he sets his sights on the Vice City scene."
+    'port gellhorn': {
+      fullName: 'Port Gellhorn',
+      region: 'Leonida · Forgotten Coast',
+      tagline: "Leonida's Forgotten Coast",
+      quote: 'Jump on a dirt bike and hold onto your wallet.',
+      desc: [
+        "This is Leonida's forgotten coast. Cheap motels, shut-down attractions, and empty strip malls won't bring the tourists back, but there's a new economy in this once-popular vacation spot.",
+        "It's fueled by malt liquor, painkillers, and truck stop energy drinks. A haven for biker gangs and underground hustlers, Port Gellhorn plays by its own rules."
       ]
     },
-    'dre quan': {
-      fullName: "Dre'Quan Priest",
-      role: 'Aspiring Music Mogul · Only Raw Records',
-      quote: "You're with the label now.",
-      bio: [
-        "Dre'Quan was always more of a hustler than a gangster. Even when he was dealing on the streets to make ends meet, breaking into music was the goal.",
-        "Now that he's signed the Real Dimez, Dre'Quan's days of booking acts into Boobie's strip club might be numbered as he sets his sights on the Vice City scene."
+    'gellhorn': {
+      fullName: 'Port Gellhorn',
+      region: 'Leonida · Forgotten Coast',
+      tagline: "Leonida's Forgotten Coast",
+      quote: 'Jump on a dirt bike and hold onto your wallet.',
+      desc: [
+        "This is Leonida's forgotten coast. Cheap motels, shut-down attractions, and empty strip malls won't bring the tourists back, but there's a new economy in this once-popular vacation spot.",
+        "It's fueled by malt liquor, painkillers, and truck stop energy drinks. A haven for biker gangs and underground hustlers, Port Gellhorn plays by its own rules."
       ]
     },
-    'real dimez': {
-      fullName: 'Real Dimez (Bae-Luxe & Roxy)',
-      role: 'Rap Duo · Only Raw Records',
-      quote: 'All my dimes in this club. Meet my twin, make it a dub.',
-      bio: [
-        "Bae-Luxe and Roxy aka Real Dimez have been friends since high school — girls with the savvy to turn their time shaking down local dealers into cold, hard cash via spicy rap tracks and a relentless social media presence.",
-        "An early hit single with local rapper DWNPLY took Real Dimez to new heights. Now, after five years and a whole lot of trouble, they're signed to Only Raw Records, hoping lightning can strike twice."
+    'ambrosia': {
+      fullName: 'Ambrosia',
+      region: 'Central Leonida · Industrial County',
+      tagline: 'Old School Values, Whatever the Cost',
+      quote: 'The battle for the health and wealth of Leonida begins here.',
+      desc: [
+        "In the heart of Leonida, American industry and old school values still reign supreme — whatever the cost. The Allied Crystal sugar refinery provides the jobs, while the local biker gang provides almost everything else.",
+        "Flaming fields, gang activity, and blue-collar grit define this industrial county. Where the factory ends, the Final Chapter biker gang begins."
       ]
     },
-    'realdimez': {
-      fullName: 'Real Dimez (Bae-Luxe & Roxy)',
-      role: 'Rap Duo · Only Raw Records',
-      quote: 'All my dimes in this club. Meet my twin, make it a dub.',
-      bio: [
-        "Bae-Luxe and Roxy aka Real Dimez have been friends since high school — girls with the savvy to turn their time shaking down local dealers into cold, hard cash via spicy rap tracks and a relentless social media presence.",
-        "An early hit single with local rapper DWNPLY took Real Dimez to new heights. Now, after five years and a whole lot of trouble, they're signed to Only Raw Records, hoping lightning can strike twice."
+    'mount kalaga': {
+      fullName: 'Mount Kalaga National Park',
+      region: 'Northern Leonida · State Border',
+      tagline: 'Room to Breathe',
+      quote: 'Room to breathe on the state\'s northern fringes.',
+      desc: [
+        "A national landmark up against the state's northern border, Mount Kalaga offers prime hunting, fishing, and off-road trails. In the lush surrounding backwoods, hillbilly mystics and paranoid radicals live far from the prying eyes of the government.",
+        "Rugged forests, canyons, and winding riverways stretch across this remote corner of Leonida — the furthest you can get from the neon of Vice City."
       ]
     },
-    'bae luxe': {
-      fullName: 'Bae-Luxe',
-      role: 'Real Dimez · Rapper',
-      quote: 'All my dimes in this club. Meet my twin, make it a dub.',
-      bio: [
-        "One half of the rap duo Real Dimez alongside her high-school friend Roxy. Together they turned their time shaking down local dealers into viral rap tracks and a relentless social media presence.",
-        "After an early hit single with DWNPLY launched them to new heights, they found themselves signed to Only Raw Records — hoping lightning can strike twice."
-      ]
-    },
-    'roxy': {
-      fullName: 'Roxy',
-      role: 'Real Dimez · Rapper',
-      quote: 'All my dimes in this club. Meet my twin, make it a dub.',
-      bio: [
-        "One half of the rap duo Real Dimez alongside Bae-Luxe, her friend since high school. The duo rose from shaking down local dealers to going viral with spicy rap tracks.",
-        "After five years and a whole lot of trouble, they're now signed to Only Raw Records, hoping their next single can recapture their early fame."
-      ]
-    },
-    'raul': {
-      fullName: 'Raul Bautista',
-      role: 'Seasoned Bank Robber',
-      quote: "Life is full of surprises, my friend. I think we'd all be wise to remember that.",
-      bio: [
-        "Confidence, charm, and cunning — Raul's a seasoned bank robber always on the hunt for talent ready to take the risks that bring the biggest rewards.",
-        "Raul's recklessness raises the stakes with every score. Sooner or later, his crew will have to double down or pull their chips from the table."
-      ]
-    },
-    'brian': {
-      fullName: 'Brian Heder',
-      role: "Drug Runner · Jason's Landlord",
-      quote: "I hauled so much grass in that plane, I could make the state of Leonida levitate.",
-      bio: [
-        "Brian's a classic drug runner from the golden age of smuggling in the Keys. Still moving product through his boat yard with his third wife, Lori, Brian's been around long enough to let others do his dirty work. Looks like a Leonida beach bum — moves like a great white shark.",
-        "Brian's letting Jason live rent-free at one of his properties — so long as he helps with local shakedowns, and stops by for Lori's sangria once in a while."
-      ]
-    },
-    'stefanie': {
-      fullName: 'Stefanie G.',
-      role: 'Leonida Dept. of Corrections · Social Worker',
-      quote: 'Do you know why you\'re here?',
-      bio: [
-        "Stefanie G. works for the Leonida Department of Corrections as a social worker. She was assigned as Lucia's correctional counselor during Lucia's incarceration at Leonida Penitentiary in Vice-Dale County.",
-        "Stefanie is the very first voice heard in Grand Theft Auto VI, opening the game's debut trailer with a single question to Lucia. Her last name remains unknown — only the initial G. is visible on her office nameplate."
+    'kalaga': {
+      fullName: 'Mount Kalaga National Park',
+      region: 'Northern Leonida · State Border',
+      tagline: 'Room to Breathe',
+      quote: "Room to breathe on the state's northern fringes.",
+      desc: [
+        "A national landmark up against the state's northern border, Mount Kalaga offers prime hunting, fishing, and off-road trails. In the lush surrounding backwoods, hillbilly mystics and paranoid radicals live far from the prying eyes of the government.",
+        "Rugged forests, canyons, and winding riverways stretch across this remote corner of Leonida — the furthest you can get from the neon of Vice City."
       ]
     }
   };
 
   /* ============================================================
-     BIO LOOKUP — normalise filename stem then fuzzy match
+     PLACE LOOKUP — normalise filename stem then fuzzy match
   ============================================================ */
-  function getBio(filename) {
+  function getInfo(filename) {
     const stem = filename
       .replace(/\.[^.]+$/, '')
       .toLowerCase()
       .replace(/[-_]/g, ' ')
       .trim();
 
-    if (CHARACTER_BIOS[stem]) return CHARACTER_BIOS[stem];
+    if (PLACE_INFO[stem]) return PLACE_INFO[stem];
 
-    for (const key of Object.keys(CHARACTER_BIOS)) {
-      if (stem.includes(key) || key.includes(stem)) return CHARACTER_BIOS[key];
+    for (const key of Object.keys(PLACE_INFO)) {
+      if (stem.includes(key) || key.includes(stem)) return PLACE_INFO[key];
     }
     return null;
   }
 
   /* ============================================================
-     RENDER BIO PANEL
+     RENDER DESCRIPTION PANEL
   ============================================================ */
-  function renderBio(filename, label) {
-    const data = getBio(filename);
+  function renderInfo(filename, label) {
+    const data = getInfo(filename);
     if (!data) {
       bioWrap.innerHTML = `
-        <div class="bio-eyebrow">Character File</div>
+        <div class="bio-eyebrow">Location File</div>
         <div class="bio-name">${label}</div>
-        <div class="bio-no-info">No official bio available yet.</div>
+        <div class="bio-no-info">No official description available yet.</div>
       `;
       return;
     }
-    const paragraphs = data.bio.map(p => `<p>${p}</p>`).join('');
+    const paragraphs = data.desc.map(p => `<p>${p}</p>`).join('');
     bioWrap.innerHTML = `
-      <div class="bio-eyebrow">Character File</div>
+      <div class="bio-eyebrow">Location · ${data.region}</div>
       <div class="bio-name">${data.fullName}</div>
-      <div class="bio-tag">${data.role}</div>
+      <div class="bio-tag">${data.tagline}</div>
       <div class="bio-divider"></div>
       ${data.quote ? `<div class="bio-quote">"${data.quote}"</div>` : ''}
       <div class="bio-text">${paragraphs}</div>
@@ -739,7 +695,7 @@
   const viewerTotal   = document.getElementById('viewerTotal');
   const bioWrap       = document.getElementById('bioWrap');
 
-  let ssIdx    = 0;
+  let ssIdx     = 0;
   let allImages = [];
 
   /* ============================================================
@@ -792,7 +748,7 @@
       return;
     }
 
-    setStatus('ok', IMAGES_PATH + '  ·  ' + images.length + ' character' + (images.length !== 1 ? 's' : '') + ' detected');
+    setStatus('ok', IMAGES_PATH + '  ·  ' + images.length + ' image' + (images.length !== 1 ? 's' : '') + ' detected');
     countEl.textContent     = images.length;
     viewerTotal.textContent = images.length;
     allImages = images;
@@ -805,7 +761,7 @@
         .replace(/\b\w/g, c => c.toUpperCase());
 
       const card = document.createElement('div');
-      card.className = 'place-card';
+      card.className = 'gallery-item';
       card.style.transitionDelay = (i * 0.04).toFixed(2) + 's';
 
       const imgWrap = document.createElement('div');
@@ -875,7 +831,7 @@
     lbLabel.textContent     = label;
     viewerCurrent.textContent = ssIdx + 1;
     viewerTotal.textContent   = imgs.length;
-    renderBio(file.name, label);
+    renderInfo(file.name, label);
     ssViewer.classList.add('active');
   }
 
@@ -885,7 +841,7 @@
     const imgs = getVisibleImgs();
     if (!imgs.length) return;
     ssIdx = (ssIdx + dir + imgs.length) % imgs.length;
-    ssImg.style.opacity = '0';
+    ssImg.style.opacity   = '0';
     bioWrap.style.opacity = '0';
     setTimeout(() => {
       const file  = allImages[ssIdx];
@@ -893,7 +849,7 @@
       ssImg.src               = imgs[ssIdx].src;
       lbLabel.textContent     = label;
       viewerCurrent.textContent = ssIdx + 1;
-      renderBio(file.name, label);
+      renderInfo(file.name, label);
       ssImg.style.opacity   = '1';
       bioWrap.style.opacity = '1';
     }, 130);
