@@ -37,13 +37,11 @@
     pointer-events: none;
   }
 
+  /* ── Nav ── */
   nav {
     position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: center;
     padding: 22px 36px;
     animation: slideDown 0.8s cubic-bezier(0.34, 1.4, 0.64, 1) both;
   }
@@ -59,8 +57,7 @@
     font-family: 'Nunito', sans-serif;
     font-size: 12px; font-weight: 900;
     letter-spacing: 0.15em; text-transform: uppercase;
-    text-decoration: none;
-    padding: 10px 22px;
+    text-decoration: none; padding: 10px 22px;
     border-radius: 999px;
     border: 1.5px solid rgba(0,255,255,0.18);
     background: rgba(0,255,255,0.04);
@@ -72,62 +69,54 @@
   }
 
   .nav-links li a::before {
-    content: '';
-    position: absolute;
+    content: ''; position: absolute;
     top: 0; left: 15%; right: 15%; height: 40%;
     background: linear-gradient(180deg, rgba(255,255,255,0.1), transparent);
-    border-radius: 0 0 50% 50%;
-    pointer-events: none;
+    border-radius: 0 0 50% 50%; pointer-events: none;
   }
 
   .nav-links li a:hover {
-    color: #fff;
-    border-color: rgba(0,255,255,0.45);
+    color: #fff; border-color: rgba(0,255,255,0.45);
     background: rgba(0,255,255,0.1);
     box-shadow: 0 0 20px rgba(0,255,255,0.2), inset 0 1px 0 rgba(255,255,255,0.12);
     transform: translateY(-2px) scale(1.04);
   }
 
   .nav-links li a.active {
-    color: #00ffff;
-    border-color: rgba(0,255,255,0.5);
+    color: #00ffff; border-color: rgba(0,255,255,0.5);
     background: rgba(0,255,255,0.1);
     box-shadow: 0 0 22px rgba(0,255,255,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
   }
 
   .nav-links li:nth-child(even) a {
-    border-color: rgba(255,0,200,0.18);
-    background: rgba(255,0,200,0.04);
+    border-color: rgba(255,0,200,0.18); background: rgba(255,0,200,0.04);
     box-shadow: 0 0 10px rgba(255,0,200,0.05), inset 0 1px 0 rgba(255,255,255,0.08);
   }
 
   .nav-links li:nth-child(even) a:hover {
-    color: #fff;
-    border-color: rgba(255,0,200,0.5);
+    color: #fff; border-color: rgba(255,0,200,0.5);
     background: rgba(255,0,200,0.1);
     box-shadow: 0 0 20px rgba(255,0,200,0.22), inset 0 1px 0 rgba(255,255,255,0.12);
   }
 
+  /* ── Main ── */
   main {
     position: relative; z-index: 1;
-    padding: 110px 40px 60px;
-    max-width: 1400px;
-    margin: 0 auto;
+    padding: 110px 40px 80px;
+    max-width: 1400px; margin: 0 auto;
   }
 
+  /* ── Page header ── */
   .page-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-bottom: 36px;
+    display: flex; align-items: flex-end;
+    justify-content: space-between; margin-bottom: 36px;
     animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
   }
 
   .eyebrow {
     font-size: 11px; font-weight: 800;
     letter-spacing: 0.35em; text-transform: uppercase;
-    color: rgba(255,255,255,0.28);
-    margin-bottom: 4px;
+    color: rgba(255,255,255,0.28); margin-bottom: 4px;
   }
 
   .page-title {
@@ -136,30 +125,32 @@
     text-transform: uppercase; line-height: 0.9;
     background: linear-gradient(90deg, #00ffff, #bf00ff, #ff00c8, #00e5ff, #00ffff);
     background-size: 300% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: textShimmer 4s linear infinite;
     filter: drop-shadow(0 0 20px rgba(0,255,255,0.25));
   }
 
-  @keyframes textShimmer {
-    0%   { background-position: 0% }
-    100% { background-position: 300% }
-  }
+  @keyframes textShimmer { 0% { background-position: 0% } 100% { background-position: 300% } }
 
+  /* ── Count badge ── */
   .count-badge {
     font-size: 11px; font-weight: 900;
     letter-spacing: 0.2em; text-transform: uppercase;
-    color: rgba(255,255,255,0.22);
-    padding: 8px 16px; border-radius: 999px;
-    border: 1.5px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.22); padding: 8px 16px;
+    border-radius: 999px; border: 1.5px solid rgba(255,255,255,0.08);
     background: rgba(255,255,255,0.03);
+    transition: all 0.3s;
   }
 
-  .count-badge span { color: #00ffff; }
+  .count-badge span {
+    color: #00ffff;
+    text-shadow: 0 0 12px rgba(0,255,255,0.6);
+    transition: all 0.3s;
+  }
 
-  .folder-bar {
+  /* ── Status bar ── */
+  .status-bar {
     display: flex; align-items: center; gap: 12px;
     padding: 12px 20px; border-radius: 12px;
     border: 1.5px solid rgba(0,255,255,0.12);
@@ -168,84 +159,83 @@
     animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
   }
 
-  .folder-dot {
+  .status-dot {
     width: 7px; height: 7px; border-radius: 50%;
-    background: #00ffff; box-shadow: 0 0 8px #00ffff;
-    flex-shrink: 0; animation: blink 2s ease-in-out infinite;
+    background: rgba(255,255,255,0.15); flex-shrink: 0;
+    transition: background 0.3s, box-shadow 0.3s;
   }
 
-  .folder-dot.err { background: #ff3040; box-shadow: 0 0 8px #ff3040; animation: none; }
+  .status-dot.loading { background: #ffcc00; box-shadow: 0 0 8px #ffcc00; animation: blink 0.8s ease-in-out infinite; }
+  .status-dot.ok      { background: #00ffff; box-shadow: 0 0 8px #00ffff; animation: blink 2s ease-in-out infinite; }
+  .status-dot.err     { background: #ff3040; box-shadow: 0 0 8px #ff3040; }
 
-  .folder-label {
-    font-size: 11px; font-weight: 800;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    color: rgba(255,255,255,0.2); flex-shrink: 0;
+  .status-text {
+    font-size: 12px; font-weight: 800; font-family: monospace;
+    color: rgba(255,255,255,0.25); flex: 1;
+    transition: color 0.3s;
   }
 
-  .folder-path {
-    font-size: 12px; font-weight: 800;
-    color: rgba(0,255,255,0.55); font-family: monospace;
-  }
+  .status-text.ok  { color: rgba(0,255,255,0.6); }
+  .status-text.err { color: rgba(255,80,80,0.6); }
 
-  .folder-path.err { color: rgba(255,80,80,0.55); }
-
-  .empty-state {
+  /* ── Empty state ── */
+  .empty {
     display: none; flex-direction: column;
     align-items: center; justify-content: center;
-    gap: 20px; padding: 80px 20px; text-align: center;
+    gap: 18px; padding: 80px 20px; text-align: center;
   }
 
-  .empty-icon {
-    width: 72px; height: 72px; border-radius: 50%;
-    border: 2px dashed rgba(0,255,255,0.2);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 28px; opacity: 0.5;
-  }
+  .empty-icon { font-size: 40px; opacity: 0.3; }
 
   .empty-title {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 28px; font-weight: 900; text-transform: uppercase;
+    font-size: 26px; font-weight: 900; text-transform: uppercase;
     color: rgba(255,255,255,0.18); letter-spacing: 0.05em;
   }
 
   .empty-sub {
-    font-size: 12px; font-weight: 800;
+    font-size: 11px; font-weight: 800;
     letter-spacing: 0.12em; text-transform: uppercase;
-    color: rgba(255,255,255,0.1); max-width: 360px; line-height: 1.8;
+    color: rgba(255,255,255,0.1); max-width: 340px; line-height: 1.9;
   }
 
   .empty-sub code {
-    color: rgba(0,255,255,0.4);
-    background: rgba(0,255,255,0.06);
+    color: rgba(0,255,255,0.4); background: rgba(0,255,255,0.06);
     padding: 2px 7px; border-radius: 4px;
-    letter-spacing: 0; text-transform: none;
+    letter-spacing: 0; text-transform: none; font-size: 11px;
   }
 
+  /* ── Grid ── */
   .places-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 18px;
   }
 
+  /* ── Card ── */
   .place-card {
     border-radius: 14px; overflow: hidden;
     border: 1.5px solid rgba(0,255,255,0.12);
     background: rgba(0,255,255,0.03);
     box-shadow: 0 8px 32px rgba(0,0,0,0.4);
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-    animation: cardIn 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+    opacity: 0; transform: scale(0.9) translateY(14px);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s,
+                opacity 0.45s ease, transform 0.45s cubic-bezier(0.34,1.4,0.64,1);
+  }
+
+  .place-card.visible {
+    opacity: 1; transform: scale(1) translateY(0);
   }
 
   .place-card:hover {
-    transform: translateY(-4px) scale(1.01);
+    transform: translateY(-4px) scale(1.01) !important;
     border-color: rgba(0,255,255,0.35);
     box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 20px rgba(0,255,255,0.08);
   }
 
   .place-card:nth-child(even) {
-    border-color: rgba(255,0,200,0.12);
-    background: rgba(255,0,200,0.03);
+    border-color: rgba(255,0,200,0.12); background: rgba(255,0,200,0.03);
   }
 
   .place-card:nth-child(even):hover {
@@ -253,11 +243,7 @@
     box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 20px rgba(255,0,200,0.08);
   }
 
-  @keyframes cardIn {
-    from { opacity: 0; transform: scale(0.92) translateY(12px); }
-    to   { opacity: 1; transform: scale(1) translateY(0); }
-  }
-
+  /* ── Card image ── */
   .card-img-wrap {
     position: relative; width: 100%;
     aspect-ratio: 16/9; overflow: hidden;
@@ -273,24 +259,23 @@
   .place-card:hover .card-img-wrap img { transform: scale(1.06); }
 
   .card-img-wrap::after {
-    content: '';
-    position: absolute; inset: 0;
+    content: ''; position: absolute; inset: 0;
     background: linear-gradient(0deg, rgba(4,0,26,0.7) 0%, transparent 50%);
     pointer-events: none;
   }
 
   .card-num {
-    position: absolute; top: 10px; left: 12px;
+    position: absolute; top: 10px; left: 12px; z-index: 2;
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 11px; font-weight: 900;
     letter-spacing: 0.15em; text-transform: uppercase;
-    color: rgba(255,255,255,0.5);
-    background: rgba(4,0,26,0.6);
+    color: rgba(255,255,255,0.5); background: rgba(4,0,26,0.6);
     padding: 4px 10px; border-radius: 999px;
     border: 1px solid rgba(255,255,255,0.1);
-    backdrop-filter: blur(8px); z-index: 2;
+    backdrop-filter: blur(8px);
   }
 
+  /* ── Card body ── */
   .card-body { padding: 14px 16px 16px; }
 
   .card-name {
@@ -303,219 +288,334 @@
 
   .card-file {
     font-size: 10px; font-weight: 800;
-    letter-spacing: 0.15em; text-transform: uppercase;
+    letter-spacing: 0.15em;
     color: rgba(255,255,255,0.18); font-family: monospace;
   }
 
-  /* lightbox */
-  .lightbox {
+  /* ── Lightbox ── */
+  #ssViewer {
     position: fixed; inset: 0; z-index: 999;
     background: rgba(4,0,26,0.95);
-    display: flex; align-items: center; justify-content: center;
-    padding: 20px; cursor: zoom-out;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 20px;
     backdrop-filter: blur(20px);
-    animation: fadeIn 0.2s ease both;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s ease;
   }
 
-  .lightbox.hidden { display: none; }
+  #ssViewer.active {
+    opacity: 1; pointer-events: all;
+  }
 
-  .lightbox img {
-    max-width: 100%; max-height: 90vh;
+  #ssImg {
+    max-width: 90vw; max-height: 80vh;
     border-radius: 10px;
     border: 1.5px solid rgba(0,255,255,0.2);
     box-shadow: 0 0 60px rgba(0,255,255,0.12);
-    object-fit: contain; cursor: default;
+    object-fit: contain;
+    transition: opacity 0.15s;
   }
 
-  .lightbox-close {
+  .viewer-controls {
+    display: flex; align-items: center; gap: 20px;
+    margin-top: 20px;
+  }
+
+  .viewer-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px; font-weight: 900;
+    color: rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.05);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 999px; padding: 8px 22px;
+    cursor: pointer; letter-spacing: 0.08em;
+    transition: color 0.15s, border-color 0.15s, background 0.15s, transform 0.15s;
+  }
+
+  .viewer-btn:hover {
+    color: #fff; border-color: rgba(0,255,255,0.4);
+    background: rgba(0,255,255,0.08);
+    transform: scale(1.08);
+  }
+
+  .viewer-counter {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px; font-weight: 900;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    min-width: 80px; text-align: center;
+  }
+
+  .viewer-counter span { color: #00ffff; }
+
+  #ssClose {
     position: fixed; top: 20px; right: 24px;
     font-size: 24px; color: rgba(255,255,255,0.4);
     cursor: pointer; background: none; border: none;
-    transition: color 0.15s;
     font-family: 'Nunito', sans-serif; font-weight: 900;
-    z-index: 1001;
+    transition: color 0.15s; z-index: 1001;
   }
 
-  .lightbox-close:hover { color: #fff; }
+  #ssClose:hover { color: #fff; }
 
-  .lightbox-label {
-    position: fixed; bottom: 24px;
-    left: 50%; transform: translateX(-50%);
+  .lb-label {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 22px; font-weight: 900;
+    font-size: 18px; font-weight: 900;
     text-transform: uppercase; letter-spacing: 0.1em;
-    color: rgba(255,255,255,0.45);
-    pointer-events: none;
+    color: rgba(255,255,255,0.3); margin-top: 6px;
   }
 
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-  @keyframes popIn {
-    from { opacity: 0; transform: scale(0.85) translateY(10px); }
-    to   { opacity: 1; transform: scale(1) translateY(0); }
-  }
-
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0.2; }
-  }
+  /* ── Animations ── */
+  @keyframes popIn  { from { opacity: 0; transform: scale(0.85) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+  @keyframes blink  { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 </style>
 </head>
 <body>
 
+<!-- ── Nav ── -->
 <nav>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
     <li><a href="#">Map</a></li>
-    <li><a href="places.html" class="active">Places</a></li>
-    <li><a href="#">Characters</a></li>
+    <li><a href="places.html">Places</a></li>
+    <li><a href="characters.html" class="active">Characters</a></li>
     <li><a href="#">Screenshots</a></li>
     <li><a href="#">Trailers</a></li>
   </ul>
 </nav>
 
-<div class="lightbox hidden" id="lightbox">
-  <button class="lightbox-close" id="lb-close">✕</button>
-  <img id="lb-img" src="" alt="">
-  <div class="lightbox-label" id="lb-label"></div>
+<!-- ── Screenshot viewer ── -->
+<div id="ssViewer">
+  <button id="ssClose">✕</button>
+  <img id="ssImg" src="" alt="">
+  <div class="lb-label" id="lbLabel"></div>
+  <div class="viewer-controls">
+    <button class="viewer-btn" id="ssPrev">&#8592;</button>
+    <div class="viewer-counter"><span id="viewerCurrent">1</span> / <span id="viewerTotal">0</span></div>
+    <button class="viewer-btn" id="ssNext">&#8594;</button>
+  </div>
 </div>
 
+<!-- ── Main ── -->
 <main>
   <div class="page-header">
     <div>
       <div class="eyebrow">Leonida ·</div>
       <div class="page-title">Characters</div>
     </div>
-    <div class="count-badge"><span id="count">0</span>Characters</div>
+    <div class="count-badge"><span id="count">0</span> characters</div>
   </div>
 
-  <div class="folder-bar">
-    <div class="folder-dot" id="folder-dot"></div>
-    <div class="folder-label">Source</div>
-    <div class="folder-path" id="folder-path-el"></div>
+  <div class="status-bar">
+    <div class="status-dot loading" id="status-dot"></div>
+    <div class="status-text" id="status-text">Scanning repository…</div>
   </div>
 
-  <div class="empty-state" id="empty-state">
+  <div class="empty" id="empty">
     <div class="empty-icon">📂</div>
     <div class="empty-title">No Images Found</div>
     <div class="empty-sub">
-      Add <code>.jpg</code> files into <code id="hint-path"></code> — they'll show up here automatically
+      Drop <code>.jpg</code>, <code>.png</code>, <code>.webp</code> or <code>.gif</code> files
+      into <code>leonida/npc/</code> and they'll appear here automatically.
     </div>
   </div>
 
-  <div class="places-grid" id="grid"></div>
+  <div class="places-grid" id="gallery"></div>
 </main>
 
 <script>
   /* ============================================================
-     ✏️  SET THIS to the folder containing your screenshots,
-         relative to this HTML file.
-         e.g.  'places/'   or   'gta/places/'
+     CONFIG
   ============================================================ */
-  const IMAGES_FOLDER = 'leonida/npc/';
-  /* ============================================================ */
+  const GITHUB_USER  = 'vocql';
+  const GITHUB_REPO  = 'leonidagta';
+  const BRANCH       = 'main';
+  const IMAGES_PATH  = 'leonida/npc';
+  const IMAGE_EXTS   = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
 
-  const IMAGE_EXTS = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
+  /* ============================================================
+     ELEMENTS
+  ============================================================ */
+  const gallery       = document.getElementById('gallery');
+  const ssViewer      = document.getElementById('ssViewer');
+  const ssImg         = document.getElementById('ssImg');
+  const countEl       = document.getElementById('count');
+  const statusDot     = document.getElementById('status-dot');
+  const statusText    = document.getElementById('status-text');
+  const lbLabel       = document.getElementById('lbLabel');
+  const viewerCurrent = document.getElementById('viewerCurrent');
+  const viewerTotal   = document.getElementById('viewerTotal');
 
-  const grid         = document.getElementById('grid');
-  const emptyState   = document.getElementById('empty-state');
-  const countEl      = document.getElementById('count');
-  const folderDot    = document.getElementById('folder-dot');
-  const folderPathEl = document.getElementById('folder-path-el');
-  const hintPath     = document.getElementById('hint-path');
+  let ssIdx = 0;
 
-  folderPathEl.textContent = IMAGES_FOLDER;
-  hintPath.textContent     = IMAGES_FOLDER;
+  /* ============================================================
+     STATUS HELPER
+  ============================================================ */
+  function setStatus(type, msg) {
+    statusDot.className  = 'status-dot ' + type;
+    statusText.className = 'status-text ' + (type === 'loading' ? '' : type);
+    statusText.textContent = msg;
+  }
 
-  async function scanFolder() {
-    let html;
+  /* ============================================================
+     LOAD — GitHub API lists the folder, filters to image files
+  ============================================================ */
+  async function loadImages() {
+    setStatus('loading', 'Fetching ' + GITHUB_USER + '/' + GITHUB_REPO + '/' + IMAGES_PATH + ' …');
 
+    const apiURL = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${IMAGES_PATH}?ref=${BRANCH}`;
+
+    let files;
     try {
-      const res = await fetch(IMAGES_FOLDER);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      html = await res.text();
-    } catch {
-      folderDot.classList.add('err');
-      folderPathEl.classList.add('err');
-      folderPathEl.textContent = IMAGES_FOLDER + '  ← folder not reachable (open via a local web server, not file://)';
-      emptyState.style.display = 'flex';
+      const res = await fetch(apiURL, { headers: { 'Accept': 'application/vnd.github.v3+json' } });
+      if (res.status === 404) {
+        setStatus('err', 'Folder not found: ' + IMAGES_PATH);
+        document.getElementById('empty').style.display = 'flex';
+        return;
+      }
+      if (!res.ok) throw new Error('GitHub API returned ' + res.status);
+      files = await res.json();
+    } catch (err) {
+      setStatus('err', 'GitHub API error — ' + err.message);
+      document.getElementById('empty').style.display = 'flex';
       return;
     }
 
-    /* parse anchor hrefs from the server's directory listing */
-    const doc   = new DOMParser().parseFromString(html, 'text/html');
-    const files = [...doc.querySelectorAll('a[href]')]
-      .map(a => decodeURIComponent(a.getAttribute('href')))
-      .filter(href => {
-        const low = href.toLowerCase();
-        return (
-          IMAGE_EXTS.some(ext => low.endsWith(ext)) &&
-          !href.startsWith('?') &&
-          !href.startsWith('/') &&
-          !href.startsWith('http')
-        );
-      });
-
-    if (!files.length) {
-      emptyState.style.display = 'flex';
-      folderPathEl.textContent = IMAGES_FOLDER + '  · no images found';
+    if (!Array.isArray(files)) {
+      setStatus('err', 'Unexpected response from GitHub API');
+      document.getElementById('empty').style.display = 'flex';
       return;
     }
 
-    countEl.textContent = files.length;
-    folderPathEl.textContent = `${IMAGES_FOLDER}  ·  ${files.length} image${files.length !== 1 ? 's' : ''}`;
+    const images = files.filter(f =>
+      f.type === 'file' &&
+      IMAGE_EXTS.some(ext => f.name.toLowerCase().endsWith(ext))
+    );
 
-    files.forEach((filename, i) => {
-      const src   = IMAGES_FOLDER + filename;
-      const name  = filename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
-      const label = capitalize(name);
+    if (!images.length) {
+      setStatus('ok', IMAGES_PATH + '  ·  no images found yet');
+      document.getElementById('empty').style.display = 'flex';
+      return;
+    }
+
+    setStatus('ok', IMAGES_PATH + '  ·  ' + images.length + ' character' + (images.length !== 1 ? 's' : '') + ' detected');
+    countEl.textContent     = images.length;
+    viewerTotal.textContent = images.length;
+
+    images.forEach((file, i) => {
+      const src      = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${BRANCH}/${IMAGES_PATH}/${file.name}`;
+      const filename = file.name;
+      const label    = file.name
+        .replace(/\.[^.]+$/, '')
+        .replace(/[-_]/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
 
       const card = document.createElement('div');
       card.className = 'place-card';
-      card.style.animationDelay = (i * 0.05).toFixed(2) + 's';
+      card.style.transitionDelay = (i * 0.04).toFixed(2) + 's';
 
-      card.innerHTML = `
-        <div class="card-img-wrap">
-          <span class="card-num">#${String(i + 1).padStart(2, '0')}</span>
-          <img src="${src}" alt="${label}" loading="lazy">
-        </div>
-        <div class="card-body">
-          <div class="card-name">${label}</div>
-          <div class="card-file">${filename}</div>
-        </div>
+      const imgWrap = document.createElement('div');
+      imgWrap.className = 'card-img-wrap';
+
+      const numBadge = document.createElement('span');
+      numBadge.className = 'card-num';
+      numBadge.textContent = '#' + String(i + 1).padStart(2, '0');
+
+      const img = document.createElement('img');
+      img.alt         = label;
+      img.loading     = 'lazy';
+      img.dataset.idx = String(i);
+      img.src         = src;
+
+      imgWrap.appendChild(numBadge);
+      imgWrap.appendChild(img);
+
+      const cardBody = document.createElement('div');
+      cardBody.className = 'card-body';
+      cardBody.innerHTML = `
+        <div class="card-name">${label}</div>
+        <div class="card-file">${filename}</div>
       `;
 
-      card.addEventListener('click', () => openLightbox(src, label));
-      grid.appendChild(card);
+      card.appendChild(imgWrap);
+      card.appendChild(cardBody);
+      gallery.appendChild(card);
+
+      ssObs.observe(card);
     });
   }
 
-  /* lightbox */
-  const lightbox = document.getElementById('lightbox');
-  const lbImg    = document.getElementById('lb-img');
-  const lbLabel  = document.getElementById('lb-label');
-  const lbClose  = document.getElementById('lb-close');
+  /* ============================================================
+     INTERSECTION OBSERVER — scroll-reveal
+  ============================================================ */
+  const ssObs = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting) {
+        en.target.classList.add('visible');
+        ssObs.unobserve(en.target);
+      }
+    });
+  }, { threshold: 0.05 });
 
-  function openLightbox(src, label) {
-    lbImg.src = src;
-    lbLabel.textContent = label;
-    lightbox.classList.remove('hidden');
+  /* ============================================================
+     VIEWER HELPERS
+  ============================================================ */
+  function getVisibleImgs() {
+    return [...gallery.querySelectorAll('img[data-idx]')];
   }
 
-  function closeLightbox() {
-    lightbox.classList.add('hidden');
-    lbImg.src = '';
+  function openViewer(idx) {
+    const imgs = getVisibleImgs();
+    if (!imgs.length) return;
+    ssIdx = idx;
+    ssImg.src = imgs[ssIdx].src;
+    lbLabel.textContent = imgs[ssIdx].alt;
+    viewerCurrent.textContent = ssIdx + 1;
+    viewerTotal.textContent   = imgs.length;
+    ssViewer.classList.add('active');
   }
 
-  lbClose.addEventListener('click', closeLightbox);
-  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+  function ssClose() { ssViewer.classList.remove('active'); }
 
-  function capitalize(str) {
-    return str.replace(/\b\w/g, c => c.toUpperCase());
+  function ssStep(dir) {
+    const imgs = getVisibleImgs();
+    if (!imgs.length) return;
+    ssIdx = (ssIdx + dir + imgs.length) % imgs.length;
+    ssImg.style.opacity = '0';
+    setTimeout(() => {
+      ssImg.src = imgs[ssIdx].src;
+      lbLabel.textContent = imgs[ssIdx].alt;
+      viewerCurrent.textContent = ssIdx + 1;
+      ssImg.style.opacity = '1';
+    }, 120);
   }
 
-  scanFolder();
+  /* ============================================================
+     EVENTS
+  ============================================================ */
+  gallery.addEventListener('click', e => {
+    const img = e.target.closest('img[data-idx]');
+    if (!img) return;
+    openViewer(parseInt(img.dataset.idx, 10));
+  });
+
+  document.getElementById('ssClose').addEventListener('click', ssClose);
+  ssViewer.addEventListener('click', e => { if (e.target === ssViewer) ssClose(); });
+  document.getElementById('ssPrev').addEventListener('click', () => ssStep(-1));
+  document.getElementById('ssNext').addEventListener('click', () => ssStep(1));
+
+  document.addEventListener('keydown', e => {
+    if (!ssViewer.classList.contains('active')) return;
+    if (e.key === 'Escape')      ssClose();
+    if (e.key === 'ArrowLeft')   ssStep(-1);
+    if (e.key === 'ArrowRight')  ssStep(1);
+  });
+
+  /* ============================================================
+     KICK OFF
+  ============================================================ */
+  loadImages();
 </script>
 </body>
 </html>
