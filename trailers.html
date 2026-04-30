@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trailers — Leonida</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@900&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #04001a;
+    min-height: 100vh;
+    font-family: 'Nunito', sans-serif;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse at 15% 20%, rgba(0,255,255,0.13) 0%, transparent 45%),
+      radial-gradient(ellipse at 85% 75%, rgba(255,0,200,0.15) 0%, transparent 45%),
+      radial-gradient(ellipse at 50% 50%, rgba(90,0,200,0.07) 0%, transparent 55%);
+    pointer-events: none;
+  }
+
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(0,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,255,0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    pointer-events: none;
+  }
+
+  /* ── Nav ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: center;
+    padding: 22px 36px;
+    animation: slideDown 0.8s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .nav-links { display: flex; align-items: center; gap: 8px; list-style: none; }
+
+  .nav-links li a {
+    font-family: 'Nunito', sans-serif;
+    font-size: 12px; font-weight: 900;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    text-decoration: none; padding: 10px 22px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(0,255,255,0.18);
+    background: rgba(0,255,255,0.04);
+    color: rgba(255,255,255,0.45);
+    box-shadow: 0 0 10px rgba(0,255,255,0.05), inset 0 1px 0 rgba(255,255,255,0.08);
+    position: relative; overflow: hidden;
+    transition: color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.15s, background 0.2s;
+    display: block;
+  }
+
+  .nav-links li a::before {
+    content: ''; position: absolute;
+    top: 0; left: 15%; right: 15%; height: 40%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.1), transparent);
+    border-radius: 0 0 50% 50%; pointer-events: none;
+  }
+
+  .nav-links li a:hover {
+    color: #fff; border-color: rgba(0,255,255,0.45);
+    background: rgba(0,255,255,0.1);
+    box-shadow: 0 0 20px rgba(0,255,255,0.2), inset 0 1px 0 rgba(255,255,255,0.12);
+    transform: translateY(-2px) scale(1.04);
+  }
+
+  .nav-links li a.active {
+    color: #00ffff; border-color: rgba(0,255,255,0.5);
+    background: rgba(0,255,255,0.1);
+    box-shadow: 0 0 22px rgba(0,255,255,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
+  }
+
+  .nav-links li:nth-child(even) a {
+    border-color: rgba(255,0,200,0.18); background: rgba(255,0,200,0.04);
+    box-shadow: 0 0 10px rgba(255,0,200,0.05), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+
+  .nav-links li:nth-child(even) a:hover {
+    color: #fff; border-color: rgba(255,0,200,0.5);
+    background: rgba(255,0,200,0.1);
+    box-shadow: 0 0 20px rgba(255,0,200,0.22), inset 0 1px 0 rgba(255,255,255,0.12);
+  }
+
+  /* ── Main ── */
+  main {
+    position: relative; z-index: 1;
+    padding: 110px 40px 80px;
+    max-width: 1400px; margin: 0 auto;
+  }
+
+  /* ── Page header ── */
+  .page-header {
+    display: flex; align-items: flex-end;
+    justify-content: space-between; margin-bottom: 48px;
+    animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  .eyebrow {
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.35em; text-transform: uppercase;
+    color: rgba(255,255,255,0.28); margin-bottom: 4px;
+  }
+
+  .page-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(36px, 6vw, 72px); font-weight: 900;
+    text-transform: uppercase; line-height: 0.9;
+    background: linear-gradient(90deg, #00ffff, #bf00ff, #ff00c8, #00e5ff, #00ffff);
+    background-size: 300% auto;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: textShimmer 4s linear infinite;
+    filter: drop-shadow(0 0 20px rgba(0,255,255,0.25));
+  }
+
+  @keyframes textShimmer { 0% { background-position: 0% } 100% { background-position: 300% } }
+
+  .count-badge {
+    font-size: 11px; font-weight: 900;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(255,255,255,0.22); padding: 8px 16px;
+    border-radius: 999px; border: 1.5px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+  }
+
+  .count-badge span { color: #00ffff; text-shadow: 0 0 12px rgba(0,255,255,0.6); }
+
+  /* ── Trailers grid ── */
+  .trailers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  /* ── Trailer card ── */
+  .trailer-card {
+    border-radius: 16px; overflow: hidden;
+    border: 1.5px solid rgba(0,255,255,0.14);
+    background: rgba(0,255,255,0.02);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    opacity: 0; transform: scale(0.93) translateY(16px);
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34,1.4,0.64,1),
+                border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+
+  .trailer-card.visible {
+    opacity: 1; transform: scale(1) translateY(0);
+  }
+
+  .trailer-card:hover {
+    border-color: rgba(0,255,255,0.3);
+    box-shadow: 0 16px 56px rgba(0,0,0,0.6), 0 0 30px rgba(0,255,255,0.07);
+  }
+
+  .trailer-card:nth-child(even) {
+    border-color: rgba(255,0,200,0.14);
+    background: rgba(255,0,200,0.02);
+  }
+
+  .trailer-card:nth-child(even):hover {
+    border-color: rgba(255,0,200,0.3);
+    box-shadow: 0 16px 56px rgba(0,0,0,0.6), 0 0 30px rgba(255,0,200,0.07);
+  }
+
+  /* ── NEW badge ── */
+  .new-badge {
+    position: absolute; top: 14px; right: 14px; z-index: 10;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 900;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: #04001a;
+    background: #00ffff;
+    padding: 5px 12px; border-radius: 999px;
+    box-shadow: 0 0 16px rgba(0,255,255,0.5);
+    animation: pulseBadge 2s ease-in-out infinite;
+  }
+
+  @keyframes pulseBadge {
+    0%, 100% { box-shadow: 0 0 16px rgba(0,255,255,0.5); }
+    50%       { box-shadow: 0 0 28px rgba(0,255,255,0.9); }
+  }
+
+  /* ── Embed wrapper ── */
+  .embed-wrap {
+    position: relative; width: 100%;
+    aspect-ratio: 16/9; overflow: hidden;
+    background: #000;
+  }
+
+  .embed-wrap iframe {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    border: none; display: block;
+  }
+
+  /* ── TBA card ── */
+  .trailer-card.tba .embed-wrap {
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 16px;
+    background: #000;
+    cursor: default;
+  }
+
+  .tba-icon {
+    font-size: 48px; opacity: 0.15;
+  }
+
+  .tba-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; font-weight: 900;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    color: rgba(255,255,255,0.12);
+  }
+
+  /* ── Animations ── */
+  @keyframes popIn { from { opacity: 0; transform: scale(0.85) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+  /* ── Responsive ── */
+  @media (max-width: 680px) {
+    .trailers-grid { grid-template-columns: 1fr; }
+    main { padding: 100px 20px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="#">Map</a></li>
+    <li><a href="places.html">Places</a></li>
+    <li><a href="characters.html">Characters</a></li>
+    <li><a href="screenshots.html">Screenshots</a></li>
+    <li><a href="trailers.html" class="active">Trailers</a></li>
+  </ul>
+</nav>
+
+<!-- ── Main ── -->
+<main>
+  <div class="page-header">
+    <div>
+      <div class="eyebrow">Leonida ·</div>
+      <div class="page-title">Trailers</div>
+    </div>
+    <div class="count-badge"><span>2</span> trailers</div>
+  </div>
+
+  <div class="trailers-grid" id="trailersGrid">
+
+    <!-- Trailer 1 -->
+    <div class="trailer-card" style="transition-delay:0s">
+      <div class="embed-wrap">
+        <iframe
+          src="https://www.youtube.com/embed/QdBZY2fkU-0?rel=0&modestbranding=1"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          title="GTA VI Trailer 1">
+        </iframe>
+      </div>
+    </div>
+
+    <!-- Trailer 2 -->
+    <div class="trailer-card" style="transition-delay:0.1s">
+      <div class="embed-wrap">
+        <iframe
+          src="https://www.youtube.com/embed/VQRLujxTm3c?rel=0&modestbranding=1"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          title="GTA VI Trailer 2">
+        </iframe>
+      </div>
+    </div>
+
+    <!-- Trailer 3 — TBA -->
+    <div class="trailer-card tba" style="transition-delay:0.2s">
+      <div class="new-badge">NEW</div>
+      <div class="embed-wrap">
+        <div class="tba-icon">▶</div>
+        <div class="tba-label">Coming Soon</div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  /* Scroll-reveal for trailer cards */
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting) {
+        en.target.classList.add('visible');
+        obs.unobserve(en.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.trailer-card').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
