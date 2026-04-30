@@ -103,7 +103,7 @@
   main {
     position: relative; z-index: 1;
     padding: 110px 40px 80px;
-    max-width: 1400px; margin: 0 auto;
+    max-width: 1450px; margin: 0 auto;
   }
 
   /* ── Page header ── */
@@ -212,6 +212,27 @@
     border: none; display: block;
   }
 
+  /* ── Card label ── */
+  .card-label {
+    padding: 10px 14px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(255,255,255,0.025);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .card-label-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px; font-weight: 900;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .card-label-year {
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.22);
+  }
+
   /* ── TBA card ── */
   .trailer-card.tba .embed-wrap {
     display: flex; align-items: center; justify-content: center;
@@ -244,18 +265,17 @@
 </head>
 <body>
 
- <nav>
-    <ul class="nav-links">
-      <li><a href="index" class="active">Home</a></li>
-      <li><a href="map">Map</a></li>
-      <li><a href="places">Places</a></li>
-      <li><a href="characters">Characters</a></li>
-      <li><a href="screenshots">Screenshots</a></li>
-      <li><a href="#">Trailers</a></li>
-    </ul>
-  </nav>
+<nav>
+  <ul class="nav-links">
+    <li><a href="index">Home</a></li>
+    <li><a href="map">Map</a></li>
+    <li><a href="places">Places</a></li>
+    <li><a href="characters">Characters</a></li>
+    <li><a href="screenshots">Screenshots</a></li>
+    <li><a href="#" class="active">Trailers</a></li>
+  </ul>
+</nav>
 
-<!-- ── Main ── -->
 <main>
   <div class="page-header">
     <div>
@@ -277,6 +297,10 @@
           title="GTA VI Trailer 1">
         </iframe>
       </div>
+      <div class="card-label">
+        <span class="card-label-title">Trailer 1</span>
+        <span class="card-label-year">Dec 2023</span>
+      </div>
     </div>
 
     <!-- Trailer 2 -->
@@ -289,6 +313,10 @@
           title="GTA VI Trailer 2">
         </iframe>
       </div>
+      <div class="card-label">
+        <span class="card-label-title">Trailer 2</span>
+        <span class="card-label-year">May 2025</span>
+      </div>
     </div>
 
     <!-- Trailer 3 — TBA -->
@@ -298,13 +326,16 @@
         <div class="tba-icon">▶</div>
         <div class="tba-label">Coming Soon</div>
       </div>
+      <div class="card-label">
+        <span class="card-label-title">Trailer 3</span>
+        <span class="card-label-year">TBA</span>
+      </div>
     </div>
 
   </div>
 </main>
 
 <script>
-  /* Scroll-reveal for trailer cards */
   const obs = new IntersectionObserver(entries => {
     entries.forEach(en => {
       if (en.isIntersecting) {
