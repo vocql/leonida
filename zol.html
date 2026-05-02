@@ -5,390 +5,784 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Welcome to Leonida</title>
 
-<!-- ═══════════════════════════════════════════════
-       PRIMARY SEO
-  ═══════════════════════════════════════════════ -->
-  <meta name="description" content="The neon-lit gateway to Leonida. Live countdown, both official trailers, the full interactive map, character bios, location breakdowns & more. The wait ends November 19, 2026.">
-  <link rel="canonical" href="https://voqcl.xyz">
-  <!-- ═══════════════════════════════════════════════
-       OPEN GRAPH  (Discord · Facebook · iMessage · Slack · LinkedIn)
-  ═══════════════════════════════════════════════ -->
-  <meta property="og:type"        content="website">
-  <meta property="og:url"         content="https://vocql.github.io/leonida/">
-  <meta property="og:title"       content="Welcome to Leonida 🌊🌅✨">
-  <meta property="og:description" content="The neon-lit gateway to Leonida. Live countdown, both official trailers, the full interactive map, character bios & more. November 19, 2026 — don't miss a second.">
-  <meta property="og:image"        content="https://vocql.github.io/leonida/leonida/images/leonida.png">
-  <meta property="og:image:width"  content="300">
-  <meta property="og:image:height" content="300">
-  <meta property="og:image:alt"    content="GTA VI countdown — Made By Voqcl">
-  <meta property="og:image:type"   content="image/png">
-  <meta property="og:locale"      content="en_US">
-  <!-- ═══════════════════════════════════════════════
-       TWITTER / X  (summary_large_image = big banner)
-  ═══════════════════════════════════════════════ -->
-  <meta name="twitter:card"        content="summary">
-  <meta name="twitter:site"        content="@vocql">
-  <meta name="twitter:title"       content="Welcome to Leonida 🌊🌅✨">
-  <meta name="twitter:description" content="Neon lights, live countdown, both trailers, interactive Leonida map, character bios & more. November 19, 2026.">
-  <meta name="twitter:image"       content="https://vocql.github.io/leonida/gallery/leonida.png">
-  <meta name="twitter:image:alt"   content="GTA VI countdown — Made By Voqcl">
-  <!-- ═══════════════════════════════════════════════
-       DISCORD  (forces accent bar color + large image)
-  ═══════════════════════════════════════════════ -->
-  <meta name="theme-color" content="#ff4dd2">
-  <!-- ═══════════════════════════════════════════════
-       MISC PLATFORM HINTS
-  ═══════════════════════════════════════════════ -->
-  <meta name="robots"     content="index, follow">
-  <meta name="keywords"   content="GTA 6, GTA VI, Grand Theft Auto 6, countdown, release date, Leonida, Vice City, trailers, November 2026">
-  <meta name="author"     content="VOCQL">
-  <link rel="icon" href="gta/npc/lucia.jpg" type="image/jpg">
-
+<meta name="description" content="The neon-lit gateway to Leonida. Live countdown, both official trailers, the full interactive map, character bios, location breakdowns & more. The wait ends November 19, 2026.">
+<link rel="canonical" href="https://voqcl.xyz">
+<meta property="og:type"        content="website">
+<meta property="og:url"         content="https://vocql.github.io/leonida/">
+<meta property="og:title"       content="Welcome to Leonida 🌊🌅✨">
+<meta property="og:description" content="The neon-lit gateway to Leonida. Live countdown, both official trailers, the full interactive map, character bios & more. November 19, 2026 — don't miss a second.">
+<meta property="og:image"       content="https://vocql.github.io/leonida/leonida/images/leonida.png">
+<meta name="twitter:card"       content="summary">
+<meta name="twitter:site"       content="@vocql">
+<meta name="twitter:title"      content="Welcome to Leonida 🌊🌅✨">
+<meta name="twitter:image"      content="https://vocql.github.io/leonida/leonida/images/leonida.png">
+<meta name="theme-color"        content="#ff4dd2">
+<meta name="robots"             content="index, follow">
+<link rel="icon" href="leonida/images/leonida.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@900&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
+
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+/* ══════════════════════════════════
+   ROOT
+══════════════════════════════════ */
+:root {
+  --cyan:  #00ffff;
+  --pink:  #ff00c8;
+  --purp:  #7700ff;
+  --bg:    #04001a;
+  --bg2:   #06002a;
+}
 
-  body {
-    background: #04001a;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 40px;
-    font-family: 'Nunito', sans-serif;
-    overflow: hidden;
-    position: relative;
-  }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
-  /* static gradient bg only, no moving elements */
-  body::before {
-    content: '';
-    position: fixed; inset: 0; z-index: 0;
-    background:
-      radial-gradient(ellipse at 15% 20%, rgba(0,255,255,0.13) 0%, transparent 45%),
-      radial-gradient(ellipse at 85% 75%, rgba(255,0,200,0.15) 0%, transparent 45%),
-      radial-gradient(ellipse at 50% 50%, rgba(90,0,200,0.07) 0%, transparent 55%);
-  }
+/* ══════════════════════════════════
+   CURSOR
+══════════════════════════════════ */
+body { cursor: none; }
+#cur {
+  position: fixed; width:10px; height:10px;
+  border-radius:50%; background:var(--cyan);
+  pointer-events:none; z-index:99999;
+  transform:translate(-50%,-50%);
+  box-shadow: 0 0 12px var(--cyan), 0 0 30px var(--cyan);
+  mix-blend-mode: screen;
+  transition: transform .1s, background .2s;
+}
+#cur-ring {
+  position: fixed; width:34px; height:34px;
+  border:1px solid rgba(0,255,255,.45);
+  border-radius:50%; pointer-events:none; z-index:99998;
+  transform:translate(-50%,-50%);
+  transition: all .16s cubic-bezier(.165,.84,.44,1);
+}
+#cur.click { transform:translate(-50%,-50%) scale(.3); }
+#cur-ring.click { transform:translate(-50%,-50%) scale(2); border-color:var(--pink); }
 
-  /* subtle static grid */
-  body::after {
-    content: '';
-    position: fixed; inset: 0; z-index: 0;
-    background-image:
-      linear-gradient(rgba(0,255,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,255,255,0.04) 1px, transparent 1px);
-    background-size: 50px 50px;
-    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
-  }
+/* ══════════════════════════════════
+   LOADER
+══════════════════════════════════ */
+#loader {
+  position:fixed; inset:0; background:#000;
+  z-index:9999; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:28px;
+  transition: opacity .9s ease, visibility .9s;
+}
+#loader.out { opacity:0; visibility:hidden; }
 
-  /* TITLE */
-  .title-wrap {
-    position: relative; z-index: 1;
-    text-align: center;
-    animation: popIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  }
+.ld-title {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size: clamp(3rem,10vw,7rem);
+  font-weight:900; text-transform:uppercase;
+  background: linear-gradient(90deg,var(--cyan),var(--pink),var(--cyan));
+  background-size:300% auto;
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation: shimmer 2s linear infinite;
+  filter: drop-shadow(0 0 30px rgba(0,255,255,.4));
+}
+.ld-bar-wrap {
+  width:260px; height:1px;
+  background:rgba(0,255,255,.12); position:relative; overflow:hidden;
+}
+.ld-bar {
+  height:100%; width:0;
+  background:linear-gradient(90deg,transparent,var(--cyan),var(--pink));
+  box-shadow:0 0 18px var(--cyan);
+  transition: width 2.2s cubic-bezier(.4,0,.2,1);
+}
+.ld-bar.go { width:100%; }
+.ld-status {
+  font-family:'Nunito',sans-serif; font-size:.65rem;
+  letter-spacing:.35em; color:rgba(0,255,255,.45);
+  text-transform:uppercase; min-height:1em;
+}
 
-  .welcome-small {
-    font-size: 13px;
-    font-weight: 800;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.38);
-    margin-bottom: 4px;
-  }
+/* ══════════════════════════════════
+   BODY
+══════════════════════════════════ */
+body {
+  background: var(--bg);
+  min-height:100vh;
+  font-family:'Nunito',sans-serif;
+  overflow-x:hidden;
+}
 
-  .leonida-text {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: clamp(60px, 11vw, 120px);
-    font-weight: 900;
-    text-transform: uppercase;
-    line-height: 0.9;
-    background: linear-gradient(90deg, #00ffff, #bf00ff, #ff00c8, #00e5ff, #00ffff);
-    background-size: 300% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: textShimmer 4s linear infinite;
-    filter: drop-shadow(0 0 28px rgba(0,255,255,0.3)) drop-shadow(0 0 50px rgba(255,0,200,0.18));
-  }
+/* ══════════════════════════════════
+   CANVAS
+══════════════════════════════════ */
+#bgCanvas {
+  position:fixed; inset:0;
+  pointer-events:none; z-index:0;
+}
 
-  @keyframes textShimmer {
-    0%   { background-position: 0% }
-    100% { background-position: 300% }
-  }
+/* ══════════════════════════════════
+   GRAIN + SCANLINES
+══════════════════════════════════ */
+#grain {
+  position:fixed; inset:-50%; width:200%; height:200%;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:.025; pointer-events:none; z-index:2;
+  animation: grainMove .12s steps(2) infinite;
+}
+#scanlines {
+  position:fixed; inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.06) 2px,rgba(0,0,0,.06) 4px);
+  pointer-events:none; z-index:3;
+}
 
-  /* PILLS */
-  .pills {
-    position: relative; z-index: 1;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    animation: popIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
-  }
+/* ══════════════════════════════════
+   NAV
+══════════════════════════════════ */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:500;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 40px;
+  background:rgba(4,0,26,0);
+  border-bottom:1px solid transparent;
+  transition: background .4s, border-color .4s, backdrop-filter .4s;
+  animation: slideDown .8s cubic-bezier(.34,1.4,.64,1) both;
+}
+nav.scrolled {
+  background:rgba(4,0,26,.88);
+  border-bottom-color:rgba(0,255,255,.1);
+  backdrop-filter:blur(14px);
+}
 
-  .pill {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 14px 26px 12px;
-    border-radius: 999px;
-    background: rgba(0, 255, 255, 0.05);
-    border: 1.5px solid rgba(0, 255, 255, 0.3);
-    box-shadow:
-      0 0 20px rgba(0, 255, 255, 0.08),
-      inset 0 1px 0 rgba(255,255,255,0.1),
-      0 6px 24px rgba(0,0,0,0.5);
-    backdrop-filter: blur(14px);
-    position: relative;
-    overflow: hidden;
-    min-width: 80px;
-  }
+.nav-logo {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:1.35rem; font-weight:900; letter-spacing:.12em;
+  text-transform:uppercase;
+  background:linear-gradient(90deg,var(--cyan),var(--pink));
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 10px rgba(0,255,255,.35));
+  text-decoration:none;
+}
 
-  .pill.pk {
-    background: rgba(255, 0, 200, 0.05);
-    border-color: rgba(255, 0, 200, 0.3);
-    box-shadow:
-      0 0 20px rgba(255, 0, 200, 0.08),
-      inset 0 1px 0 rgba(255,255,255,0.1),
-      0 6px 24px rgba(0,0,0,0.5);
-  }
+.nav-links { display:flex; align-items:center; gap:6px; list-style:none; }
 
-  /* glassy top shine */
-  .pill::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 18%; right: 18%;
-    height: 35%;
-    background: linear-gradient(180deg, rgba(255,255,255,0.1), transparent);
-    border-radius: 0 0 50% 50%;
-    pointer-events: none;
-  }
+.nav-links li a {
+  font-family:'Nunito',sans-serif; font-size:11px;
+  font-weight:900; letter-spacing:.15em; text-transform:uppercase;
+  text-decoration:none; padding:9px 20px; border-radius:999px;
+  border:1.5px solid rgba(0,255,255,.18);
+  background:rgba(0,255,255,.04);
+  color:rgba(255,255,255,.45);
+  box-shadow:0 0 10px rgba(0,255,255,.05),inset 0 1px 0 rgba(255,255,255,.08);
+  position:relative; overflow:hidden;
+  transition: color .2s, border-color .2s, box-shadow .2s, transform .15s, background .2s;
+  display:block;
+}
+.nav-links li a::before {
+  content:''; position:absolute; top:0; left:15%; right:15%; height:40%;
+  background:linear-gradient(180deg,rgba(255,255,255,.1),transparent);
+  border-radius:0 0 50% 50%; pointer-events:none;
+}
+.nav-links li a:hover {
+  color:#fff; border-color:rgba(0,255,255,.5);
+  background:rgba(0,255,255,.1);
+  box-shadow:0 0 22px rgba(0,255,255,.25),inset 0 1px 0 rgba(255,255,255,.12);
+  transform:translateY(-2px) scale(1.04);
+}
+.nav-links li a.active { color:var(--cyan); border-color:rgba(0,255,255,.5); background:rgba(0,255,255,.1); }
+.nav-links li:nth-child(even) a { border-color:rgba(255,0,200,.18); background:rgba(255,0,200,.04); }
+.nav-links li:nth-child(even) a:hover {
+  border-color:rgba(255,0,200,.5); background:rgba(255,0,200,.1);
+  box-shadow:0 0 22px rgba(255,0,200,.25),inset 0 1px 0 rgba(255,255,255,.12);
+}
 
-  .pill-num {
-    font-family: 'Nunito', sans-serif;
-    font-size: 36px;
-    font-weight: 900;
-    line-height: 1;
-    background: linear-gradient(160deg, #00ffff 0%, #7700ff 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    min-width: 54px;
-    text-align: center;
-    display: block;
-  }
+.nav-hamburger { display:none; flex-direction:column; gap:5px; cursor:none; padding:4px; }
+.nav-hamburger span {
+  display:block; width:24px; height:2px;
+  background:rgba(0,255,255,.7); border-radius:2px;
+  transition: transform .3s, opacity .3s;
+}
+.nav-hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity:0; }
+.nav-hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
 
-  .pk .pill-num {
-    background: linear-gradient(160deg, #ff00c8 0%, #7700ff 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+/* mobile nav drawer */
+.nav-drawer {
+  position:fixed; top:0; left:0; right:0; bottom:0;
+  background:rgba(4,0,26,.97); backdrop-filter:blur(20px);
+  z-index:490; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:16px;
+  opacity:0; visibility:hidden;
+  transition: opacity .35s, visibility .35s;
+}
+.nav-drawer.open { opacity:1; visibility:visible; }
+.nav-drawer a {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(2rem,8vw,3.5rem); font-weight:900;
+  letter-spacing:.1em; text-transform:uppercase; text-decoration:none;
+  color:rgba(255,255,255,.35);
+  transition: color .2s, text-shadow .2s;
+}
+.nav-drawer a:hover { color:#fff; text-shadow:0 0 30px var(--cyan); }
 
-  .pill-lbl {
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.28);
-    margin-top: 3px;
-  }
+/* ══════════════════════════════════
+   HERO SECTION
+══════════════════════════════════ */
+#hero {
+  position:relative; z-index:10;
+  min-height:100vh;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  gap:36px; padding:100px 20px 60px;
+  text-align:center;
+}
 
-  /* animated separator */
-  .sep {
-    font-family: 'Nunito', sans-serif;
-    font-size: 28px;
-    font-weight: 900;
-    background: linear-gradient(180deg, #00ffff, #ff00c8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    opacity: 0.45;
-    margin-bottom: 12px;
-    animation: sepBlink 1s ease-in-out infinite;
-  }
+.hero-eyebrow {
+  font-size:11px; font-weight:900; letter-spacing:.45em;
+  text-transform:uppercase; color:rgba(255,255,255,.3);
+  animation: popIn .9s cubic-bezier(.34,1.56,.64,1) .4s both;
+  display:flex; align-items:center; gap:12px;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content:''; width:30px; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,255,255,.4));
+}
+.hero-eyebrow::after { transform:scaleX(-1); }
 
-  @keyframes sepBlink {
-    0%, 100% { opacity: 0.45; }
-    50%       { opacity: 0.1; }
-  }
+.title-wrap { animation: popIn 1s cubic-bezier(.34,1.56,.64,1) .5s both; }
 
-  /* bounce on tick */
-  .bounce {
-    animation: numBounce 0.4s cubic-bezier(0.34, 1.8, 0.64, 1);
-  }
+.welcome-small {
+  font-size:13px; font-weight:900;
+  letter-spacing:.35em; text-transform:uppercase;
+  color:rgba(255,255,255,.28); margin-bottom:6px;
+}
 
-  @keyframes numBounce {
-    0%   { transform: scale(1.4) translateY(-5px); }
-    60%  { transform: scale(0.93) translateY(2px); }
-    100% { transform: scale(1) translateY(0); }
-  }
+.leonida-text {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(70px,13vw,140px);
+  font-weight:900; text-transform:uppercase; line-height:.88;
+  background:linear-gradient(90deg,var(--cyan),var(--purp),var(--pink),#00e5ff,var(--cyan));
+  background-size:400% auto;
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation: shimmer 4s linear infinite;
+  filter:drop-shadow(0 0 32px rgba(0,255,255,.3)) drop-shadow(0 0 60px rgba(255,0,200,.18));
+  position:relative;
+}
+/* glitch layers */
+.leonida-text::before, .leonida-text::after {
+  content:'LEONIDA';
+  position:absolute; top:0; left:0; right:0;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:inherit; font-weight:900; text-transform:uppercase;
+  -webkit-text-fill-color:transparent;
+  opacity:0;
+}
+.leonida-text.glitch::before {
+  background:linear-gradient(90deg,var(--cyan),var(--purp));
+  -webkit-background-clip:text; background-clip:text;
+  clip-path:inset(35% 0 50% 0);
+  transform:translate(-3px,0);
+  opacity:1; animation:none;
+}
+.leonida-text.glitch::after {
+  background:linear-gradient(90deg,var(--pink),var(--purp));
+  -webkit-background-clip:text; background-clip:text;
+  clip-path:inset(60% 0 20% 0);
+  transform:translate(3px,0);
+  opacity:1; animation:none;
+}
 
-  /* date subtitle */
-  .subtitle {
-    position: relative; z-index: 1;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.22);
-    text-align: center;
-    animation: popIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
-  }
+/* ══════════════════════════════════
+   COUNTDOWN PILLS
+══════════════════════════════════ */
+.pills {
+  display:flex; align-items:center; gap:10px;
+  animation: popIn 1s cubic-bezier(.34,1.56,.64,1) .65s both;
+  flex-wrap:wrap; justify-content:center;
+}
 
-  .subtitle span { color: #ff00c8; }
+.pill {
+  display:flex; flex-direction:column; align-items:center;
+  padding:16px 28px 14px; border-radius:999px;
+  background:rgba(0,255,255,.05);
+  border:1.5px solid rgba(0,255,255,.28);
+  box-shadow:0 0 24px rgba(0,255,255,.08),inset 0 1px 0 rgba(255,255,255,.1),0 8px 30px rgba(0,0,0,.55);
+  backdrop-filter:blur(16px);
+  position:relative; overflow:hidden; min-width:88px;
+  transition: border-color .3s, box-shadow .3s, transform .3s;
+}
+.pill:hover {
+  border-color:rgba(0,255,255,.55);
+  box-shadow:0 0 40px rgba(0,255,255,.2),inset 0 1px 0 rgba(255,255,255,.15),0 8px 30px rgba(0,0,0,.55);
+  transform:translateY(-4px) scale(1.04);
+}
+.pill.pk {
+  background:rgba(255,0,200,.05);
+  border-color:rgba(255,0,200,.28);
+  box-shadow:0 0 24px rgba(255,0,200,.08),inset 0 1px 0 rgba(255,255,255,.1),0 8px 30px rgba(0,0,0,.55);
+}
+.pill.pk:hover {
+  border-color:rgba(255,0,200,.55);
+  box-shadow:0 0 40px rgba(255,0,200,.2),inset 0 1px 0 rgba(255,255,255,.15),0 8px 30px rgba(0,0,0,.55);
+}
+.pill::before {
+  content:''; position:absolute; top:0; left:18%; right:18%; height:35%;
+  background:linear-gradient(180deg,rgba(255,255,255,.1),transparent);
+  border-radius:0 0 50% 50%; pointer-events:none;
+}
 
-  @keyframes popIn {
-    from { opacity: 0; transform: scale(0.75) translateY(12px); }
-    to   { opacity: 1; transform: scale(1) translateY(0); }
-  }
+.pill-num {
+  font-size:42px; font-weight:900; line-height:1;
+  background:linear-gradient(160deg,var(--cyan) 0%,var(--purp) 100%);
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent;
+  min-width:58px; text-align:center; display:block;
+  transition: transform .05s;
+}
+.pk .pill-num {
+  background:linear-gradient(160deg,var(--pink) 0%,var(--purp) 100%);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+.pill-lbl {
+  font-size:9px; font-weight:900; letter-spacing:.2em;
+  text-transform:uppercase; color:rgba(255,255,255,.25); margin-top:4px;
+}
 
-  /* NAVBAR — no bg, just floating */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 22px 36px;
-    background: none;
-    border: none;
-    animation: slideDown 0.8s cubic-bezier(0.34, 1.4, 0.64, 1) both;
-  }
+.sep {
+  font-size:30px; font-weight:900;
+  background:linear-gradient(180deg,var(--cyan),var(--pink));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  opacity:.4; margin-bottom:14px;
+  animation: sepBlink 1s ease-in-out infinite;
+}
 
-  @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+.bounce { animation: numBounce .4s cubic-bezier(.34,1.8,.64,1); }
 
-  .nav-logo {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 22px;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    background: linear-gradient(90deg, #00ffff, #ff00c8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 0 10px rgba(0,255,255,0.4));
-    cursor: pointer;
-  }
+.subtitle {
+  font-size:11px; font-weight:900; letter-spacing:.2em;
+  text-transform:uppercase; color:rgba(255,255,255,.2);
+  animation: popIn 1s cubic-bezier(.34,1.56,.64,1) .8s both;
+}
+.subtitle span { color:var(--pink); }
 
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    list-style: none;
-  }
+/* scroll indicator */
+.scroll-hint {
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  animation: popIn 1s .9s both, scrollBob 1.8s 2s ease-in-out infinite;
+  opacity:.45;
+}
+.scroll-hint span {
+  font-size:9px; letter-spacing:.4em; text-transform:uppercase;
+  color:rgba(255,255,255,.4);
+}
+.scroll-arrow {
+  width:1px; height:36px;
+  background:linear-gradient(180deg,rgba(0,255,255,.6),transparent);
+}
 
-  .nav-links li a {
-    font-family: 'Nunito', sans-serif;
-    font-size: 12px;
-    font-weight: 900;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    text-decoration: none;
-    padding: 10px 22px;
-    border-radius: 999px;
-    border: 1.5px solid rgba(0,255,255,0.18);
-    background: rgba(0,255,255,0.04);
-    color: rgba(255,255,255,0.45);
-    box-shadow:
-      0 0 10px rgba(0,255,255,0.05),
-      inset 0 1px 0 rgba(255,255,255,0.08);
-    position: relative;
-    overflow: hidden;
-    transition: color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.15s, background 0.2s;
-    display: block;
-  }
+/* ══════════════════════════════════
+   SECTIONS BASE
+══════════════════════════════════ */
+section:not(#hero) {
+  position:relative; z-index:10;
+  padding:100px 60px;
+}
 
-  /* glassy shine on each nav pill */
-  .nav-links li a::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 15%; right: 15%;
-    height: 40%;
-    background: linear-gradient(180deg, rgba(255,255,255,0.1), transparent);
-    border-radius: 0 0 50% 50%;
-    pointer-events: none;
-  }
+.section-eyebrow {
+  font-size:10px; font-weight:900; letter-spacing:.5em;
+  text-transform:uppercase; color:rgba(0,255,255,.45);
+  margin-bottom:1rem; display:flex; align-items:center; gap:12px;
+}
+.section-eyebrow::before {
+  content:''; width:30px; height:1px;
+  background:rgba(0,255,255,.35);
+}
 
-  .nav-links li a:hover {
-    color: #fff;
-    border-color: rgba(0,255,255,0.45);
-    background: rgba(0,255,255,0.1);
-    box-shadow: 0 0 20px rgba(0,255,255,0.2), inset 0 1px 0 rgba(255,255,255,0.12);
-    transform: translateY(-2px) scale(1.04);
-  }
+.section-title {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(2.5rem,5vw,4.5rem); font-weight:900;
+  text-transform:uppercase; line-height:.95;
+  background:linear-gradient(90deg,#fff 0%,rgba(255,255,255,.65) 100%);
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-bottom:2rem;
+}
 
-  .nav-links li a.active {
-    color: #00ffff;
-    border-color: rgba(0,255,255,0.5);
-    background: rgba(0,255,255,0.1);
-    box-shadow: 0 0 22px rgba(0,255,255,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
-  }
+.reveal {
+  opacity:0; transform:translateY(28px);
+  transition: opacity .8s ease, transform .8s ease;
+}
+.reveal.visible { opacity:1; transform:none; }
 
-  /* alternate pink pills every other item */
-  .nav-links li:nth-child(even) a {
-    border-color: rgba(255,0,200,0.18);
-    background: rgba(255,0,200,0.04);
-    box-shadow:
-      0 0 10px rgba(255,0,200,0.05),
-      inset 0 1px 0 rgba(255,255,255,0.08);
-  }
+/* ══════════════════════════════════
+   DIVIDER
+══════════════════════════════════ */
+.divider {
+  position:relative; z-index:10;
+  display:flex; align-items:center; gap:16px;
+  padding:0 60px;
+}
+.divider-line { flex:1; height:1px; background:linear-gradient(90deg,transparent,rgba(0,255,255,.15),transparent); }
+.divider-dot {
+  width:5px; height:5px; border-radius:50%;
+  background:var(--cyan); box-shadow:0 0 10px var(--cyan);
+  animation: glowPulse 2s ease-in-out infinite;
+}
 
-  .nav-links li:nth-child(even) a:hover {
-    color: #fff;
-    border-color: rgba(255,0,200,0.5);
-    background: rgba(255,0,200,0.1);
-    box-shadow: 0 0 20px rgba(255,0,200,0.22), inset 0 1px 0 rgba(255,255,255,0.12);
-  }
+/* ══════════════════════════════════
+   TRAILERS SECTION
+══════════════════════════════════ */
+#trailers { background:linear-gradient(180deg,transparent,rgba(0,255,255,.025),transparent); }
 
-  .nav-badge {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.3);
-  }
+.trailers-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:24px;
+  max-width:1100px; margin:0 auto;
+}
 
-  .nav-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: #00ffff;
-    box-shadow: 0 0 8px #00ffff;
-    animation: blink 2s ease-in-out infinite;
-  }
+.trailer-card {
+  position:relative; overflow:hidden;
+  border:1px solid rgba(0,255,255,.15);
+  background:rgba(0,255,255,.03);
+  backdrop-filter:blur(8px);
+  border-radius:8px;
+  cursor:none;
+  transition: border-color .3s, transform .4s, box-shadow .3s;
+}
+.trailer-card:hover {
+  border-color:rgba(0,255,255,.4);
+  transform:translateY(-6px);
+  box-shadow:0 20px 60px rgba(0,0,0,.6), 0 0 40px rgba(0,255,255,.08);
+}
+.trailer-card:first-child { border-color:rgba(255,0,200,.15); }
+.trailer-card:first-child:hover { border-color:rgba(255,0,200,.4); box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 40px rgba(255,0,200,.08); }
 
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0.25; }
-  }
+.trailer-thumb {
+  position:relative; padding-top:56.25%; background:#000;
+}
+.trailer-thumb iframe {
+  position:absolute; inset:0; width:100%; height:100%; border:none;
+}
+.trailer-overlay {
+  position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(180deg,transparent 50%,rgba(4,0,26,.9) 100%);
+}
+
+.trailer-info { padding:20px 22px 22px; }
+.trailer-tag {
+  font-size:9px; font-weight:900; letter-spacing:.4em;
+  text-transform:uppercase; color:rgba(0,255,255,.5);
+  margin-bottom:6px;
+}
+.trailer-card:first-child .trailer-tag { color:rgba(255,0,200,.5); }
+.trailer-name {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:1.4rem; font-weight:900; text-transform:uppercase;
+  color:#fff; letter-spacing:.05em;
+}
+.trailer-views {
+  font-size:10px; letter-spacing:.15em; text-transform:uppercase;
+  color:rgba(255,255,255,.25); margin-top:6px;
+}
+
+/* ══════════════════════════════════
+   FACTS / STATS SECTION
+══════════════════════════════════ */
+#facts { text-align:center; }
+
+.facts-grid {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:2px;
+  max-width:1000px; margin:0 auto;
+}
+
+.fact-card {
+  padding:2.5rem 1.5rem;
+  background:rgba(0,255,255,.03);
+  border:1px solid rgba(0,255,255,.08);
+  position:relative; overflow:hidden;
+  transition: background .3s, border-color .3s;
+}
+.fact-card:hover { background:rgba(0,255,255,.06); border-color:rgba(0,255,255,.2); }
+.fact-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  transform:scaleX(0); transition:transform .4s ease;
+}
+.fact-card:hover::before { transform:scaleX(1); }
+.fact-card:nth-child(even) { border-color:rgba(255,0,200,.08); }
+.fact-card:nth-child(even):hover { background:rgba(255,0,200,.04); border-color:rgba(255,0,200,.2); }
+.fact-card:nth-child(even)::before { background:linear-gradient(90deg,transparent,var(--pink),transparent); }
+
+.fact-num {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(2rem,4vw,3.5rem); font-weight:900;
+  background:linear-gradient(135deg,var(--cyan),var(--purp));
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent;
+  display:block; line-height:1;
+  filter:drop-shadow(0 0 12px rgba(0,255,255,.3));
+}
+.fact-card:nth-child(even) .fact-num {
+  background:linear-gradient(135deg,var(--pink),var(--purp));
+  -webkit-background-clip:text; background-clip:text;
+  filter:drop-shadow(0 0 12px rgba(255,0,200,.3));
+}
+.fact-label {
+  font-size:10px; letter-spacing:.25em; text-transform:uppercase;
+  color:rgba(255,255,255,.3); margin-top:8px; display:block;
+}
+
+/* ══════════════════════════════════
+   CHARACTERS TEASER
+══════════════════════════════════ */
+#characters { text-align:center; }
+
+.chars-grid {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:16px;
+  max-width:900px; margin:0 auto;
+}
+
+.char-card {
+  position:relative; overflow:hidden;
+  border:1px solid rgba(0,255,255,.1);
+  background:linear-gradient(135deg,rgba(0,255,255,.04) 0%,rgba(119,0,255,.04) 100%);
+  backdrop-filter:blur(8px);
+  padding:2.5rem 1.5rem;
+  border-radius:4px;
+  cursor:none;
+  transition: border-color .3s, transform .4s, box-shadow .3s;
+  opacity:0; transform:translateY(30px);
+  transition: opacity .6s ease, transform .6s ease, border-color .3s, box-shadow .3s;
+}
+.char-card.visible { opacity:1; transform:translateY(0); }
+.char-card:hover { border-color:rgba(0,255,255,.35); transform:translateY(-6px) !important; box-shadow:0 20px 50px rgba(0,0,0,.6); }
+.char-card:nth-child(even) {
+  border-color:rgba(255,0,200,.1);
+  background:linear-gradient(135deg,rgba(255,0,200,.04) 0%,rgba(119,0,255,.04) 100%);
+}
+.char-card:nth-child(even):hover { border-color:rgba(255,0,200,.35); }
+
+.char-icon { font-size:3rem; margin-bottom:1rem; display:block; }
+.char-name {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:1.5rem; font-weight:900; text-transform:uppercase;
+  letter-spacing:.08em; color:#fff; margin-bottom:.4rem;
+}
+.char-role {
+  font-size:9px; letter-spacing:.35em; text-transform:uppercase;
+  color:rgba(0,255,255,.45); margin-bottom:1rem;
+}
+.char-card:nth-child(even) .char-role { color:rgba(255,0,200,.45); }
+.char-desc { font-size:.85rem; color:rgba(255,255,255,.35); line-height:1.6; font-weight:800; }
+
+/* ══════════════════════════════════
+   MAP TEASER
+══════════════════════════════════ */
+#map-teaser {
+  text-align:center;
+  background:linear-gradient(180deg,transparent,rgba(255,0,200,.02),transparent);
+}
+
+.map-card {
+  max-width:700px; margin:0 auto;
+  border:1px solid rgba(0,255,255,.15);
+  background:rgba(0,0,0,.4); backdrop-filter:blur(12px);
+  padding:3rem; border-radius:8px;
+  position:relative; overflow:hidden;
+  transition: border-color .3s, box-shadow .3s;
+}
+.map-card:hover { border-color:rgba(0,255,255,.35); box-shadow:0 0 60px rgba(0,255,255,.06); }
+
+/* animated map grid */
+.map-grid-anim {
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(0,255,255,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,255,255,.04) 1px,transparent 1px);
+  background-size:40px 40px;
+  animation:gridScroll 8s linear infinite;
+}
+.map-ping {
+  position:absolute; border-radius:50%;
+  width:10px; height:10px;
+  border:2px solid var(--cyan);
+  box-shadow:0 0 12px var(--cyan);
+  animation:pingAnim 2s ease-out infinite;
+}
+.map-ping::after {
+  content:''; position:absolute; inset:-8px;
+  border-radius:50%; border:1px solid rgba(0,255,255,.3);
+  animation:pingAnim 2s ease-out infinite .3s;
+}
+
+.map-card-content { position:relative; z-index:2; }
+.map-coords {
+  font-family:'Nunito',sans-serif; font-size:11px;
+  letter-spacing:.35em; color:rgba(0,255,255,.4);
+  text-transform:uppercase; margin-bottom:1.5rem;
+}
+.map-btn {
+  display:inline-block; text-decoration:none;
+  font-size:11px; font-weight:900; letter-spacing:.25em;
+  text-transform:uppercase; color:var(--bg);
+  background:linear-gradient(90deg,var(--cyan),var(--pink));
+  padding:.9rem 2.5rem; border-radius:999px;
+  margin-top:1.5rem;
+  transition: transform .2s, box-shadow .2s;
+  cursor:none;
+  position:relative; overflow:hidden;
+}
+.map-btn::before {
+  content:''; position:absolute; top:0; left:-100%; width:60%; height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
+  transform:skewX(-20deg); transition:left .5s ease;
+}
+.map-btn:hover { transform:translateY(-3px); box-shadow:0 0 40px rgba(0,255,255,.4); }
+.map-btn:hover::before { left:150%; }
+
+/* ══════════════════════════════════
+   FOOTER
+══════════════════════════════════ */
+footer {
+  position:relative; z-index:10;
+  padding:3rem 60px;
+  border-top:1px solid rgba(0,255,255,.08);
+  display:flex; align-items:center; justify-content:space-between;
+  gap:1rem; flex-wrap:wrap;
+}
+
+.footer-brand {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:1.2rem; font-weight:900; letter-spacing:.15em;
+  background:linear-gradient(90deg,var(--cyan),var(--pink));
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.footer-copy {
+  font-size:10px; letter-spacing:.2em; text-transform:uppercase;
+  color:rgba(255,255,255,.18);
+}
+.footer-links { display:flex; gap:16px; }
+.footer-links a {
+  font-size:10px; letter-spacing:.2em; text-transform:uppercase;
+  color:rgba(255,255,255,.25); text-decoration:none;
+  transition:color .2s;
+}
+.footer-links a:hover { color:var(--cyan); }
+
+/* ══════════════════════════════════
+   KEYFRAMES
+══════════════════════════════════ */
+@keyframes shimmer {
+  from { background-position:0% }
+  to   { background-position:400% }
+}
+@keyframes popIn {
+  from { opacity:0; transform:scale(.75) translateY(12px); }
+  to   { opacity:1; transform:scale(1) translateY(0); }
+}
+@keyframes slideDown {
+  from { opacity:0; transform:translateY(-16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes sepBlink {
+  0%,100% { opacity:.4; }
+  50%      { opacity:.08; }
+}
+@keyframes numBounce {
+  0%   { transform:scale(1.4) translateY(-5px); }
+  60%  { transform:scale(.93) translateY(2px); }
+  100% { transform:scale(1) translateY(0); }
+}
+@keyframes scrollBob {
+  0%,100% { transform:translateY(0); }
+  50%      { transform:translateY(8px); }
+}
+@keyframes grainMove {
+  0%   { transform:translate(0,0); }
+  100% { transform:translate(-1%,-1%); }
+}
+@keyframes glowPulse {
+  0%,100% { box-shadow:0 0 8px var(--cyan); }
+  50%      { box-shadow:0 0 22px var(--cyan); }
+}
+@keyframes gridScroll {
+  from { background-position:0 0; }
+  to   { background-position:40px 40px; }
+}
+@keyframes pingAnim {
+  0%   { transform:scale(1); opacity:1; }
+  100% { transform:scale(2.5); opacity:0; }
+}
+
+/* ══════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════ */
+@media (max-width:900px) {
+  .nav-links { display:none; }
+  .nav-hamburger { display:flex; }
+  nav { padding:16px 24px; }
+  section:not(#hero) { padding:70px 24px; }
+  .divider { padding:0 24px; }
+  .trailers-grid { grid-template-columns:1fr; }
+  .facts-grid { grid-template-columns:repeat(2,1fr); }
+  .chars-grid { grid-template-columns:1fr; }
+  footer { padding:2.5rem 24px; flex-direction:column; text-align:center; }
+  .footer-links { justify-content:center; }
+}
+@media (max-width:500px) {
+  .pills { gap:6px; }
+  .pill { padding:12px 18px 10px; min-width:70px; }
+  .pill-num { font-size:32px; }
+  .facts-grid { grid-template-columns:1fr 1fr; }
+}
 </style>
 </head>
 <body>
 
-  <nav>
-    <ul class="nav-links">
-      <li><a href="#" class="active">Home</a></li>
-      <li><a href="map">Map</a></li>
-      <li><a href="places">Places</a></li>
-      <li><a href="characters">Characters</a></li>
-      <li><a href="screenshots">Screenshots</a></li>
-      <li><a href="trailers">Trailers</a></li>
-    </ul>
-  </nav>
+<!-- ── CURSOR ── -->
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- ── EFFECTS ── -->
+<canvas id="bgCanvas"></canvas>
+<div id="grain"></div>
+<div id="scanlines"></div>
+
+<!-- ══════════ LOADER ══════════ -->
+<div id="loader">
+  <div class="ld-title">Leonida</div>
+  <div class="ld-bar-wrap"><div class="ld-bar" id="ldBar"></div></div>
+  <div class="ld-status" id="ldStatus">CONNECTING TO LEONIDA NETWORK...</div>
+</div>
+
+<!-- ══════════ NAV ══════════ -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">LEONIDA</a>
+  <ul class="nav-links">
+    <li><a href="#" class="active">Home</a></li>
+    <li><a href="map">Map</a></li>
+    <li><a href="places">Places</a></li>
+    <li><a href="characters">Characters</a></li>
+    <li><a href="screenshots">Screenshots</a></li>
+    <li><a href="trailers">Trailers</a></li>
+  </ul>
+  <div class="nav-hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="nav-drawer" id="navDrawer">
+  <a href="#">Home</a>
+  <a href="map">Map</a>
+  <a href="places">Places</a>
+  <a href="characters">Characters</a>
+  <a href="screenshots">Screenshots</a>
+  <a href="trailers">Trailers</a>
+</div>
+
+<!-- ══════════ HERO ══════════ -->
+<section id="hero">
+  <div class="hero-eyebrow">Grand Theft Auto VI &bull; November 19, 2026</div>
 
   <div class="title-wrap">
     <div class="welcome-small">Welcome to</div>
-    <div class="leonida-text">Leonida</div>
+    <div class="leonida-text" id="leonidaTitle">LEONIDA</div>
   </div>
 
   <div class="pills">
@@ -396,64 +790,311 @@
       <span class="pill-num" id="n-d">000</span>
       <span class="pill-lbl">Days</span>
     </div>
-
     <div class="sep">:</div>
-
     <div class="pill pk" id="pill-h">
       <span class="pill-num" id="n-h">00</span>
       <span class="pill-lbl">Hours</span>
     </div>
-
     <div class="sep">:</div>
-
     <div class="pill" id="pill-m">
       <span class="pill-num" id="n-m">00</span>
       <span class="pill-lbl">Mins</span>
     </div>
-
     <div class="sep">:</div>
-
     <div class="pill pk" id="pill-s">
       <span class="pill-num" id="n-s">00</span>
       <span class="pill-lbl">Secs</span>
     </div>
   </div>
 
-  <div class="subtitle">Release · <span>November 19, 2026</span> · PS5 · Xbox Series X|S</div>
+  <div class="subtitle">Release &middot; <span>November 19, 2026</span> &middot; PS5 &middot; Xbox Series X|S</div>
+
+  <div class="scroll-hint">
+    <span>Explore</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ══════════ DIVIDER ══════════ -->
+<div class="divider">
+  <div class="divider-line"></div>
+  <div class="divider-dot"></div>
+  <div class="divider-line"></div>
+</div>
+
+<!-- ══════════ TRAILERS ══════════ -->
+<section id="trailers">
+  <div class="section-eyebrow reveal">Official Trailers</div>
+  <div class="section-title reveal">Both drops.<br>Watch again.</div>
+
+  <div class="trailers-grid">
+    <div class="trailer-card reveal" style="transition-delay:.1s">
+      <div class="trailer-thumb">
+        <iframe src="https://www.youtube.com/embed/QdBZExpgErs" title="GTA VI Trailer 2" allowfullscreen loading="lazy"></iframe>
+        <div class="trailer-overlay"></div>
+      </div>
+      <div class="trailer-info">
+        <div class="trailer-tag">Trailer 2 &bull; 2025</div>
+        <div class="trailer-name">Grand Theft Auto VI — Trailer 2</div>
+        <div class="trailer-views">Official Rockstar Games</div>
+      </div>
+    </div>
+
+    <div class="trailer-card reveal" style="transition-delay:.2s">
+      <div class="trailer-thumb">
+        <iframe src="https://www.youtube.com/embed/GGCqEHyYWiY" title="GTA VI Trailer 1" allowfullscreen loading="lazy"></iframe>
+        <div class="trailer-overlay"></div>
+      </div>
+      <div class="trailer-info">
+        <div class="trailer-tag">Trailer 1 &bull; 2023</div>
+        <div class="trailer-name">Grand Theft Auto VI — Trailer 1</div>
+        <div class="trailer-views">Official Rockstar Games</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+<!-- ══════════ FACTS ══════════ -->
+<section id="facts">
+  <div class="section-eyebrow reveal" style="justify-content:center">By The Numbers</div>
+  <div class="section-title reveal" style="text-align:center">Leonida By<br>the numbers</div>
+
+  <div class="facts-grid">
+    <div class="fact-card reveal" style="transition-delay:.05s">
+      <span class="fact-num" data-target="2" data-suffix="K+">0</span>
+      <span class="fact-label">NPCs &amp; Pedestrians</span>
+    </div>
+    <div class="fact-card reveal" style="transition-delay:.1s">
+      <span class="fact-num" data-target="12" data-suffix="">0</span>
+      <span class="fact-label">Years in the Making</span>
+    </div>
+    <div class="fact-card reveal" style="transition-delay:.15s">
+      <span class="fact-num" data-target="2" data-suffix=" Protags">0</span>
+      <span class="fact-label">Protagonists</span>
+    </div>
+    <div class="fact-card reveal" style="transition-delay:.2s">
+      <span class="fact-num" data-target="1" data-suffix=" State">0</span>
+      <span class="fact-label">Open World Leonida</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+<!-- ══════════ CHARACTERS ══════════ -->
+<section id="characters">
+  <div class="section-eyebrow reveal" style="justify-content:center">Known Faces</div>
+  <div class="section-title reveal" style="text-align:center">Leonida's<br>cast</div>
+
+  <div class="chars-grid">
+    <div class="char-card" style="transition-delay:.1s">
+      <span class="char-icon">🌊</span>
+      <div class="char-name">Lucia</div>
+      <div class="char-role">Protagonist &bull; Series First</div>
+      <p class="char-desc">The first female protagonist in GTA's main series. Born in Leonida, her story is one of survival, loyalty, and inevitable chaos.</p>
+    </div>
+    <div class="char-card" style="transition-delay:.2s">
+      <span class="char-icon">🔥</span>
+      <div class="char-name">Jason</div>
+      <div class="char-role">Protagonist &bull; Her Partner</div>
+      <p class="char-desc">Lucia's partner in crime and in life. A man shaped by Leonida's lawless swamp counties — dangerous and devoted in equal measure.</p>
+    </div>
+    <div class="char-card" style="transition-delay:.3s">
+      <span class="char-icon">🎰</span>
+      <div class="char-name">Vice City</div>
+      <div class="char-role">Setting &bull; The Real Star</div>
+      <p class="char-desc">After 22 years the sun-scorched neon paradise returns. Bigger, more alive, and more absurd than ever. The city writes its own rules.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+<!-- ══════════ MAP TEASER ══════════ -->
+<section id="map-teaser">
+  <div class="section-eyebrow reveal" style="justify-content:center">Interactive Map</div>
+  <div class="section-title reveal" style="text-align:center">Explore<br>the state</div>
+
+  <div class="map-card reveal">
+    <div class="map-grid-anim"></div>
+    <div class="map-ping" style="top:40%;left:55%"></div>
+    <div class="map-ping" style="top:65%;left:30%;animation-delay:.7s;border-color:var(--pink);box-shadow:0 0 12px var(--pink)"></div>
+    <div class="map-ping" style="top:25%;left:70%;animation-delay:1.2s;width:8px;height:8px"></div>
+    <div class="map-card-content">
+      <div class="map-coords">25.7617° N, 80.1918° W &bull; Leonida State</div>
+      <div class="section-title" style="font-size:2rem;margin-bottom:1rem">Full Interactive<br>Leonida Map</div>
+      <p style="color:rgba(255,255,255,.35);font-size:.9rem;line-height:1.7;font-weight:800;max-width:420px;margin:0 auto">
+        Explore Vice City, the Everglades, Ambrosia County, and every corner of the state. Drop pins, find locations, track landmarks.
+      </p>
+      <a href="map" class="map-btn">
+        Open Map →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="footer-brand">LEONIDA</div>
+  <div class="footer-copy">© 2025 VOCQL &bull; Fan Project &bull; Not affiliated with Rockstar Games</div>
+  <div class="footer-links">
+    <a href="trailers">Trailers</a>
+    <a href="map">Map</a>
+    <a href="characters">Characters</a>
+    <a href="screenshots">Screenshots</a>
+  </div>
+</footer>
 
 <script>
-  const prev = { d:'', h:'', m:'', s:'' };
+/* ── CURSOR ── */
+const cur = document.getElementById('cur');
+const ring = document.getElementById('cur-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+window.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx+'px'; cur.style.top = my+'px';
+});
+(function animRing() {
+  rx += (mx-rx)*.17; ry += (my-ry)*.17;
+  ring.style.left = rx+'px'; ring.style.top = ry+'px';
+  requestAnimationFrame(animRing);
+})();
+window.addEventListener('mousedown', () => { cur.classList.add('click'); ring.classList.add('click'); });
+window.addEventListener('mouseup',   () => { cur.classList.remove('click'); ring.classList.remove('click'); });
 
-  function bounce(id) {
-    const el = document.getElementById('n-' + id);
-    el.classList.remove('bounce');
-    void el.offsetWidth;
-    el.classList.add('bounce');
-    setTimeout(() => el.classList.remove('bounce'), 450);
+/* ── LOADER ── */
+const statuses = [
+  'CONNECTING TO LEONIDA NETWORK...',
+  'MAPPING VICE CITY COORDINATES...',
+  'LOADING WANTED LEVEL SYSTEM...',
+  'SYNCING COUNTDOWN SEQUENCE...',
+  'WELCOME TO LEONIDA.',
+];
+const ldBar = document.getElementById('ldBar');
+const ldSt  = document.getElementById('ldStatus');
+const loader = document.getElementById('loader');
+setTimeout(() => ldBar.classList.add('go'), 80);
+statuses.forEach((s, i) => setTimeout(() => ldSt.textContent = s, i * 440));
+setTimeout(() => { loader.classList.add('out'); }, 2600);
+
+/* ── CANVAS PARTICLES ── */
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resize(); window.addEventListener('resize', resize);
+
+class P {
+  constructor() { this.reset(true); }
+  reset(init) {
+    this.x = Math.random() * canvas.width;
+    this.y = init ? Math.random() * canvas.height : canvas.height + 10;
+    this.r = Math.random() * 1.2 + .2;
+    this.vy = -(Math.random() * .4 + .15);
+    this.vx = (Math.random()-.5)*.2;
+    this.op = Math.random()*.5+.1;
+    this.dec = Math.random()*.0012+.0006;
+    this.pink = Math.random() < .25;
   }
-
-  function tick() {
-    const target = new Date('2026-11-19T00:00:00');
-    const diff   = target - new Date();
-
-    if (diff <= 0) {
-      ['d','h','m','s'].forEach(k => document.getElementById('n-'+k).textContent = '00');
-      return;
-    }
-
-    const d = String(Math.floor(diff / 86400000)).padStart(3, '0');
-    const h = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
-    const m = String(Math.floor((diff % 3600000)  / 60000)).padStart(2, '0');
-    const s = String(Math.floor((diff % 60000)    / 1000)).padStart(2, '0');
-
-    if (d !== prev.d) { document.getElementById('n-d').textContent = d; bounce('d'); prev.d = d; }
-    if (h !== prev.h) { document.getElementById('n-h').textContent = h; bounce('h'); prev.h = h; }
-    if (m !== prev.m) { document.getElementById('n-m').textContent = m; bounce('m'); prev.m = m; }
-    if (s !== prev.s) { document.getElementById('n-s').textContent = s; bounce('s'); prev.s = s; }
+  step() {
+    this.x += this.vx; this.y += this.vy; this.op -= this.dec;
+    if (this.op <= 0 || this.y < -10) this.reset();
   }
+  draw() {
+    ctx.save(); ctx.globalAlpha = this.op;
+    ctx.shadowBlur = 8;
+    ctx.shadowColor = this.pink ? '#ff00c8' : '#00ffff';
+    ctx.fillStyle   = this.pink ? '#ff00c8' : '#00ffff';
+    ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI*2); ctx.fill();
+    ctx.restore();
+  }
+}
 
-  tick();
-  setInterval(tick, 1000);
+const pts = Array.from({length:160}, () => new P());
+function animPts() { ctx.clearRect(0,0,canvas.width,canvas.height); pts.forEach(p=>{p.step();p.draw();}); requestAnimationFrame(animPts); }
+animPts();
+
+/* ── COUNTDOWN ── */
+const prev = {d:'',h:'',m:'',s:''};
+function bounce(id) {
+  const el = document.getElementById('n-'+id);
+  el.classList.remove('bounce'); void el.offsetWidth; el.classList.add('bounce');
+  setTimeout(() => el.classList.remove('bounce'), 450);
+}
+function tick() {
+  const diff = new Date('2026-11-19T00:00:00') - new Date();
+  if (diff <= 0) { ['d','h','m','s'].forEach(k => document.getElementById('n-'+k).textContent='00'); return; }
+  const d = String(Math.floor(diff/86400000)).padStart(3,'0');
+  const h = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+  const m = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+  const s = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+  if(d!==prev.d){document.getElementById('n-d').textContent=d;bounce('d');prev.d=d;}
+  if(h!==prev.h){document.getElementById('n-h').textContent=h;bounce('h');prev.h=h;}
+  if(m!==prev.m){document.getElementById('n-m').textContent=m;bounce('m');prev.m=m;}
+  if(s!==prev.s){document.getElementById('n-s').textContent=s;bounce('s');prev.s=s;}
+}
+tick(); setInterval(tick, 1000);
+
+/* ── NAV SCROLL ── */
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+/* ── HAMBURGER ── */
+const hb = document.getElementById('hamburger');
+const drawer = document.getElementById('navDrawer');
+hb.addEventListener('click', () => {
+  hb.classList.toggle('open'); drawer.classList.toggle('open');
+});
+drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  hb.classList.remove('open'); drawer.classList.remove('open');
+}));
+
+/* ── SCROLL REVEAL ── */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} });
+}, {threshold:.12});
+document.querySelectorAll('.reveal,.char-card').forEach(el => obs.observe(el));
+
+/* ── STAT COUNTERS ── */
+const cObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){animCount(e.target);cObs.unobserve(e.target);} });
+},{threshold:.5});
+document.querySelectorAll('[data-target]').forEach(el => cObs.observe(el));
+
+function animCount(el) {
+  const target = +el.dataset.target;
+  const suffix = el.dataset.suffix || '';
+  const dur = 1600, start = performance.now();
+  function step(ts) {
+    const p = Math.min((ts-start)/dur, 1);
+    const ease = 1 - Math.pow(1-p, 3);
+    el.textContent = Math.round(ease*target) + (p===1?suffix:'');
+    if(p<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+/* ── RANDOM TITLE GLITCH ── */
+const title = document.getElementById('leonidaTitle');
+function doGlitch() {
+  title.classList.add('glitch');
+  setTimeout(() => title.classList.remove('glitch'), 180);
+}
+setInterval(() => { if(Math.random()<.12) doGlitch(); }, 2800);
+
+/* ── PARALLAX HERO ── */
+window.addEventListener('scroll', () => {
+  const hero = document.getElementById('hero');
+  const s = window.scrollY;
+  hero.style.transform = `translateY(${s*.3}px)`;
+  hero.style.opacity = Math.max(0, 1 - s/600);
+});
+
+/* ── CONSOLE EASTER EGG ── */
+console.log('%cWELCOME TO LEONIDA', 'color:#00ffff;font-family:Barlow Condensed,sans-serif;font-size:2.5rem;font-weight:900');
+console.log('%cNovember 19, 2026 — Don\'t be late.', 'color:#ff00c8;font-family:Nunito,sans-serif;font-size:.9rem;letter-spacing:.2em');
 </script>
 </body>
 </html>
