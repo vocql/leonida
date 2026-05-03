@@ -465,28 +465,39 @@ document.addEventListener('click', e => {
   document.body.appendChild(r);
   setTimeout(()=>r.remove(), 950);
 });
+  
+/* PARTICLES — more visible, no delay */
+const pc = document.getElementById('particles');
 
-// PARTICLES \\
-const container = document.getElementById("particles");
-const particleCount = 30; // 🔥 change this number
+for (let i = 0; i < 12; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
 
-for (let i = 0; i < particleCount; i++) {
-  const particle = document.createElement("div");
-  particle.classList.add("particle");
+  // brighter / less transparent colors
+  const c = Math.random() > 0.5
+    ? 'rgba(0,255,255,0.9)'
+    : 'rgba(255,0,200,0.85)';
 
-  // random position
-  particle.style.left = Math.random() * 100 + "%";
+  const sz = Math.random() * 1.8 + 1;
 
-  // random size
-  const size = Math.random() * 3 + 1;
-  particle.style.width = size + "px";
-  particle.style.height = size + "px";
+  p.style.cssText = `
+    left: ${Math.random() * 100}%;
+    width: ${sz}px;
+    height: ${sz}px;
+    background: ${c};
+    box-shadow: 0 0 ${sz * 6}px ${c};
 
-  // random speed (lower = faster)
-  const speed = Math.random() * 20 + 10; 
-  particle.style.animationDuration = speed + "s";
+    /* movement area */
+    --drift: ${(Math.random() - 0.5) * 60}px;
 
-  container.appendChild(particle);
+    /* speed */
+    animation-duration: ${Math.random() * 20 + 12}s;
+
+    /* ❌ NO DELAY (all start immediately) */
+    animation-delay: 0s;
+  `;
+
+  pc.appendChild(p);
 }
 
 /* HAMBURGER */
