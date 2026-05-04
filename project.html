@@ -6,7 +6,7 @@
 <title>Map — Leonida</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-:root { --cyan:#00ffff; --pink:#ff00c8; --purple:#7700ff; --bg:#04001a; }
+:root { --cyan:#00ffff; --pink:#ff00c8; --bg:#04001a; }
 *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
 
 body {
@@ -16,10 +16,10 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 18px;
   font-family: 'Rajdhani', sans-serif;
   overflow: hidden;
   position: relative;
-  gap: 18px;
 }
 
 .bg-glow {
@@ -127,7 +127,7 @@ body {
 }
 @keyframes textShimmer { 0%{background-position:0%} 100%{background-position:300%} }
 
-/* MAP - centered rectangle, taller */
+/* MAP */
 .map-wrap {
   position: relative; z-index: 5;
   width: min(860px, 92vw);
@@ -135,11 +135,21 @@ body {
   border-radius: 18px;
   overflow: hidden;
   border: 1px solid rgba(0,255,255,0.18);
-  box-shadow:
-    0 0 50px rgba(0,255,255,0.08),
-    0 0 100px rgba(255,0,200,0.05),
-    0 12px 50px rgba(0,0,0,0.7);
+  box-shadow: 0 0 50px rgba(0,255,255,0.08), 0 0 100px rgba(255,0,200,0.05), 0 12px 50px rgba(0,0,0,0.7);
+  animation: popIn 0.9s cubic-bezier(0.34,1.4,0.64,1) 0.1s both;
+}
 
+/* Scale the iframe down so map appears zoomed out */
+.map-wrap iframe {
+  width: 133%;
+  height: 133%;
+  border: none;
+  display: block;
+  transform: scale(0.75);
+  transform-origin: top left;
+}
+
+@keyframes popIn {
   from { opacity:0; transform:scale(0.97) translateY(12px); }
   to   { opacity:1; transform:scale(1) translateY(0); }
 }
@@ -155,14 +165,12 @@ body {
 <div class="bg-glow"></div>
 <div class="bg-grid"></div>
 
-<!-- Hamburger -->
 <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle menu">
   <div class="bar"></div>
   <div class="bar"></div>
   <div class="bar"></div>
 </button>
 
-<!-- Nav overlay -->
 <div class="nav-overlay" id="navOverlay">
   <div class="nav-backdrop" id="navBackdrop"></div>
   <div class="nav-panel">
@@ -182,13 +190,11 @@ body {
   </div>
 </div>
 
-<!-- Title -->
 <div class="title-block">
   <div class="page-label">Explore</div>
   <div class="page-title">State of Leonida</div>
 </div>
 
-<!-- Map -->
 <div class="map-wrap">
   <iframe src="https://map.stateofleonida.net/" title="State of Leonida Map" allowfullscreen loading="lazy"></iframe>
 </div>
