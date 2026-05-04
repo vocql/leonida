@@ -1,5 +1,3 @@
-// TESTING PROJECT PAGE \\
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,43 +38,10 @@ body {
   font-family: 'Rajdhani', sans-serif;
   overflow: hidden;
   position: relative;
-  cursor: none;
 }
 
-/* ─── CUSTOM CURSOR ─── */
-#cursor-dot {
-  position: fixed; top: 0; left: 0; z-index: 9999;
-  width: 10px; height: 10px; border-radius: 50%;
-  background: var(--cyan);
-  box-shadow: 0 0 12px var(--cyan), 0 0 24px rgba(0,255,255,0.5);
-  pointer-events: none;
-  transform: translate(-50%,-50%);
-  transition: width .15s, height .15s, background .15s, box-shadow .15s;
-}
-#cursor-ring {
-  position: fixed; top: 0; left: 0; z-index: 9998;
-  width: 36px; height: 36px; border-radius: 50%;
-  border: 1.5px solid rgba(0,255,255,0.4);
-  pointer-events: none;
-  transform: translate(-50%,-50%);
-  transition: width .3s ease, height .3s ease, border-color .3s, transform .08s linear;
-}
-body:has(a:hover) #cursor-dot,
-body:has(button:hover) #cursor-dot { width: 18px; height: 18px; background: var(--pink); box-shadow: 0 0 20px var(--pink); }
-body:has(a:hover) #cursor-ring,
-body:has(button:hover) #cursor-ring { width: 56px; height: 56px; border-color: rgba(255,0,200,0.5); }
+#auroraCanvas { display: none; }
 
-/* cursor trail */
-.cursor-trail {
-  position: fixed; width: 5px; height: 5px; border-radius: 50%;
-  pointer-events: none; z-index: 9997;
-  transform: translate(-50%,-50%);
-  background: var(--pink);
-  animation: trailFade 0.6s forwards;
-}
-@keyframes trailFade { to { opacity: 0; transform: translate(-50%,-50%) scale(0); } }
-
-/* ─── BACKGROUND ─── */
 .bg-glow {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background:
@@ -84,6 +49,7 @@ body:has(button:hover) #cursor-ring { width: 56px; height: 56px; border-color: r
     radial-gradient(ellipse 65% 50% at 88% 78%, rgba(255,0,200,0.08) 0%, transparent 100%),
     radial-gradient(ellipse 50% 40% at 50% 50%, rgba(100,0,220,0.05) 0%, transparent 100%);
 }
+
 .bg-grid {
   position: fixed; inset: 0; z-index: 1; pointer-events: none;
   background-image:
@@ -92,6 +58,7 @@ body:has(button:hover) #cursor-ring { width: 56px; height: 56px; border-color: r
   background-size: 60px 60px;
   mask-image: radial-gradient(ellipse 85% 65% at center, black 10%, transparent 75%);
 }
+
 .particles { position: fixed; inset: 0; z-index: 2; overflow: hidden; pointer-events: none; }
 .particle {
   position: absolute; border-radius: 50%;
@@ -104,7 +71,7 @@ body:has(button:hover) #cursor-ring { width: 56px; height: 56px; border-color: r
   100% { transform: translateY(-10vh) translateX(var(--drift)); opacity: 0; }
 }
 
-/* ─── HAMBURGER ─── */
+/* HAMBURGER */
 .hamburger-btn {
   position: fixed; top: 22px; right: 26px; z-index: 200;
   width: 52px; height: 52px; border-radius: 50%;
@@ -112,7 +79,7 @@ body:has(button:hover) #cursor-ring { width: 56px; height: 56px; border-color: r
   border: 1.5px solid rgba(0,255,255,0.25);
   box-shadow: 0 0 20px rgba(0,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.1);
   backdrop-filter: blur(16px);
-  cursor: none;
+  cursor: pointer;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
   transition: all 0.3s ease;
   animation: fadeSlideIn 0.8s cubic-bezier(0.34,1.4,0.64,1) both;
@@ -139,7 +106,7 @@ body:has(button:hover) #cursor-ring { width: 56px; height: 56px; border-color: r
 .hamburger-btn.open .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
 .hamburger-btn.open .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background: var(--pink); }
 
-/* ─── NAV OVERLAY ─── */
+/* NAV OVERLAY */
 .nav-overlay {
   position: fixed; inset: 0; z-index: 150;
   pointer-events: none; opacity: 0; transition: opacity 0.4s ease;
@@ -159,6 +126,18 @@ body:has(button:hover) #cursor-ring { width: 56px; height: 56px; border-color: r
   transition: transform 0.5s cubic-bezier(0.34,1.2,0.64,1);
   display: flex; flex-direction: column; justify-content: center;
   padding: 80px 48px; overflow: hidden;
+}
+.nav-panel::before {
+  content: ''; position: absolute; top: -80px; right: -80px;
+  width: 360px; height: 360px;
+  background: radial-gradient(circle, rgba(0,255,255,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.nav-panel::after {
+  content: ''; position: absolute; bottom: -60px; left: -60px;
+  width: 280px; height: 280px;
+  background: radial-gradient(circle, rgba(255,0,200,0.06) 0%, transparent 70%);
+  pointer-events: none;
 }
 .nav-overlay.open .nav-panel { transform: translateX(0); }
 .nav-label {
@@ -183,20 +162,9 @@ body:has(button:hover) #cursor-ring { width: 56px; height: 56px; border-color: r
   text-decoration: none; color: rgba(255,255,255,0.18);
   display: block; padding: 9px 0; line-height: 1;
   transition: color 0.2s, letter-spacing 0.25s; position: relative;
-  cursor: none;
 }
-.nav-links li a::after {
-  content: ''; position: absolute; left: 0; bottom: 7px;
-  width: 0; height: 2px;
-  background: linear-gradient(90deg, var(--cyan), var(--pink));
-  transition: width 0.3s cubic-bezier(0.34,1.4,0.64,1); border-radius: 2px;
-}
-.nav-links li a:hover { color: #fff; letter-spacing: 0.08em; }
-.nav-links li a:hover::after { width: 100%; }
-.nav-links li:nth-child(odd) a:hover  { color: var(--cyan); text-shadow: 0 0 20px rgba(0,255,255,0.35); }
-.nav-links li:nth-child(even) a:hover { color: var(--pink); text-shadow: 0 0 20px rgba(255,0,200,0.35); }
-.nav-links li a.active { color: var(--cyan); }
-.nav-links li a.active::after { width: 38%; }
+.nav-links li a:hover { color: #fff; letter-spacing: 0.08em; text-shadow: none; }
+.nav-links li a.active { color: #fff; }
 .nav-footer {
   position: absolute; bottom: 36px; left: 48px; right: 48px;
   padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.05);
@@ -212,7 +180,7 @@ body:has(button:hover) #cursor-ring { width: 56px; height: 56px; border-color: r
 }
 @keyframes dotPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(0.55)} }
 
-/* ─── TITLE ─── */
+/* TITLE */
 .title-wrap {
   position: relative; z-index: 5; text-align: center;
   animation: popIn 1s cubic-bezier(0.34,1.56,0.64,1) both;
@@ -230,13 +198,10 @@ body:has(button:hover) #cursor-ring { width: 56px; height: 56px; border-color: r
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   animation: textShimmer 4s linear infinite;
   filter: drop-shadow(0 0 40px rgba(0,255,255,0.28)) drop-shadow(0 0 70px rgba(255,0,200,0.15));
-  position: relative;
 }
-/* 3D tilt effect applied via JS */
-.title-wrap { perspective: 800px; }
 @keyframes textShimmer { 0%{background-position:0%} 100%{background-position:300%} }
 
-/* ─── COUNTDOWN ─── */
+/* COUNTDOWN */
 .pills {
   position: relative; z-index: 5;
   display: flex; align-items: center; gap: 10px;
@@ -251,7 +216,6 @@ body:has(button:hover) #cursor-ring { width: 56px; height: 56px; border-color: r
   backdrop-filter: blur(20px);
   position: relative; overflow: hidden; min-width: 84px;
   transition: transform 0.25s cubic-bezier(0.34,1.4,0.64,1), box-shadow 0.25s;
-  cursor: none;
 }
 .pill:hover {
   transform: translateY(-5px) scale(1.04);
@@ -303,7 +267,7 @@ body:has(button:hover) #cursor-ring { width: 56px; height: 56px; border-color: r
   100%{ transform: scale(1) translateY(0); }
 }
 
-/* ─── SUBTITLE ─── */
+/* SUBTITLE */
 .subtitle-wrap {
   position: relative; z-index: 5;
   animation: popIn 1s cubic-bezier(0.34,1.56,0.64,1) 0.3s both;
@@ -316,7 +280,7 @@ body:has(button:hover) #cursor-ring { width: 56px; height: 56px; border-color: r
 .subtitle-divider { width: 28px; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent); }
 .subtitle span.date { color: var(--pink); text-shadow: 0 0 14px rgba(255,0,200,0.3); }
 
-/* ─── PLATFORMS ─── */
+/* PLATFORMS */
 .platforms {
   position: relative; z-index: 5;
   display: flex; align-items: center; gap: 8px;
@@ -328,194 +292,12 @@ body:has(button:hover) #cursor-ring { width: 56px; height: 56px; border-color: r
   border: 1px solid rgba(255,255,255,0.09); color: rgba(255,255,255,0.28);
   background: rgba(255,255,255,0.02);
   transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
-  cursor: none;
 }
 .platform-badge:hover { border-color: rgba(0,255,255,0.28); color: var(--cyan); box-shadow: 0 0 14px rgba(0,255,255,0.12); }
 
-/* ─── HYPE METER ─── */
-.hype-wrap {
-  position: relative; z-index: 5;
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  animation: popIn 1s cubic-bezier(0.34,1.56,0.64,1) 0.5s both;
-}
-.hype-label {
-  font-size: 9px; font-weight: 700; letter-spacing: 0.35em;
-  text-transform: uppercase; color: rgba(255,255,255,0.2);
-  display: flex; align-items: center; gap: 8px;
-}
-.hype-label .hype-count {
-  color: var(--cyan); font-size: 11px;
-  text-shadow: 0 0 10px rgba(0,255,255,0.4);
-  transition: all 0.2s;
-}
-.hype-bar-outer {
-  width: 260px; height: 6px; border-radius: 99px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
-  overflow: hidden; position: relative;
-}
-.hype-bar-inner {
-  height: 100%; border-radius: 99px;
-  background: linear-gradient(90deg, var(--purple), var(--cyan), var(--pink));
-  background-size: 200% auto;
-  animation: hypeShimmer 2s linear infinite;
-  transition: width 0.5s cubic-bezier(0.34,1.4,0.64,1);
-  width: 0%;
-}
-@keyframes hypeShimmer { 0%{background-position:0%} 100%{background-position:200%} }
-.hype-btn {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 13px; font-weight: 700; letter-spacing: 0.2em;
-  text-transform: uppercase;
-  padding: 8px 28px; border-radius: 8px;
-  border: 1px solid rgba(0,255,255,0.25);
-  background: rgba(0,255,255,0.05);
-  color: var(--cyan);
-  cursor: none;
-  transition: all 0.2s cubic-bezier(0.34,1.4,0.64,1);
-  position: relative; overflow: hidden;
-}
-.hype-btn::before {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(0,255,255,0.08), transparent);
-  transform: translateX(-100%);
-  transition: transform 0.4s;
-}
-.hype-btn:hover { background: rgba(0,255,255,0.12); transform: scale(1.05); box-shadow: 0 0 24px rgba(0,255,255,0.2); }
-.hype-btn:hover::before { transform: translateX(100%); }
-.hype-btn:active { transform: scale(0.96); }
-.hype-btn.fired {
-  border-color: rgba(255,0,200,0.5);
-  background: rgba(255,0,200,0.1);
-  color: var(--pink);
-  box-shadow: 0 0 30px rgba(255,0,200,0.25);
-  animation: hypeFirePop 0.35s cubic-bezier(0.34,1.8,0.64,1);
-}
-@keyframes hypeFirePop { 0%{transform:scale(1.3)} 100%{transform:scale(1.05)} }
-
-/* ─── LORE TICKER ─── */
-.lore-ticker {
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 20;
-  height: 38px;
-  background: rgba(4,0,26,0.85);
-  border-top: 1px solid rgba(0,255,255,0.1);
-  backdrop-filter: blur(10px);
-  display: flex; align-items: center; overflow: hidden;
-}
-.lore-ticker-label {
-  flex-shrink: 0;
-  padding: 0 16px;
-  font-size: 9px; font-weight: 700; letter-spacing: 0.3em;
-  text-transform: uppercase; color: var(--cyan);
-  border-right: 1px solid rgba(0,255,255,0.15);
-  height: 100%; display: flex; align-items: center;
-  white-space: nowrap;
-  text-shadow: 0 0 10px rgba(0,255,255,0.4);
-}
-.lore-ticker-track {
-  flex: 1; overflow: hidden; position: relative;
-}
-.lore-ticker-inner {
-  display: flex; gap: 80px; white-space: nowrap;
-  animation: tickerScroll 40s linear infinite;
-  will-change: transform;
-}
-.lore-ticker-inner:hover { animation-play-state: paused; }
-@keyframes tickerScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-.lore-item {
-  font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.35); cursor: default; flex-shrink: 0;
-  transition: color 0.2s;
-}
-.lore-item:hover { color: rgba(255,255,255,0.8); }
-.lore-item span { color: var(--pink); font-weight: 700; }
-
-/* ─── SOUND TOGGLE ─── */
-.sound-btn {
-  position: fixed; top: 22px; left: 26px; z-index: 200;
-  width: 52px; height: 52px; border-radius: 50%;
-  background: rgba(255,0,200,0.05);
-  border: 1.5px solid rgba(255,0,200,0.2);
-  box-shadow: 0 0 20px rgba(255,0,200,0.08);
-  backdrop-filter: blur(16px);
-  cursor: none;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.3s ease;
-  animation: fadeSlideInLeft 0.8s cubic-bezier(0.34,1.4,0.64,1) both;
-}
-@keyframes fadeSlideInLeft {
-  from { opacity: 0; transform: translateX(-20px) scale(0.8); }
-  to   { opacity: 1; transform: translateX(0) scale(1); }
-}
-.sound-btn:hover { background: rgba(255,0,200,0.1); border-color: var(--pink); transform: scale(1.08); }
-.sound-btn svg { width: 20px; height: 20px; }
-.sound-btn.muted { border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.02); }
-.sound-btn.muted svg { opacity: 0.3; }
-
-/* ─── KONAMI UNLOCK OVERLAY ─── */
-.konami-overlay {
-  position: fixed; inset: 0; z-index: 1000;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 20px;
-  pointer-events: none; opacity: 0;
-  transition: opacity 0.5s;
-}
-.konami-overlay.show { opacity: 1; pointer-events: all; }
-.konami-bg {
-  position: absolute; inset: 0;
-  background: rgba(4,0,26,0.96); backdrop-filter: blur(30px);
-}
-.konami-content { position: relative; z-index: 1; text-align: center; }
-.konami-text {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: clamp(48px,9vw,90px); font-weight: 900;
-  text-transform: uppercase; letter-spacing: 0.05em;
-  background: linear-gradient(90deg, var(--cyan), var(--pink));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  animation: konPop 0.6s cubic-bezier(0.34,1.8,0.64,1);
-}
-@keyframes konPop { from{transform:scale(0) rotate(-15deg)} to{transform:scale(1) rotate(0deg)} }
-.konami-sub {
-  font-size: 12px; font-weight: 600; letter-spacing: 0.3em;
-  text-transform: uppercase; color: rgba(255,255,255,0.3);
-  margin-top: 8px;
-}
-.konami-close {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 13px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
-  padding: 10px 32px; border-radius: 8px;
-  border: 1px solid rgba(0,255,255,0.3); color: var(--cyan);
-  background: rgba(0,255,255,0.06); cursor: none;
-  transition: all 0.2s;
-  margin-top: 16px;
-}
-.konami-close:hover { background: rgba(0,255,255,0.15); }
-.konami-seq {
-  display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;
-  margin-top: 16px;
-}
-.konami-key {
-  font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
-  text-transform: uppercase; padding: 4px 8px; border-radius: 4px;
-  border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.4);
-  background: rgba(255,255,255,0.04);
-}
-
-/* ─── PROGRESS BAR (top) ─── */
-#top-progress {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 300;
-  height: 3px;
-  background: linear-gradient(90deg, var(--purple), var(--cyan), var(--pink));
-  background-size: 200% auto;
-  animation: hypeShimmer 2s linear infinite;
-  transform-origin: left;
-  transform: scaleX(0);
-  transition: transform 1s cubic-bezier(0.4,0,0.2,1);
-}
-
-/* ─── STATUS BAR ─── */
+/* STATUS BAR */
 .status-bar {
-  position: fixed; bottom: 48px; left: 50%; transform: translateX(-50%); z-index: 10;
+  position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 10;
   display: flex; align-items: center; gap: 8px;
   font-size: 10px; font-weight: 600; letter-spacing: 0.25em;
   text-transform: uppercase; color: rgba(255,255,255,0.13);
@@ -528,7 +310,7 @@ body:has(button:hover) #cursor-ring { width: 56px; height: 56px; border-color: r
   animation: dotPulse 2s ease-in-out infinite;
 }
 
-/* ─── CLICK RIPPLE ─── */
+/* CLICK RIPPLE */
 .ripple {
   position: fixed; border-radius: 50%; pointer-events: none; z-index: 4;
   border: 1.5px solid rgba(0,255,255,0.4);
@@ -540,7 +322,7 @@ body:has(button:hover) #cursor-ring { width: 56px; height: 56px; border-color: r
   100%{ transform: translate(-50%,-50%) scale(3.5); opacity: 0; }
 }
 
-/* ─── PILL TOOLTIP ─── */
+/* TOOLTIP on pill hover */
 .pill-tooltip {
   position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%);
   font-size: 9px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
@@ -553,63 +335,6 @@ body:has(button:hover) #cursor-ring { width: 56px; height: 56px; border-color: r
 }
 .pill:hover .pill-tooltip { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-/* ─── SCREENSHAKE ─── */
-@keyframes shake {
-  0%,100%{transform:translate(0,0) rotate(0deg)}
-  20%{transform:translate(-2px,1px) rotate(-0.3deg)}
-  40%{transform:translate(2px,-1px) rotate(0.3deg)}
-  60%{transform:translate(-1px,2px) rotate(-0.2deg)}
-  80%{transform:translate(1px,-1px) rotate(0.2deg)}
-}
-body.shake { animation: shake 0.35s ease; }
-
-/* ─── KONAMI PROGRESS (corner) ─── */
-#konami-progress-dots {
-  position: fixed; bottom: 48px; right: 26px; z-index: 50;
-  display: flex; gap: 4px; align-items: center;
-  opacity: 0; transition: opacity 0.3s;
-}
-#konami-progress-dots.visible { opacity: 1; }
-.kd {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: rgba(255,255,255,0.15);
-  transition: background 0.2s, box-shadow 0.2s;
-}
-.kd.lit { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
-
-/* ─── HYPESCROLL FLOATING EMOTES ─── */
-.hype-emote {
-  position: fixed; z-index: 30; pointer-events: none;
-  font-size: 22px; user-select: none;
-  animation: emoteFloat 2s cubic-bezier(0.2,0.8,0.2,1) forwards;
-}
-@keyframes emoteFloat {
-  0%  { opacity: 1; transform: translateY(0) scale(1); }
-  100%{ opacity: 0; transform: translateY(-120px) scale(1.4) rotate(15deg); }
-}
-
-/* ─── TIME ZONE CLOCK ─── */
-.tz-bar {
-  position: fixed; top: 90px; left: 50%; transform: translateX(-50%); z-index: 10;
-  display: flex; gap: 20px; align-items: center;
-  animation: popIn 1.2s cubic-bezier(0.34,1.56,0.64,1) 0.7s both;
-}
-.tz-item {
-  display: flex; flex-direction: column; align-items: center; gap: 2px;
-}
-.tz-name {
-  font-size: 8px; font-weight: 700; letter-spacing: 0.25em;
-  text-transform: uppercase; color: rgba(255,255,255,0.18);
-}
-.tz-time {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 16px; font-weight: 700; letter-spacing: 0.05em;
-  color: rgba(255,255,255,0.22);
-  transition: color 0.3s;
-}
-.tz-item.local .tz-time { color: var(--cyan); text-shadow: 0 0 10px rgba(0,255,255,0.3); }
-.tz-sep { color: rgba(255,255,255,0.07); font-size: 20px; margin-top: -4px; }
-
 @keyframes popIn {
   from { opacity: 0; transform: scale(0.75) translateY(14px); }
   to   { opacity: 1; transform: scale(1) translateY(0); }
@@ -621,43 +346,25 @@ body.shake { animation: shake 0.35s ease; }
   .pill-num { font-size: 32px; }
   .sep  { font-size: 24px; }
   .nav-panel { padding: 70px 28px; }
-  .tz-bar { display: none; }
-  .hype-wrap { width: 90vw; }
-  .hype-bar-outer { width: 100%; }
 }
 </style>
 </head>
 <body>
 
-<!-- TOP PROGRESS -->
-<div id="top-progress"></div>
-
-<!-- CURSOR -->
-<div id="cursor-dot"></div>
-<div id="cursor-ring"></div>
-
+<canvas id="auroraCanvas"></canvas>
 <div class="bg-glow"></div>
 <div class="bg-grid"></div>
 <div id="mouseGlow"></div>
 <div class="particles" id="particles"></div>
 
-<!-- SOUND TOGGLE -->
-<button class="sound-btn" id="soundBtn" aria-label="Toggle sound">
-  <svg id="soundIcon" viewBox="0 0 24 24" fill="none" stroke="var(--pink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
-    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
-  </svg>
-</button>
-
-<!-- HAMBURGER -->
+<!-- Hamburger -->
 <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle menu">
   <div class="bar"></div>
   <div class="bar"></div>
   <div class="bar"></div>
 </button>
 
-<!-- NAV OVERLAY -->
+<!-- Nav overlay -->
 <div class="nav-overlay" id="navOverlay">
   <div class="nav-backdrop" id="navBackdrop"></div>
   <div class="nav-panel">
@@ -677,38 +384,10 @@ body.shake { animation: shake 0.35s ease; }
   </div>
 </div>
 
-<!-- TIME ZONE BAR -->
-<div class="tz-bar" id="tzBar">
-  <div class="tz-item">
-    <div class="tz-name">LA</div>
-    <div class="tz-time" id="tz-la">--:--</div>
-  </div>
-  <div class="tz-sep">·</div>
-  <div class="tz-item">
-    <div class="tz-name">NYC</div>
-    <div class="tz-time" id="tz-nyc">--:--</div>
-  </div>
-  <div class="tz-sep">·</div>
-  <div class="tz-item local">
-    <div class="tz-name">LOCAL</div>
-    <div class="tz-time" id="tz-local">--:--</div>
-  </div>
-  <div class="tz-sep">·</div>
-  <div class="tz-item">
-    <div class="tz-name">LON</div>
-    <div class="tz-time" id="tz-lon">--:--</div>
-  </div>
-  <div class="tz-sep">·</div>
-  <div class="tz-item">
-    <div class="tz-name">TKY</div>
-    <div class="tz-time" id="tz-tky">--:--</div>
-  </div>
-</div>
-
-<!-- MAIN -->
-<div class="title-wrap" id="titleWrap">
+<!-- Main -->
+<div class="title-wrap">
   <div class="welcome-small">Welcome to</div>
-  <div class="leonida-text" id="leonidaText">Leonida</div>
+  <div class="leonida-text">Leonida</div>
 </div>
 
 <div class="pills">
@@ -747,116 +426,18 @@ body.shake { animation: shake 0.35s ease; }
   <div class="platform-badge">Xbox Series X|S</div>
 </div>
 
-<!-- HYPE METER -->
-<div class="hype-wrap">
-  <div class="hype-label">
-    Hype Level — <span class="hype-count" id="hypeCount">0</span>
-  </div>
-  <div class="hype-bar-outer">
-    <div class="hype-bar-inner" id="hypeBar"></div>
-  </div>
-  <button class="hype-btn" id="hypeBtn">🔥 HYPE IT UP</button>
-</div>
-
-<!-- STATUS BAR -->
-<div class="status-bar">
-  <div class="status-dot"></div>
-  <span id="statusText">SYSTEMS ONLINE — COUNTING DOWN</span>
-</div>
-
-<!-- LORE TICKER -->
-<div class="lore-ticker">
-  <div class="lore-ticker-label">// LEONIDA WIRE</div>
-  <div class="lore-ticker-track">
-    <div class="lore-ticker-inner" id="tickerInner"></div>
-  </div>
-</div>
-
-<!-- KONAMI OVERLAY -->
-<div class="konami-overlay" id="konamiOverlay">
-  <div class="konami-bg"></div>
-  <div class="konami-content">
-    <div class="konami-text">30 EXTRA LIVES</div>
-    <div class="konami-sub">Easter egg unlocked — you know your history</div>
-    <div class="konami-seq">
-      <div class="konami-key">↑</div>
-      <div class="konami-key">↑</div>
-      <div class="konami-key">↓</div>
-      <div class="konami-key">↓</div>
-      <div class="konami-key">←</div>
-      <div class="konami-key">→</div>
-      <div class="konami-key">←</div>
-      <div class="konami-key">→</div>
-      <div class="konami-key">B</div>
-      <div class="konami-key">A</div>
-    </div>
-    <button class="konami-close" id="konamiClose">CLOSE ✕</button>
-  </div>
-</div>
-
-<!-- KONAMI DOTS -->
-<div id="konami-progress-dots"></div>
-
 <script>
-/* ─────────────────────────────────────
-   CUSTOM CURSOR + TRAIL
-───────────────────────────────────── */
-const dot = document.getElementById('cursor-dot');
-const ring = document.getElementById('cursor-ring');
-let cx = innerWidth/2, cy = innerHeight/2;
-let rx = cx, ry = cy;
-let lastTrail = 0;
-
-document.addEventListener('mousemove', e => {
-  cx = e.clientX; cy = e.clientY;
-  dot.style.left = cx + 'px'; dot.style.top = cy + 'px';
-
-  const now = Date.now();
-  if (now - lastTrail > 40) {
-    lastTrail = now;
-    const t = document.createElement('div');
-    t.className = 'cursor-trail';
-    t.style.left = cx + 'px'; t.style.top = cy + 'px';
-    t.style.background = Math.random() > 0.5 ? 'rgba(0,255,255,0.5)' : 'rgba(255,0,200,0.5)';
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 600);
-  }
-});
-(function ringLoop(){
-  rx += (cx - rx) * 0.12; ry += (cy - ry) * 0.12;
-  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-  requestAnimationFrame(ringLoop);
-})();
-
-/* ─────────────────────────────────────
-   MOUSE GLOW
-───────────────────────────────────── */
+/* MOUSE GLOW */
 const glow = document.getElementById('mouseGlow');
 let mx = innerWidth/2, my = innerHeight/2, gx = mx, gy = my;
 document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-(function glowLoop(){
+(function loop(){
   gx += (mx-gx)*0.07; gy += (my-gy)*0.07;
   glow.style.left = gx+'px'; glow.style.top = gy+'px';
-  requestAnimationFrame(glowLoop);
+  requestAnimationFrame(loop);
 })();
 
-/* ─────────────────────────────────────
-   3D TILT ON TITLE
-───────────────────────────────────── */
-const titleWrap = document.getElementById('titleWrap');
-const leonidaText = document.getElementById('leonidaText');
-document.addEventListener('mousemove', e => {
-  const xPct = (e.clientX / innerWidth - 0.5) * 2;
-  const yPct = (e.clientY / innerHeight - 0.5) * 2;
-  const rotX = yPct * -8;
-  const rotY = xPct * 12;
-  leonidaText.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-});
-titleWrap.style.perspective = '800px';
-
-/* ─────────────────────────────────────
-   RIPPLES
-───────────────────────────────────── */
+/* RIPPLES */
 document.addEventListener('click', e => {
   const r = document.createElement('div');
   r.className = 'ripple';
@@ -867,9 +448,7 @@ document.addEventListener('click', e => {
   setTimeout(()=>r.remove(), 950);
 });
 
-/* ─────────────────────────────────────
-   HAMBURGER
-───────────────────────────────────── */
+/* HAMBURGER */
 const hBtn = document.getElementById('hamburgerBtn');
 const overlay = document.getElementById('navOverlay');
 const backdrop = document.getElementById('navBackdrop');
@@ -877,27 +456,21 @@ function toggleMenu(){
   const open = overlay.classList.toggle('open');
   hBtn.classList.toggle('open', open);
   document.body.style.overflow = open ? 'hidden' : '';
-  playClick();
 }
 hBtn.addEventListener('click', toggleMenu);
 backdrop.addEventListener('click', toggleMenu);
 document.addEventListener('keydown', e => { if(e.key==='Escape' && overlay.classList.contains('open')) toggleMenu(); });
 
-/* ─────────────────────────────────────
-   COUNTDOWN
-───────────────────────────────────── */
+/* COUNTDOWN */
 const prev = {d:'',h:'',m:'',s:''};
 function bounce(id){
   const el = document.getElementById('n-'+id);
   el.classList.remove('bounce'); void el.offsetWidth; el.classList.add('bounce');
   setTimeout(()=>el.classList.remove('bounce'), 500);
 }
-const RELEASE = new Date('2026-11-19T00:00:00');
-
 function tick(){
-  const diff = RELEASE - new Date();
-  const totalSecs = Math.max(0, Math.floor(diff / 1000));
-  const totalDays = Math.floor(diff / 86400000);
+  const target = new Date('2026-11-19T00:00:00');
+  const diff = target - new Date();
   if(diff<=0){ ['d','h','m','s'].forEach(k=>document.getElementById('n-'+k).textContent='00'); return; }
   const d = String(Math.floor(diff/86400000)).padStart(3,'0');
   const h = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
@@ -908,221 +481,9 @@ function tick(){
     if(tip) tip.textContent=d+' days to go!';}
   if(h!==prev.h){document.getElementById('n-h').textContent=h;bounce('h');prev.h=h;}
   if(m!==prev.m){document.getElementById('n-m').textContent=m;bounce('m');prev.m=m;}
-  if(s!==prev.s){document.getElementById('n-s').textContent=s;bounce('s');prev.s=s; playTick();}
-
-  // top progress bar (how far into the year from Jan 1 2026)
-  const yearStart = new Date('2026-01-01T00:00:00');
-  const yearEnd   = RELEASE;
-  const elapsed = Date.now() - yearStart;
-  const total   = yearEnd - yearStart;
-  const pct     = Math.min(1, Math.max(0, elapsed / total));
-  document.getElementById('top-progress').style.transform = `scaleX(${pct})`;
+  if(s!==prev.s){document.getElementById('n-s').textContent=s;bounce('s');prev.s=s;}
 }
-tick(); setInterval(tick, 1000);
-
-/* ─────────────────────────────────────
-   SOUND ENGINE (Web Audio API)
-───────────────────────────────────── */
-let audioCtx = null;
-let soundOn = false;
-
-function getAudio(){
-  if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  return audioCtx;
-}
-
-function playTone(freq, type, duration, vol=0.07){
-  if(!soundOn) return;
-  try {
-    const ctx = getAudio();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain); gain.connect(ctx.destination);
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(freq*0.5, ctx.currentTime + duration);
-    gain.gain.setValueAtTime(vol, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-    osc.start(); osc.stop(ctx.currentTime + duration);
-  } catch(e){}
-}
-
-function playTick() { playTone(880, 'sine', 0.08, 0.03); }
-function playClick() { playTone(440, 'square', 0.12, 0.05); }
-function playHype()  {
-  playTone(440, 'sawtooth', 0.15, 0.1);
-  setTimeout(()=>playTone(660, 'sawtooth', 0.15, 0.1), 80);
-  setTimeout(()=>playTone(880, 'sawtooth', 0.2, 0.15), 160);
-}
-function playKonami(){
-  const notes = [523,659,784,1047,784,659,523];
-  notes.forEach((n,i)=>setTimeout(()=>playTone(n,'sine',0.3,0.12), i*120));
-}
-
-const soundBtn = document.getElementById('soundBtn');
-const soundIcon = document.getElementById('soundIcon');
-soundBtn.addEventListener('click', () => {
-  soundOn = !soundOn;
-  soundBtn.classList.toggle('muted', !soundOn);
-  if(soundOn){
-    try { getAudio().resume(); } catch(e){}
-    playTone(660,'sine',0.2,0.1);
-  }
-});
-
-/* ─────────────────────────────────────
-   HYPE METER
-───────────────────────────────────── */
-const HYPE_MAX = 100;
-let hype = parseInt(localStorage.getItem('leonida_hype') || '0', 10);
-const hypeBtn = document.getElementById('hypeBtn');
-const hypeBar = document.getElementById('hypeBar');
-const hypeCount = document.getElementById('hypeCount');
-const EMOTES = ['🔥','🌊','🌅','⚡','💥','🎮','🏖️','🚗','✨','🎯'];
-
-function updateHype(){
-  const pct = Math.min(100, (hype / HYPE_MAX) * 100);
-  hypeBar.style.width = pct + '%';
-  hypeCount.textContent = hype;
-  localStorage.setItem('leonida_hype', hype);
-}
-updateHype();
-
-hypeBtn.addEventListener('click', e => {
-  if(hype >= HYPE_MAX) return;
-  hype = Math.min(HYPE_MAX, hype + 1);
-  updateHype();
-  playHype();
-
-  hypeBtn.classList.add('fired');
-  setTimeout(() => hypeBtn.classList.remove('fired'), 400);
-
-  // shake
-  document.body.classList.remove('shake');
-  void document.body.offsetWidth;
-  document.body.classList.add('shake');
-  setTimeout(() => document.body.classList.remove('shake'), 350);
-
-  // floating emote
-  const emote = document.createElement('div');
-  emote.className = 'hype-emote';
-  emote.textContent = EMOTES[Math.floor(Math.random() * EMOTES.length)];
-  emote.style.left = (e.clientX + (Math.random()-0.5)*80) + 'px';
-  emote.style.top  = e.clientY + 'px';
-  document.body.appendChild(emote);
-  setTimeout(() => emote.remove(), 2000);
-
-  if(hype >= HYPE_MAX){
-    hypeBtn.textContent = '💯 MAX HYPE';
-    hypeBtn.style.cursor = 'default';
-  }
-});
-
-/* ─────────────────────────────────────
-   LORE TICKER
-───────────────────────────────────── */
-const LORE = [
-  { text: 'LEONIDA STATE — where the sun never sets on the hustle', tag: 'CULTURE' },
-  { text: 'VICE CITY returns — bigger, bolder, more dangerous than ever', tag: 'CONFIRMED' },
-  { text: 'Lucia & Jason — two protagonists, one story, zero mercy', tag: 'CHARACTERS' },
-  { text: 'The Everglades: miles of swamp, secrets, and alligators', tag: 'LOCATIONS' },
-  { text: 'Fastest-selling entertainment product pre-orders in history', tag: 'RECORD' },
-  { text: 'Trailer 2 dropped — 90M+ views in 24 hours', tag: 'NUMBERS' },
-  { text: 'Strip malls, neon, and palm trees — the aesthetic is UNMATCHED', tag: 'VIBES' },
-  { text: 'The heist goes south — everything after is survival', tag: 'STORY' },
-  { text: 'PS5 & Xbox Series X|S — built for next-gen from the ground up', tag: 'PLATFORMS' },
-  { text: 'Rockstar Games — November 19, 2026 — mark the calendar', tag: 'DATE' },
-  { text: 'GTA VI: most anticipated game in a generation', tag: 'HYPE' },
-  { text: 'No PC date yet — console first, as always', tag: 'UPDATE' },
-];
-
-const tickerInner = document.getElementById('tickerInner');
-// Double for seamless loop
-[...LORE, ...LORE].forEach(item => {
-  const el = document.createElement('div');
-  el.className = 'lore-item';
-  el.innerHTML = `<span>[${item.tag}]</span> ${item.text}`;
-  tickerInner.appendChild(el);
-});
-
-/* ─────────────────────────────────────
-   TIMEZONE CLOCKS
-───────────────────────────────────── */
-function formatTZ(tz){
-  return new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:false, timeZone: tz});
-}
-function tickClocks(){
-  document.getElementById('tz-la').textContent    = formatTZ('America/Los_Angeles');
-  document.getElementById('tz-nyc').textContent   = formatTZ('America/New_York');
-  document.getElementById('tz-local').textContent = new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:false});
-  document.getElementById('tz-lon').textContent   = formatTZ('Europe/London');
-  document.getElementById('tz-tky').textContent   = formatTZ('Asia/Tokyo');
-}
-tickClocks(); setInterval(tickClocks, 1000);
-
-/* ─────────────────────────────────────
-   KONAMI CODE
-───────────────────────────────────── */
-const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-let konamiIdx = 0;
-const dotsContainer = document.getElementById('konami-progress-dots');
-KONAMI.forEach(()=>{
-  const d = document.createElement('div');
-  d.className = 'kd';
-  dotsContainer.appendChild(d);
-});
-const dots = dotsContainer.querySelectorAll('.kd');
-
-document.addEventListener('keydown', e => {
-  if(e.key === KONAMI[konamiIdx]){
-    dots[konamiIdx].classList.add('lit');
-    dotsContainer.classList.add('visible');
-    konamiIdx++;
-    if(konamiIdx === KONAMI.length){
-      setTimeout(()=>{
-        document.getElementById('konamiOverlay').classList.add('show');
-        playKonami();
-        konamiIdx = 0;
-        dots.forEach(d=>d.classList.remove('lit'));
-        dotsContainer.classList.remove('visible');
-      }, 300);
-    }
-  } else {
-    konamiIdx = 0;
-    dots.forEach(d=>d.classList.remove('lit'));
-    if(dotsContainer.classList.contains('visible')){
-      setTimeout(()=>dotsContainer.classList.remove('visible'), 500);
-    }
-  }
-});
-
-document.getElementById('konamiClose').addEventListener('click', ()=>{
-  document.getElementById('konamiOverlay').classList.remove('show');
-  playClick();
-});
-
-/* ─────────────────────────────────────
-   STATUS TEXT ROTATION
-───────────────────────────────────── */
-const STATUSES = [
-  'SYSTEMS ONLINE — COUNTING DOWN',
-  'LEONIDA IS WAITING',
-  'NOVEMBER 19, 2026',
-  'LUCIA & JASON — COMING SOON',
-  'VICE CITY REBORN',
-  'THE HYPE IS REAL',
-];
-let statusIdx = 0;
-const statusEl = document.getElementById('statusText');
-setInterval(()=>{
-  statusEl.style.opacity = '0';
-  setTimeout(()=>{
-    statusIdx = (statusIdx + 1) % STATUSES.length;
-    statusEl.textContent = STATUSES[statusIdx];
-    statusEl.style.opacity = '';
-  }, 400);
-}, 5000);
-statusEl.style.transition = 'opacity 0.4s';
+tick(); setInterval(tick,1000);
 </script>
 </body>
 </html>
