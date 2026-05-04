@@ -71,8 +71,6 @@ body {
   100% { transform: translateY(-10vh) translateX(var(--drift)); opacity: 0; }
 }
 
-
-
 /* HAMBURGER */
 .hamburger-btn {
   position: fixed; top: 22px; right: 26px; z-index: 200;
@@ -165,18 +163,8 @@ body {
   display: block; padding: 9px 0; line-height: 1;
   transition: color 0.2s, letter-spacing 0.25s; position: relative;
 }
-.nav-links li a::after {
-  content: ''; position: absolute; left: 0; bottom: 7px;
-  width: 0; height: 2px;
-  background: linear-gradient(90deg, var(--cyan), var(--pink));
-  transition: width 0.3s cubic-bezier(0.34,1.4,0.64,1); border-radius: 2px;
-}
-.nav-links li a:hover { color: #fff; letter-spacing: 0.08em; }
-.nav-links li a:hover::after { width: 100%; }
-.nav-links li:nth-child(odd) a:hover  { color: var(--cyan); text-shadow: 0 0 20px rgba(0,255,255,0.35); }
-.nav-links li:nth-child(even) a:hover { color: var(--pink); text-shadow: 0 0 20px rgba(255,0,200,0.35); }
-.nav-links li a.active { color: var(--cyan); }
-.nav-links li a.active::after { width: 38%; }
+.nav-links li a:hover { color: #fff; letter-spacing: 0.08em; text-shadow: none; }
+.nav-links li a.active { color: #fff; }
 .nav-footer {
   position: absolute; bottom: 36px; left: 48px; right: 48px;
   padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.05);
@@ -307,8 +295,6 @@ body {
 }
 .platform-badge:hover { border-color: rgba(0,255,255,0.28); color: var(--cyan); box-shadow: 0 0 14px rgba(0,255,255,0.12); }
 
-
-
 /* STATUS BAR */
 .status-bar {
   position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 10;
@@ -370,10 +356,6 @@ body {
 <div class="bg-grid"></div>
 <div id="mouseGlow"></div>
 <div class="particles" id="particles"></div>
-
-
-
-
 
 <!-- Hamburger -->
 <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle menu">
