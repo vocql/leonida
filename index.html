@@ -465,40 +465,6 @@ document.addEventListener('click', e => {
   document.body.appendChild(r);
   setTimeout(()=>r.remove(), 950);
 });
-  
-/* PARTICLES — more visible, no delay */
-const pc = document.getElementById('particles');
-
-for (let i = 0; i < 40; i++) {
-  const p = document.createElement('div');
-  p.className = 'particle';
-
-  // brighter / less transparent colors
-  const c = Math.random() > 0.5
-    ? 'rgba(0,255,255,0.9)'
-    : 'rgba(255,0,200,0.85)';
-
-  const sz = Math.random() * 1.8 + 1;
-
-  p.style.cssText = `
-    left: ${Math.random() * 100}%;
-    width: ${sz}px;
-    height: ${sz}px;
-    background: ${c};
-    box-shadow: 0 0 ${sz * 6}px ${c};
-
-    /* movement area */
-    --drift: ${(Math.random() - 0.5) * 60}px;
-
-    /* speed */
-    animation-duration: ${Math.random() * 20 + 12}s;
-
-    /* ❌ NO DELAY (all start immediately) */
-    animation-delay: 0s;
-  `;
-
-  pc.appendChild(p);
-}
 
 /* HAMBURGER */
 const hBtn = document.getElementById('hamburgerBtn');
