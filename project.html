@@ -280,6 +280,56 @@ body {
 .subtitle-divider { width: 28px; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent); }
 .subtitle span.date { color: var(--pink); text-shadow: 0 0 14px rgba(255,0,200,0.3); }
 
+/* PROGRESS BAR */
+.progress-wrap {
+  position: relative; z-index: 5;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  animation: popIn 1s cubic-bezier(0.34,1.56,0.64,1) 0.35s both;
+}
+.progress-meta {
+  width: min(340px, 88vw);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.progress-meta-label {
+  font-size: 8px; font-weight: 600; letter-spacing: 0.28em;
+  text-transform: uppercase; color: rgba(255,255,255,0.18);
+}
+.progress-pct {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.15em;
+  background: linear-gradient(90deg, #00ffff, #ff00c8);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.progress-track {
+  width: min(340px, 88vw);
+  height: 10px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 99px;
+  border: 1px solid rgba(255,255,255,0.1);
+  position: relative;
+  overflow: visible;
+}
+.progress-fill {
+  height: 10px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #00ffff, #bf00ff, #ff00c8, #00ffff);
+  background-size: 300% 100%;
+  animation: pbShift 4s linear infinite;
+  width: 0%;
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: absolute;
+  top: -1px; left: -1px;
+  box-shadow: 0 0 10px rgba(0,255,255,0.4), 0 0 22px rgba(255,0,200,0.2);
+  border-radius: 99px;
+}
+@keyframes pbShift { 0%{background-position:0% 0%} 100%{background-position:300% 0%} }
+.progress-days {
+  font-size: 8px; font-weight: 600; letter-spacing: 0.28em;
+  text-transform: uppercase; color: rgba(255,255,255,0.12);
+  animation: fadeBreathe 4s ease-in-out infinite;
+}
+@keyframes fadeBreathe { 0%,100%{opacity:0.6} 50%{opacity:1} }
+
 /* PLATFORMS */
 .platforms {
   position: relative; z-index: 5;
@@ -290,7 +340,7 @@ body {
 .platform-badge {
   font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
   padding: 5px 14px; border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.09); 
+  border: 1px solid rgba(255,255,255,0.09);
   color: rgba(255,255,255,0.28);
   background: rgba(255,255,255,0.02);
   transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
@@ -301,7 +351,7 @@ body {
   color: #ffffff;
   box-shadow: 0 0 14px rgba(255,255,255,0.2);
 }
-  
+
 /* STATUS BAR */
 .status-bar {
   position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 10;
@@ -428,6 +478,18 @@ body {
   </div>
 </div>
 
+<!-- PROGRESS BAR -->
+<div class="progress-wrap">
+  <div class="progress-meta">
+    <span class="progress-meta-label">Trailer 1</span>
+    <span class="progress-pct" id="pb-pct">0%</span>
+    <span class="progress-meta-label">Launch</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="pb-fill"></div>
+  </div>
+</div>
+
 <div class="platforms">
   <div class="platform-badge">PS5</div>
   <div class="platform-badge">Xbox Series X|S</div>
@@ -491,6 +553,36 @@ function tick(){
   if(s!==prev.s){document.getElementById('n-s').textContent=s;bounce('s');prev.s=s;}
 }
 tick(); setInterval(tick,1000);
+
+/* PROGRESS BAR — synced to countdown */
+(function(){
+  const releaseDate = new Date('2026-11-19T00:00:00');
+  const totalMs = releaseDate - new Date('2023-12-04T00:00:00');
+  function updateBar(){
+    const now    = new Date();
+    const diffMs = releaseDate - now;
+    if(diffMs <= 0){
+      document.getElementById('pb-fill').style.width = '100%';
+      document.getElementById('pb-pct').textContent  = '100%';
+      document.getElementById('pb-days').textContent = 'available now';
+      return;
+    }
+    const elapsed = totalMs - diffMs;
+    const pct     = Math.min(100, Math.max(0, elapsed / totalMs * 100));
+    const days    = Math.floor(diffMs / 86400000);
+    const hours   = Math.floor((diffMs % 86400000) / 3600000);
+    const mins    = Math.floor((diffMs % 3600000) / 60000);
+    const secs    = Math.floor((diffMs % 60000) / 1000);
+    document.getElementById('pb-fill').style.width = pct.toFixed(4) + '%';
+    document.getElementById('pb-pct').textContent  = pct.toFixed(2) + '%';
+    document.getElementById('pb-days').textContent =
+      days + 'd ' + String(hours).padStart(2,'0') + 'h ' +
+      String(mins).padStart(2,'0') + 'm ' +
+      String(secs).padStart(2,'0') + 's remaining';
+  }
+  updateBar();
+  setInterval(updateBar, 1000);
+})();
 </script>
 </body>
 </html>
