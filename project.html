@@ -28,7 +28,6 @@
 html { scroll-behavior: smooth; }
 
 body {
-  background: var(--bg);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -38,37 +37,35 @@ body {
   font-family: 'Rajdhani', sans-serif;
   overflow: hidden;
   position: relative;
+  /* ── The Leonida artwork as background ── */
+  background-image: url('leonida/images/others.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
-#auroraCanvas { display: none; }
-
-.bg-glow {
+/* Dark overlay so the text stays readable over the bright art */
+.bg-darken {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background:
-    radial-gradient(ellipse 70% 55% at 12% 20%, rgba(0,255,255,0.07) 0%, transparent 100%),
-    radial-gradient(ellipse 65% 50% at 88% 78%, rgba(255,0,200,0.08) 0%, transparent 100%),
-    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(100,0,220,0.05) 0%, transparent 100%);
+  background: rgba(4, 0, 26, 0.52);
 }
 
-.bg-grid {
+/* Subtle colour tint that echoes the neon palette */
+.bg-tint {
   position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 55% at 12% 20%, rgba(0,255,255,0.08) 0%, transparent 100%),
+    radial-gradient(ellipse 65% 50% at 88% 78%, rgba(255,0,200,0.09) 0%, transparent 100%);
+}
+
+/* Grid squares — kept exactly as requested */
+.bg-grid {
+  position: fixed; inset: 0; z-index: 2; pointer-events: none;
   background-image:
-    linear-gradient(rgba(0,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,255,255,0.03) 1px, transparent 1px);
+    linear-gradient(rgba(0,255,255,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,255,0.07) 1px, transparent 1px);
   background-size: 60px 60px;
   mask-image: radial-gradient(ellipse 85% 65% at center, black 10%, transparent 75%);
-}
-
-.particles { position: fixed; inset: 0; z-index: 2; overflow: hidden; pointer-events: none; }
-.particle {
-  position: absolute; border-radius: 50%;
-  animation: floatUp linear infinite; opacity: 0;
-}
-@keyframes floatUp {
-  0%   { transform: translateY(100vh); opacity: 0; }
-  10%  { opacity: 0.8; }
-  90%  { opacity: 0.4; }
-  100% { transform: translateY(-10vh) translateX(var(--drift)); opacity: 0; }
 }
 
 /* HAMBURGER */
@@ -114,7 +111,7 @@ body {
 .nav-overlay.open { pointer-events: all; opacity: 1; }
 .nav-backdrop {
   position: absolute; inset: 0;
-  background: rgba(4,0,26,0.9); backdrop-filter: blur(24px);
+  background: rgba(4,0,26,0.88); backdrop-filter: blur(24px);
 }
 .nav-panel {
   position: absolute; top: 0; right: 0;
@@ -161,7 +158,7 @@ body {
   text-transform: uppercase; letter-spacing: 0.04em;
   text-decoration: none; color: rgba(255,255,255,0.18);
   display: block; padding: 9px 0; line-height: 1;
-  transition: color 0.2s, letter-spacing 0.25s; position: relative;
+  transition: color 0.2s, letter-spacing 0.25s;
 }
 .nav-links li a:hover { color: #fff; letter-spacing: 0.08em; }
 .nav-links li a.active { color: #fff; }
@@ -187,7 +184,8 @@ body {
 }
 .welcome-small {
   font-size: 12px; font-weight: 600; letter-spacing: 0.45em;
-  text-transform: uppercase; color: rgba(255,255,255,0.32); margin-bottom: 6px;
+  text-transform: uppercase; color: rgba(255,255,255,0.55); margin-bottom: 6px;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.6);
 }
 .leonida-text {
   font-family: 'Barlow Condensed', sans-serif;
@@ -196,8 +194,8 @@ body {
   background: linear-gradient(90deg, #00ffff, #bf00ff, #ff00c8, #00e5ff, #00ffff);
   background-size: 300% auto;
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  animation: textShimmer 4s linear infinite;
-  filter: drop-shadow(0 0 40px rgba(0,255,255,0.28)) drop-shadow(0 0 70px rgba(255,0,200,0.15));
+  animation: textShimmer 8s linear infinite;
+  filter: drop-shadow(0 2px 16px rgba(0,0,0,0.7)) drop-shadow(0 0 40px rgba(0,255,255,0.3));
 }
 @keyframes textShimmer { 0%{background-position:0%} 100%{background-position:300%} }
 
@@ -210,29 +208,29 @@ body {
 .pill {
   display: flex; flex-direction: column; align-items: center;
   padding: 16px 26px 12px; border-radius: 14px;
-  background: rgba(0,255,255,0.04);
-  border: 1px solid rgba(0,255,255,0.18);
-  box-shadow: 0 0 24px rgba(0,255,255,0.06), inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 32px rgba(0,0,0,0.5);
+  background: rgba(4,0,26,0.55);
+  border: 1px solid rgba(0,255,255,0.22);
+  box-shadow: 0 0 24px rgba(0,255,255,0.08), inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 32px rgba(0,0,0,0.5);
   backdrop-filter: blur(20px);
   position: relative; overflow: hidden; min-width: 84px;
   transition: transform 0.25s cubic-bezier(0.34,1.4,0.64,1), box-shadow 0.25s;
 }
 .pill:hover {
   transform: translateY(-5px) scale(1.04);
-  box-shadow: 0 0 40px rgba(0,255,255,0.14), inset 0 1px 0 rgba(255,255,255,0.14), 0 16px 48px rgba(0,0,0,0.6);
+  box-shadow: 0 0 40px rgba(0,255,255,0.18), inset 0 1px 0 rgba(255,255,255,0.14), 0 16px 48px rgba(0,0,0,0.6);
 }
 .pill.pk {
-  background: rgba(255,0,200,0.04); border-color: rgba(255,0,200,0.18);
-  box-shadow: 0 0 24px rgba(255,0,200,0.06), inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 32px rgba(0,0,0,0.5);
+  background: rgba(4,0,26,0.55); border-color: rgba(255,0,200,0.22);
+  box-shadow: 0 0 24px rgba(255,0,200,0.08), inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 32px rgba(0,0,0,0.5);
 }
-.pill.pk:hover { box-shadow: 0 0 40px rgba(255,0,200,0.14), inset 0 1px 0 rgba(255,255,255,0.14), 0 16px 48px rgba(0,0,0,0.6); }
+.pill.pk:hover { box-shadow: 0 0 40px rgba(255,0,200,0.18), inset 0 1px 0 rgba(255,255,255,0.14), 0 16px 48px rgba(0,0,0,0.6); }
 .pill::before {
   content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 1px;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
 }
 .pill::after {
   content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--cyan), transparent); opacity: 0.35;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent); opacity: 0.4;
 }
 .pill.pk::after { background: linear-gradient(90deg, transparent, var(--pink), transparent); }
 .pill-num {
@@ -241,16 +239,16 @@ body {
   background: linear-gradient(160deg, #00ffff, #7700ff);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   min-width: 54px; text-align: center; display: block; letter-spacing: -0.02em;
-  filter: drop-shadow(0 0 10px rgba(0,255,255,0.35));
+  filter: drop-shadow(0 0 10px rgba(0,255,255,0.4));
 }
 .pk .pill-num {
   background: linear-gradient(160deg, #ff00c8, #7700ff);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  filter: drop-shadow(0 0 10px rgba(255,0,200,0.35));
+  filter: drop-shadow(0 0 10px rgba(255,0,200,0.4));
 }
 .pill-lbl {
   font-size: 9px; font-weight: 600; letter-spacing: 0.28em;
-  text-transform: uppercase; color: rgba(255,255,255,0.22); margin-top: 4px;
+  text-transform: uppercase; color: rgba(255,255,255,0.35); margin-top: 4px;
 }
 .sep {
   font-family: 'Barlow Condensed', sans-serif; font-size: 34px; font-weight: 900;
@@ -274,11 +272,11 @@ body {
 }
 .subtitle {
   font-size: 11px; font-weight: 600; letter-spacing: 0.3em;
-  text-transform: uppercase; color: rgba(255,255,255,0.18);
+  text-transform: uppercase; color: rgba(255,255,255,0.35);
   display: flex; align-items: center; gap: 14px;
 }
-.subtitle-divider { width: 28px; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent); }
-.subtitle span.date { color: var(--pink); text-shadow: 0 0 14px rgba(255,0,200,0.3); }
+.subtitle-divider { width: 28px; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent); }
+.subtitle span.date { color: var(--pink); text-shadow: 0 0 14px rgba(255,0,200,0.4); }
 
 /* PLATFORMS */
 .platforms {
@@ -289,33 +287,18 @@ body {
 .platform-badge {
   font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
   padding: 5px 14px; border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.09);
-  color: rgba(255,255,255,0.28);
-  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.45);
+  background: rgba(4,0,26,0.45);
+  backdrop-filter: blur(8px);
   transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
 .platform-badge:hover {
-  border-color: rgba(255,255,255,0.5);
-  color: #ffffff;
-  box-shadow: 0 0 14px rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.6); color: #ffffff;
+  box-shadow: 0 0 14px rgba(255,255,255,0.15);
 }
 
-/* STATUS BAR */
-.status-bar {
-  position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 10;
-  display: flex; align-items: center; gap: 8px;
-  font-size: 10px; font-weight: 600; letter-spacing: 0.25em;
-  text-transform: uppercase; color: rgba(255,255,255,0.13);
-  animation: popIn 1s cubic-bezier(0.34,1.56,0.64,1) 0.6s both;
-  white-space: nowrap;
-}
-.status-dot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--cyan); box-shadow: 0 0 8px var(--cyan);
-  animation: dotPulse 2s ease-in-out infinite;
-}
-
-/* CLICK RIPPLE */
+/* RIPPLE */
 .ripple {
   position: fixed; border-radius: 50%; pointer-events: none; z-index: 4;
   border: 1.5px solid rgba(0,255,255,0.4);
@@ -327,12 +310,12 @@ body {
   100%{ transform: translate(-50%,-50%) scale(3.5); opacity: 0; }
 }
 
-/* TOOLTIP on pill hover */
+/* PILL TOOLTIP */
 .pill-tooltip {
   position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%);
   font-size: 9px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
-  color: rgba(255,255,255,0.6); white-space: nowrap;
-  background: rgba(4,0,26,0.85); border: 1px solid rgba(0,255,255,0.2);
+  color: rgba(255,255,255,0.7); white-space: nowrap;
+  background: rgba(4,0,26,0.9); border: 1px solid rgba(0,255,255,0.25);
   padding: 4px 10px; border-radius: 6px;
   opacity: 0; pointer-events: none;
   transition: opacity 0.2s, transform 0.2s;
@@ -345,96 +328,46 @@ body {
   to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/* ── MUSIC PLAYER ── */
-
-/* Invisible corner trigger zone */
+/* MUSIC PLAYER */
 .music-wrap {
-  position: fixed;
-  bottom: 0; left: 0;
-  width: 200px; height: 100px;
-  z-index: 10;
+  position: fixed; bottom: 0; left: 0;
+  width: 200px; height: 100px; z-index: 10;
 }
-
-/* Player hidden by default, shown on hover over the zone */
 .music-player {
-  position: absolute;
-  bottom: 22px; left: 22px;
+  position: absolute; bottom: 22px; left: 22px;
   display: flex; align-items: center; gap: 10px;
   padding: 10px 16px 10px 12px; border-radius: 40px;
   background: rgba(4,0,26,0.75);
   border: 1px solid rgba(0,255,255,0.18);
   box-shadow: 0 0 24px rgba(0,255,255,0.08), 0 8px 32px rgba(0,0,0,0.5);
   backdrop-filter: blur(20px);
-  white-space: nowrap;
-  opacity: 0;
-  transform: translateY(10px) scale(0.9);
-  pointer-events: none;
-  transition:
-    opacity 0.4s cubic-bezier(0.34,1.4,0.64,1),
-    transform 0.4s cubic-bezier(0.34,1.4,0.64,1),
-    border-color 0.3s,
-    box-shadow 0.3s;
+  white-space: nowrap; opacity: 0;
+  transform: translateY(10px) scale(0.9); pointer-events: none;
+  transition: opacity 0.4s cubic-bezier(0.34,1.4,0.64,1), transform 0.4s cubic-bezier(0.34,1.4,0.64,1), border-color 0.3s, box-shadow 0.3s;
   transform-origin: bottom left;
 }
-.music-wrap:hover .music-player {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  pointer-events: all;
-}
-.music-player.playing {
-  border-color: rgba(255,0,200,0.3);
-  box-shadow: 0 0 28px rgba(255,0,200,0.12), 0 8px 32px rgba(0,0,0,0.5);
-}
-
+.music-wrap:hover .music-player { opacity: 1; transform: translateY(0) scale(1); pointer-events: all; }
+.music-player.playing { border-color: rgba(255,0,200,0.3); box-shadow: 0 0 28px rgba(255,0,200,0.12), 0 8px 32px rgba(0,0,0,0.5); }
 .music-play-btn {
   width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
-  background: rgba(0,255,255,0.08);
-  border: 1px solid rgba(0,255,255,0.3);
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s;
+  background: rgba(0,255,255,0.08); border: 1px solid rgba(0,255,255,0.3);
+  cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
 }
-.music-play-btn:hover {
-  background: rgba(0,255,255,0.16);
-  box-shadow: 0 0 14px rgba(0,255,255,0.2);
-  transform: scale(1.08);
-}
-.music-player.playing .music-play-btn {
-  background: rgba(255,0,200,0.1);
-  border-color: rgba(255,0,200,0.35);
-}
+.music-play-btn:hover { background: rgba(0,255,255,0.16); box-shadow: 0 0 14px rgba(0,255,255,0.2); transform: scale(1.08); }
+.music-player.playing .music-play-btn { background: rgba(255,0,200,0.1); border-color: rgba(255,0,200,0.35); }
 .music-play-btn svg { width: 14px; height: 14px; fill: var(--cyan); }
 .music-player.playing .music-play-btn svg { fill: var(--pink); }
-
 .music-info { display: flex; flex-direction: column; gap: 2px; }
-.music-title {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
-  text-transform: uppercase; color: rgba(255,255,255,0.55);
-  white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis;
-}
-.music-bars {
-  display: flex; align-items: flex-end; gap: 2px; height: 12px;
-}
-.music-bars span {
-  width: 3px; border-radius: 2px; background: var(--cyan);
-  opacity: 0.5; transform-origin: bottom;
-}
-.music-player.playing .music-bars span {
-  opacity: 1;
-  animation: barDance var(--spd) ease-in-out infinite alternate;
-  background: var(--pink);
-}
+.music-title { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.55); white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
+.music-bars { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
+.music-bars span { width: 3px; border-radius: 2px; background: var(--cyan); opacity: 0.5; transform-origin: bottom; }
+.music-player.playing .music-bars span { opacity: 1; animation: barDance var(--spd) ease-in-out infinite alternate; background: var(--pink); }
 .music-bars span:nth-child(1){ height: 5px;  --spd: 0.55s; }
 .music-bars span:nth-child(2){ height: 10px; --spd: 0.40s; }
 .music-bars span:nth-child(3){ height: 7px;  --spd: 0.65s; }
 .music-bars span:nth-child(4){ height: 12px; --spd: 0.45s; }
 .music-bars span:nth-child(5){ height: 6px;  --spd: 0.58s; }
-@keyframes barDance {
-  from { transform: scaleY(0.25); }
-  to   { transform: scaleY(1); }
-}
-
-
+@keyframes barDance { from{transform:scaleY(0.25)} to{transform:scaleY(1)} }
 
 @media (max-width: 500px) {
   .pills { gap: 6px; }
@@ -444,28 +377,23 @@ body {
   .nav-panel { padding: 70px 28px; }
   .music-wrap { width: 160px; height: 80px; }
   .music-title { max-width: 100px; }
-  .music-vol { width: 48px; }
 }
 </style>
 </head>
 <body>
 
-<canvas id="auroraCanvas"></canvas>
-<div class="bg-glow"></div>
+<!-- Layers over the image -->
+<div class="bg-darken"></div>
+<div class="bg-tint"></div>
 <div class="bg-grid"></div>
-<div id="mouseGlow"></div>
-<div class="particles" id="particles"></div>
 
-<!-- 🎵 Replace YOUR_AUDIO_FILE.mp3 with your actual file path -->
 <audio id="bgMusic" loop preload="auto">
-  <source src="leonida/music/leonida.mp3" type="audio/mpeg">
+  <source src="leonida/music/relax.mp3" type="audio/mpeg">
 </audio>
 
 <!-- Hamburger -->
 <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle menu">
-  <div class="bar"></div>
-  <div class="bar"></div>
-  <div class="bar"></div>
+  <div class="bar"></div><div class="bar"></div><div class="bar"></div>
 </button>
 
 <!-- Nav overlay -->
@@ -488,7 +416,7 @@ body {
   </div>
 </div>
 
-<!-- Main -->
+<!-- Main content -->
 <div class="title-wrap">
   <div class="welcome-small">Welcome to</div>
   <div class="leonida-text">Leonida</div>
@@ -530,12 +458,12 @@ body {
   <div class="platform-badge">Xbox Series X|S</div>
 </div>
 
-<!-- Music Player: invisible hover zone in bottom-left corner, no dot -->
+<!-- Music player -->
 <div class="music-wrap">
   <div class="music-player" id="musicPlayer">
     <button class="music-play-btn" id="musicBtn" aria-label="Play/Pause">
-      <svg id="iconPlay" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>
-      <svg id="iconPause" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+      <svg id="iconPlay"  viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      <svg id="iconPause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
     </button>
     <div class="music-info">
       <div class="music-title" id="musicTitle">Music</div>
@@ -543,21 +471,10 @@ body {
         <span></span><span></span><span></span><span></span><span></span>
       </div>
     </div>
-
   </div>
 </div>
 
 <script>
-/* MOUSE GLOW */
-const glow = document.getElementById('mouseGlow');
-let mx = innerWidth/2, my = innerHeight/2, gx = mx, gy = my;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-(function loop(){
-  gx += (mx-gx)*0.07; gy += (my-gy)*0.07;
-  glow.style.left = gx+'px'; glow.style.top = gy+'px';
-  requestAnimationFrame(loop);
-})();
-
 /* RIPPLES */
 document.addEventListener('click', e => {
   const r = document.createElement('div');
@@ -570,9 +487,9 @@ document.addEventListener('click', e => {
 });
 
 /* HAMBURGER */
-const hBtn = document.getElementById('hamburgerBtn');
+const hBtn    = document.getElementById('hamburgerBtn');
 const overlay = document.getElementById('navOverlay');
-const backdrop = document.getElementById('navBackdrop');
+const backdrop= document.getElementById('navBackdrop');
 function toggleMenu(){
   const open = overlay.classList.toggle('open');
   hBtn.classList.toggle('open', open);
@@ -580,7 +497,9 @@ function toggleMenu(){
 }
 hBtn.addEventListener('click', toggleMenu);
 backdrop.addEventListener('click', toggleMenu);
-document.addEventListener('keydown', e => { if(e.key==='Escape' && overlay.classList.contains('open')) toggleMenu(); });
+document.addEventListener('keydown', e => {
+  if(e.key==='Escape' && overlay.classList.contains('open')) toggleMenu();
+});
 
 /* COUNTDOWN */
 const prev = {d:'',h:'',m:'',s:''};
@@ -591,15 +510,14 @@ function bounce(id){
 }
 function tick(){
   const target = new Date('2026-11-19T00:00:00');
-  const diff = target - new Date();
+  const diff   = target - new Date();
   if(diff<=0){ ['d','h','m','s'].forEach(k=>document.getElementById('n-'+k).textContent='00'); return; }
   const d = String(Math.floor(diff/86400000)).padStart(3,'0');
   const h = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
   const m = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
   const s = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
   if(d!==prev.d){document.getElementById('n-d').textContent=d;bounce('d');prev.d=d;
-    const tip=document.getElementById('tip-d');
-    if(tip) tip.textContent=d+' days to go!';}
+    const tip=document.getElementById('tip-d'); if(tip) tip.textContent=d+' days to go!';}
   if(h!==prev.h){document.getElementById('n-h').textContent=h;bounce('h');prev.h=h;}
   if(m!==prev.m){document.getElementById('n-m').textContent=m;bounce('m');prev.m=m;}
   if(s!==prev.s){document.getElementById('n-s').textContent=s;bounce('s');prev.s=s;}
@@ -609,48 +527,34 @@ tick(); setInterval(tick,1000);
 /* MUSIC PLAYER */
 const music     = document.getElementById('bgMusic');
 const musicBtn  = document.getElementById('musicBtn');
-// const player    = document.getElementById('musicPlayer');
-// const iconPlay  = document.getElementById('iconPlay');
-// const iconPause = document.getElementById('iconPause');
-// const titleEl   = document.getElementById('musicTitle');
-
-music.volume = 0.10; // Volume Max
-
-// Set title from filename
-const src = music.querySelector('source')?.src || '';
-const fileName = src.split('/').pop().replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ') || 'Music';
+const player    = document.getElementById('musicPlayer');
+const iconPlay  = document.getElementById('iconPlay');
+const iconPause = document.getElementById('iconPause');
+const titleEl   = document.getElementById('musicTitle');
+music.volume = 0.12;
+const src      = music.querySelector('source')?.src || '';
+const fileName = src.split('/').pop().replace(/\.[^.]+$/,'').replace(/[-_]/g,' ') || 'Music';
 titleEl.textContent = fileName;
-
-function setPlaying(state) {
+function setPlaying(state){
   player.classList.toggle('playing', state);
   iconPlay.style.display  = state ? 'none' : '';
   iconPause.style.display = state ? ''     : 'none';
 }
-
 musicBtn.addEventListener('click', () => {
-  if (music.paused) {
-    music.play().then(() => setPlaying(true)).catch(() => {});
-  } else {
-    music.pause();
-    setPlaying(false);
-  }
+  if(music.paused){ music.play().then(()=>setPlaying(true)).catch(()=>{}); }
+  else            { music.pause(); setPlaying(false); }
 });
-
-
-music.addEventListener('ended', () => setPlaying(false));
-
-// Autoplay on load. Browsers block autoplay until a user gesture,
-// so we catch the rejection and play on the very first interaction.
-music.play().then(() => setPlaying(true)).catch(() => {
+music.addEventListener('ended', ()=>setPlaying(false));
+music.play().then(()=>setPlaying(true)).catch(()=>{
   const unlock = () => {
-    music.play().then(() => setPlaying(true)).catch(() => {});
+    music.play().then(()=>setPlaying(true)).catch(()=>{});
     document.removeEventListener('click',      unlock);
     document.removeEventListener('keydown',    unlock);
     document.removeEventListener('touchstart', unlock);
   };
-  document.addEventListener('click',      unlock, { once: true });
-  document.addEventListener('keydown',    unlock, { once: true });
-  document.addEventListener('touchstart', unlock, { once: true });
+  document.addEventListener('click',      unlock, {once:true});
+  document.addEventListener('keydown',    unlock, {once:true});
+  document.addEventListener('touchstart', unlock, {once:true});
 });
 </script>
 </body>
