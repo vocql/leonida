@@ -270,7 +270,7 @@ main {
 
 .card-img-wrap {
   position: relative; width: 100%;
-  aspect-ratio: 16/9; overflow: hidden;
+  aspect-ratio: 1/1; overflow: hidden;
   background: rgba(255,255,255,0.04);
 }
 .card-img-wrap img {
@@ -296,11 +296,7 @@ main {
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 20px; font-weight: 900;
   text-transform: uppercase; letter-spacing: 0.04em;
-  color: rgba(255,255,255,0.85); line-height: 1; margin-bottom: 5px;
-}
-.card-file {
-  font-size: 10px; font-weight: 600; letter-spacing: 0.15em;
-  color: rgba(255,255,255,0.18); font-family: monospace;
+  color: rgba(255,255,255,0.85); line-height: 1;
 }
 
 /* LIGHTBOX */
@@ -646,7 +642,7 @@ async function loadImages() {
     const img = document.createElement('img'); img.alt = label; img.loading = 'lazy'; img.dataset.idx = String(i); img.src = src;
     imgWrap.appendChild(numBadge); imgWrap.appendChild(img);
     const cardBody = document.createElement('div'); cardBody.className = 'card-body';
-    cardBody.innerHTML = `<div class="card-name">${label}</div><div class="card-file">${file.name}</div>`;
+    cardBody.innerHTML = `<div class="card-name">${label}</div>`;
     card.appendChild(imgWrap); card.appendChild(cardBody);
     gallery.appendChild(card); ssObs.observe(card);
   });
