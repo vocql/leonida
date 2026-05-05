@@ -434,14 +434,7 @@ body {
   to   { transform: scaleY(1); }
 }
 
-.music-vol {
-  -webkit-appearance: none;
-  width: 64px; height: 3px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 2px; outline: none; cursor: pointer;
-  accent-color: var(--cyan);
-}
-.music-player.playing .music-vol { accent-color: var(--pink); }
+
 
 @media (max-width: 500px) {
   .pills { gap: 6px; }
@@ -550,7 +543,7 @@ body {
         <span></span><span></span><span></span><span></span><span></span>
       </div>
     </div>
-    <input class="music-vol" type="range" id="musicVol" min="0" max="1" step="0.01" value="0.4" title="Volume">
+
   </div>
 </div>
 
@@ -617,12 +610,11 @@ tick(); setInterval(tick,1000);
 const music     = document.getElementById('bgMusic');
 const musicBtn  = document.getElementById('musicBtn');
 const player    = document.getElementById('musicPlayer');
-const volSlider = document.getElementById('musicVol');
 const iconPlay  = document.getElementById('iconPlay');
 const iconPause = document.getElementById('iconPause');
 const titleEl   = document.getElementById('musicTitle');
 
-music.volume = parseFloat(volSlider.value);
+music.volume = 0.10; // Volume Max
 
 // Set title from filename
 const src = music.querySelector('source')?.src || '';
@@ -644,9 +636,6 @@ musicBtn.addEventListener('click', () => {
   }
 });
 
-volSlider.addEventListener('input', () => {
-  music.volume = parseFloat(volSlider.value);
-});
 
 music.addEventListener('ended', () => setPlaying(false));
 
