@@ -163,7 +163,7 @@ body {
   display: block; padding: 9px 0; line-height: 1;
   transition: color 0.2s, letter-spacing 0.25s; position: relative;
 }
-.nav-links li a:hover { color: #fff; letter-spacing: 0.08em; text-shadow: none; }
+.nav-links li a:hover { color: #fff; letter-spacing: 0.08em; }
 .nav-links li a.active { color: #fff; }
 .nav-footer {
   position: absolute; bottom: 36px; left: 48px; right: 48px;
@@ -346,21 +346,46 @@ body {
 }
 
 /* ── MUSIC PLAYER ── */
+
+/* Invisible corner trigger zone */
+.music-wrap {
+  position: fixed;
+  bottom: 0; left: 0;
+  width: 200px; height: 100px;
+  z-index: 10;
+}
+
+/* Player hidden by default, shown on hover over the zone */
 .music-player {
-  position: fixed; bottom: 26px; left: 26px; z-index: 10;
+  position: absolute;
+  bottom: 22px; left: 22px;
   display: flex; align-items: center; gap: 10px;
   padding: 10px 16px 10px 12px; border-radius: 40px;
-  background: rgba(4,0,26,0.7);
+  background: rgba(4,0,26,0.75);
   border: 1px solid rgba(0,255,255,0.18);
   box-shadow: 0 0 24px rgba(0,255,255,0.08), 0 8px 32px rgba(0,0,0,0.5);
   backdrop-filter: blur(20px);
-  animation: popIn 1s cubic-bezier(0.34,1.56,0.64,1) 0.7s both;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(10px) scale(0.9);
+  pointer-events: none;
+  transition:
+    opacity 0.4s cubic-bezier(0.34,1.4,0.64,1),
+    transform 0.4s cubic-bezier(0.34,1.4,0.64,1),
+    border-color 0.3s,
+    box-shadow 0.3s;
+  transform-origin: bottom left;
+}
+.music-wrap:hover .music-player {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: all;
 }
 .music-player.playing {
   border-color: rgba(255,0,200,0.3);
   box-shadow: 0 0 28px rgba(255,0,200,0.12), 0 8px 32px rgba(0,0,0,0.5);
 }
+
 .music-play-btn {
   width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
   background: rgba(0,255,255,0.08);
@@ -424,7 +449,7 @@ body {
   .pill-num { font-size: 32px; }
   .sep  { font-size: 24px; }
   .nav-panel { padding: 70px 28px; }
-  .music-player { bottom: 70px; left: 14px; padding: 8px 12px 8px 10px; }
+  .music-wrap { width: 160px; height: 80px; }
   .music-title { max-width: 100px; }
   .music-vol { width: 48px; }
 }
@@ -512,19 +537,21 @@ body {
   <div class="platform-badge">Xbox Series X|S</div>
 </div>
 
-<!-- Music Player -->
-<div class="music-player" id="musicPlayer">
-  <button class="music-play-btn" id="musicBtn" aria-label="Play music">
-    <svg id="iconPlay" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>
-    <svg id="iconPause" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-  </button>
-  <div class="music-info">
-    <div class="music-title" id="musicTitle">Music</div>
-    <div class="music-bars">
-      <span></span><span></span><span></span><span></span><span></span>
+<!-- Music Player: invisible hover zone in bottom-left corner, no dot -->
+<div class="music-wrap">
+  <div class="music-player" id="musicPlayer">
+    <button class="music-play-btn" id="musicBtn" aria-label="Play/Pause">
+      <svg id="iconPlay" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>
+      <svg id="iconPause" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+    </button>
+    <div class="music-info">
+      <div class="music-title" id="musicTitle">Music</div>
+      <div class="music-bars">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
     </div>
+    <input class="music-vol" type="range" id="musicVol" min="0" max="1" step="0.01" value="0.4" title="Volume">
   </div>
-  <input class="music-vol" type="range" id="musicVol" min="0" max="1" step="0.01" value="0.4" title="Volume">
 </div>
 
 <script>
@@ -597,7 +624,7 @@ const titleEl   = document.getElementById('musicTitle');
 
 music.volume = parseFloat(volSlider.value);
 
-// Pull a nice title from the filename
+// Set title from filename
 const src = music.querySelector('source')?.src || '';
 const fileName = src.split('/').pop().replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ') || 'Music';
 titleEl.textContent = fileName;
@@ -623,10 +650,11 @@ volSlider.addEventListener('input', () => {
 
 music.addEventListener('ended', () => setPlaying(false));
 
-// Try autoplay on load; if blocked, wait for first interaction
+// Autoplay on load. Browsers block autoplay until a user gesture,
+// so we catch the rejection and play on the very first interaction.
 music.play().then(() => setPlaying(true)).catch(() => {
   const unlock = () => {
-    music.play().then(() => { setPlaying(true); }).catch(() => {});
+    music.play().then(() => setPlaying(true)).catch(() => {});
     document.removeEventListener('click',      unlock);
     document.removeEventListener('keydown',    unlock);
     document.removeEventListener('touchstart', unlock);
