@@ -163,7 +163,7 @@ body {
   display: block; padding: 9px 0; line-height: 1;
   transition: color 0.2s, letter-spacing 0.25s; position: relative;
 }
-.nav-links li a:hover { color: #fff; letter-spacing: 0.08em; text-shadow: none; }
+.nav-links li a:hover { color: #fff; letter-spacing: 0.08em; }
 .nav-links li a.active { color: #fff; }
 .nav-footer {
   position: absolute; bottom: 36px; left: 48px; right: 48px;
@@ -286,22 +286,20 @@ body {
   display: flex; align-items: center; gap: 8px;
   animation: popIn 1s cubic-bezier(0.34,1.56,0.64,1) 0.4s both;
 }
-
 .platform-badge {
   font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
   padding: 5px 14px; border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.09); 
+  border: 1px solid rgba(255,255,255,0.09);
   color: rgba(255,255,255,0.28);
   background: rgba(255,255,255,0.02);
   transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
-
 .platform-badge:hover {
   border-color: rgba(255,255,255,0.5);
   color: #ffffff;
   box-shadow: 0 0 14px rgba(255,255,255,0.2);
 }
-  
+
 /* STATUS BAR */
 .status-bar {
   position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 10;
@@ -347,12 +345,106 @@ body {
   to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
+/* ── MUSIC PLAYER ── */
+
+/* Invisible corner trigger zone */
+.music-wrap {
+  position: fixed;
+  bottom: 0; left: 0;
+  width: 200px; height: 100px;
+  z-index: 10;
+}
+
+/* Player hidden by default, shown on hover over the zone */
+.music-player {
+  position: absolute;
+  bottom: 22px; left: 22px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px 10px 12px; border-radius: 40px;
+  background: rgba(4,0,26,0.75);
+  border: 1px solid rgba(0,255,255,0.18);
+  box-shadow: 0 0 24px rgba(0,255,255,0.08), 0 8px 32px rgba(0,0,0,0.5);
+  backdrop-filter: blur(20px);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(10px) scale(0.9);
+  pointer-events: none;
+  transition:
+    opacity 0.4s cubic-bezier(0.34,1.4,0.64,1),
+    transform 0.4s cubic-bezier(0.34,1.4,0.64,1),
+    border-color 0.3s,
+    box-shadow 0.3s;
+  transform-origin: bottom left;
+}
+.music-wrap:hover .music-player {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+.music-player.playing {
+  border-color: rgba(255,0,200,0.3);
+  box-shadow: 0 0 28px rgba(255,0,200,0.12), 0 8px 32px rgba(0,0,0,0.5);
+}
+
+.music-play-btn {
+  width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+  background: rgba(0,255,255,0.08);
+  border: 1px solid rgba(0,255,255,0.3);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.music-play-btn:hover {
+  background: rgba(0,255,255,0.16);
+  box-shadow: 0 0 14px rgba(0,255,255,0.2);
+  transform: scale(1.08);
+}
+.music-player.playing .music-play-btn {
+  background: rgba(255,0,200,0.1);
+  border-color: rgba(255,0,200,0.35);
+}
+.music-play-btn svg { width: 14px; height: 14px; fill: var(--cyan); }
+.music-player.playing .music-play-btn svg { fill: var(--pink); }
+
+.music-info { display: flex; flex-direction: column; gap: 2px; }
+.music-title {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
+  text-transform: uppercase; color: rgba(255,255,255,0.55);
+  white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis;
+}
+.music-bars {
+  display: flex; align-items: flex-end; gap: 2px; height: 12px;
+}
+.music-bars span {
+  width: 3px; border-radius: 2px; background: var(--cyan);
+  opacity: 0.5; transform-origin: bottom;
+}
+.music-player.playing .music-bars span {
+  opacity: 1;
+  animation: barDance var(--spd) ease-in-out infinite alternate;
+  background: var(--pink);
+}
+.music-bars span:nth-child(1){ height: 5px;  --spd: 0.55s; }
+.music-bars span:nth-child(2){ height: 10px; --spd: 0.40s; }
+.music-bars span:nth-child(3){ height: 7px;  --spd: 0.65s; }
+.music-bars span:nth-child(4){ height: 12px; --spd: 0.45s; }
+.music-bars span:nth-child(5){ height: 6px;  --spd: 0.58s; }
+@keyframes barDance {
+  from { transform: scaleY(0.25); }
+  to   { transform: scaleY(1); }
+}
+
+
+
 @media (max-width: 500px) {
   .pills { gap: 6px; }
   .pill  { min-width: 66px; padding: 12px 14px 10px; }
   .pill-num { font-size: 32px; }
   .sep  { font-size: 24px; }
   .nav-panel { padding: 70px 28px; }
+  .music-wrap { width: 160px; height: 80px; }
+  .music-title { max-width: 100px; }
+  .music-vol { width: 48px; }
 }
 </style>
 </head>
@@ -363,6 +455,11 @@ body {
 <div class="bg-grid"></div>
 <div id="mouseGlow"></div>
 <div class="particles" id="particles"></div>
+
+<!-- 🎵 Replace YOUR_AUDIO_FILE.mp3 with your actual file path -->
+<audio id="bgMusic" loop preload="auto">
+  <source src="leonida/music/leonida.mp3" type="audio/mpeg">
+</audio>
 
 <!-- Hamburger -->
 <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle menu">
@@ -433,6 +530,23 @@ body {
   <div class="platform-badge">Xbox Series X|S</div>
 </div>
 
+<!-- Music Player: invisible hover zone in bottom-left corner, no dot -->
+<div class="music-wrap">
+  <div class="music-player" id="musicPlayer">
+    <button class="music-play-btn" id="musicBtn" aria-label="Play/Pause">
+      <svg id="iconPlay" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>
+      <svg id="iconPause" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+    </button>
+    <div class="music-info">
+      <div class="music-title" id="musicTitle">Music</div>
+      <div class="music-bars">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <script>
 /* MOUSE GLOW */
 const glow = document.getElementById('mouseGlow');
@@ -491,6 +605,53 @@ function tick(){
   if(s!==prev.s){document.getElementById('n-s').textContent=s;bounce('s');prev.s=s;}
 }
 tick(); setInterval(tick,1000);
+
+/* MUSIC PLAYER */
+const music     = document.getElementById('bgMusic');
+const musicBtn  = document.getElementById('musicBtn');
+const player    = document.getElementById('musicPlayer');
+const iconPlay  = document.getElementById('iconPlay');
+const iconPause = document.getElementById('iconPause');
+const titleEl   = document.getElementById('musicTitle');
+
+music.volume = 0.10; // Volume Max
+
+// Set title from filename
+const src = music.querySelector('source')?.src || '';
+const fileName = src.split('/').pop().replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ') || 'Music';
+titleEl.textContent = fileName;
+
+function setPlaying(state) {
+  player.classList.toggle('playing', state);
+  iconPlay.style.display  = state ? 'none' : '';
+  iconPause.style.display = state ? ''     : 'none';
+}
+
+musicBtn.addEventListener('click', () => {
+  if (music.paused) {
+    music.play().then(() => setPlaying(true)).catch(() => {});
+  } else {
+    music.pause();
+    setPlaying(false);
+  }
+});
+
+
+music.addEventListener('ended', () => setPlaying(false));
+
+// Autoplay on load. Browsers block autoplay until a user gesture,
+// so we catch the rejection and play on the very first interaction.
+music.play().then(() => setPlaying(true)).catch(() => {
+  const unlock = () => {
+    music.play().then(() => setPlaying(true)).catch(() => {});
+    document.removeEventListener('click',      unlock);
+    document.removeEventListener('keydown',    unlock);
+    document.removeEventListener('touchstart', unlock);
+  };
+  document.addEventListener('click',      unlock, { once: true });
+  document.addEventListener('keydown',    unlock, { once: true });
+  document.addEventListener('touchstart', unlock, { once: true });
+});
 </script>
 </body>
 </html>
