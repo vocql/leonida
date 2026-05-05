@@ -537,6 +537,10 @@ body {
       <svg id="iconPlay" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>
       <svg id="iconPause" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
     </button>
+    <div class="music-info">
+      <div class="music-title" id="musicTitle">Music</div>
+      <div class="music-bars">
+        <span></span><span></span><span></span><span></span><span></span>
       </div>
     </div>
 
@@ -608,9 +612,9 @@ const musicBtn  = document.getElementById('musicBtn');
 const player    = document.getElementById('musicPlayer');
 const iconPlay  = document.getElementById('iconPlay');
 const iconPause = document.getElementById('iconPause');
-// const titleEl   = document.getElementById('musicTitle');
+const titleEl   = document.getElementById('musicTitle');
 
-music.volume = 0.10; // Volume Max
+music.volume = 0.12;
 
 // Set title from filename
 const src = music.querySelector('source')?.src || '';
