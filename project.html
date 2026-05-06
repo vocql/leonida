@@ -267,14 +267,6 @@ body {
     radial-gradient(ellipse 70% 55% at 12% 20%, rgba(0,255,255,0.08) 0%, transparent 100%),
     radial-gradient(ellipse 65% 50% at 88% 78%, rgba(255,0,200,0.09) 0%, transparent 100%);
 }
-.bg-grid {
-  position: fixed; inset: 0; z-index: 2; pointer-events: none;
-  background-image:
-    linear-gradient(rgba(0,255,255,0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,255,255,0.07) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: radial-gradient(ellipse 85% 65% at center, black 10%, transparent 75%);
-}
 
 /* ── PAGE SYSTEM ──────────────────────────────────── */
 .page {
@@ -907,7 +899,7 @@ body {
   box-shadow: 0 16px 56px rgba(0,0,0,0.7), 0 0 30px rgba(255,0,200,0.1);
 }
 
-/* Thumbnail wrapper — replaces the old embed-wrap for non-TBA cards */
+/* Thumbnail wrapper */
 .thumb-wrap {
   position: relative;
   width: 100%;
@@ -1376,11 +1368,6 @@ body {
       <div class="trailer-card" data-vid="QdBZY2fkU-0" data-title="Trailer 1" data-year="Dec 2023" style="transition-delay:0s">
         <div class="thumb-wrap">
           <img src="https://img.youtube.com/vi/QdBZY2fkU-0/maxresdefault.jpg" alt="GTA VI Trailer 1" loading="lazy">
-          <div class="thumb-overlay">
-            <div class="play-circle">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-          </div>
         </div>
         <div class="card-label">
           <span class="card-label-title">Trailer 1</span>
@@ -1392,11 +1379,6 @@ body {
       <div class="trailer-card" data-vid="VQRLujxTm3c" data-title="Trailer 2" data-year="May 2025" style="transition-delay:0.1s">
         <div class="thumb-wrap">
           <img src="https://img.youtube.com/vi/VQRLujxTm3c/maxresdefault.jpg" alt="GTA VI Trailer 2" loading="lazy">
-          <div class="thumb-overlay">
-            <div class="play-circle">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-          </div>
         </div>
         <div class="card-label">
           <span class="card-label-title">Trailer 2</span>
@@ -1867,6 +1849,7 @@ const TRAILERS = [
   { vid: 'VQRLujxTm3c', title: 'Trailer 2', year: 'May 2025' }
 ];
 let tlbIdx = 0;
+let tlbMusicWasPlaying = false; // ← tracks whether music was playing before trailer opened
 
 const tlbEl     = document.getElementById('trailerLB');
 const tlbVideo  = document.getElementById('tlbVideo');
@@ -1886,12 +1869,23 @@ function openTLB(idx) {
   tlbCur.textContent   = idx + 1;
   tlbEl.classList.add('active');
   document.body.style.overflow = 'hidden';
+  // Pause background music while trailer plays
+  if (!music.paused) {
+    music.pause();
+    setPlaying(false);
+    tlbMusicWasPlaying = true;
+  }
 }
 
 function closeTLB() {
   tlbEl.classList.remove('active');
   tlbVideo.innerHTML = '';
   document.body.style.overflow = '';
+  // Resume background music if it was playing before the trailer opened
+  if (tlbMusicWasPlaying) {
+    tlbMusicWasPlaying = false;
+    music.play().then(() => setPlaying(true)).catch(() => {});
+  }
 }
 
 function stepTLB(dir) {
