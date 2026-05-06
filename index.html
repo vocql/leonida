@@ -33,6 +33,244 @@ body {
   background-repeat: no-repeat;
 }
 
+/* ══════════════════════════════════════════════════
+   LOADING SCREEN
+══════════════════════════════════════════════════ */
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #04001a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  pointer-events: all;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+#loading-screen.fade-out {
+  opacity: 0;
+  transform: scale(1.04);
+  pointer-events: none;
+}
+#loading-screen.gone {
+  display: none;
+}
+
+/* Loading screen noise texture overlay */
+#loading-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 15% 20%, rgba(0,255,255,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 55% at 85% 80%, rgba(255,0,200,0.09) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(119,0,255,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Loading grid */
+#loading-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,255,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 75% 65% at center, black 10%, transparent 75%);
+  pointer-events: none;
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Scanline effect */
+.loading-scanline {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.08) 2px,
+    rgba(0,0,0,0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+  animation: scanMove 8s linear infinite;
+}
+@keyframes scanMove {
+  0%   { background-position: 0 0; }
+  100% { background-position: 0 100px; }
+}
+
+/* Corner decorations */
+.loading-corner {
+  position: absolute;
+  width: 60px; height: 60px;
+  pointer-events: none;
+}
+.loading-corner--tl { top: 32px; left: 32px; border-top: 1.5px solid rgba(0,255,255,0.3); border-left: 1.5px solid rgba(0,255,255,0.3); }
+.loading-corner--tr { top: 32px; right: 32px; border-top: 1.5px solid rgba(0,255,255,0.3); border-right: 1.5px solid rgba(0,255,255,0.3); }
+.loading-corner--bl { bottom: 32px; left: 32px; border-bottom: 1.5px solid rgba(255,0,200,0.3); border-left: 1.5px solid rgba(255,0,200,0.3); }
+.loading-corner--br { bottom: 32px; right: 32px; border-bottom: 1.5px solid rgba(255,0,200,0.3); border-right: 1.5px solid rgba(255,0,200,0.3); }
+
+/* Text block */
+.loading-eyebrow {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.6);
+  animation: loadFadeUp 0.8s ease 0.1s both;
+}
+
+.loading-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(72px, 14vw, 148px);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.88;
+  background: linear-gradient(90deg, #00ffff, #bf00ff, #ff00c8, #00e5ff, #00ffff);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: textShimmer 8s linear infinite, loadFadeUp 0.9s cubic-bezier(0.34,1.4,0.64,1) 0.2s both;
+  filter: drop-shadow(0 2px 16px rgba(0,0,0,0.9)) drop-shadow(0 0 60px rgba(0,255,255,0.4));
+}
+
+@keyframes loadFadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Progress bar area */
+.loading-progress-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 280px;
+  animation: loadFadeUp 0.8s ease 0.5s both;
+}
+
+.loading-bar-track {
+  width: 100%;
+  height: 2px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.loading-bar-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--cyan), var(--purple), var(--pink));
+  box-shadow: 0 0 12px rgba(0,255,255,0.6);
+  transition: width 0.1s ease;
+  animation: loadBarAnim 14s cubic-bezier(0.4, 0, 0.2, 1) 0.6s forwards;
+}
+
+@keyframes loadBarAnim {
+  0%   { width: 0%; }
+  30%  { width: 45%; }
+  60%  { width: 72%; }
+  85%  { width: 91%; }
+  100% { width: 100%; }
+}
+
+/* Shimmer sweep on bar */
+.loading-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  animation: barShimmer 3.5s ease 0.8s infinite;
+}
+@keyframes barShimmer {
+  0%   { left: -60%; }
+  100% { left: 120%; }
+}
+
+.loading-status-text {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  font-family: monospace;
+  min-height: 16px;
+}
+
+@keyframes statusCycle {
+  0%   { opacity: 0.2; }
+  100% { opacity: 0.2; }
+}
+
+/* Pulsing dots */
+.loading-dots {
+  display: flex;
+  gap: 7px;
+  animation: loadFadeUp 0.8s ease 0.7s both;
+}
+.loading-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: rgba(0,255,255,0.25);
+  animation: dotPulseLoad 1.4s ease-in-out infinite;
+}
+.loading-dot:nth-child(1) { animation-delay: 0s; }
+.loading-dot:nth-child(2) { animation-delay: 0.18s; background: rgba(119,0,255,0.35); }
+.loading-dot:nth-child(3) { animation-delay: 0.36s; background: rgba(255,0,200,0.25); }
+@keyframes dotPulseLoad {
+  0%,100% { opacity: 0.25; transform: scale(0.8); }
+  50%     { opacity: 1; transform: scale(1.4); box-shadow: 0 0 8px currentColor; }
+}
+
+/* Date line */
+.loading-date {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: rgba(255,0,200,0.45);
+  text-shadow: 0 0 14px rgba(255,0,200,0.3);
+  animation: loadFadeUp 0.8s ease 0.8s both;
+}
+
+/* Horizontal divider lines */
+.loading-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 320px;
+  animation: loadFadeUp 0.8s ease 0.3s both;
+}
+.loading-divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+}
+.loading-divider-diamond {
+  width: 5px; height: 5px;
+  background: rgba(0,255,255,0.3);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
 /* ── SHARED BG LAYERS ─────────────────────────────── */
 .bg-darken {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
@@ -645,26 +883,56 @@ body {
 .bio-text p:last-child { margin-bottom: 0; }
 .bio-no-info { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.2); letter-spacing: 0.1em; text-transform: uppercase; padding: 30px 0; text-align: center; }
 
-/* ── TRAILERS PAGE ────────────────────────────────── */
+/* ══════════════════════════════════════════════════
+   TRAILERS PAGE — FIXED (no blur, crisp iframes)
+══════════════════════════════════════════════════ */
+
+/* Trailers page needs its own stacking context so bg overlays don't bleed */
+#page-trailers {
+  isolation: isolate;
+}
+
+/* The trailers scrollable content */
+#page-trailers .page-main {
+  overflow-y: auto;
+  height: 100%;
+}
+
 .trailers-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 24px;
 }
 #page-trailers .page-header { margin-bottom: 48px; }
+
 .trailer-card {
   border-radius: 16px; overflow: hidden;
   border: 1.5px solid rgba(0,255,255,0.14);
-  background: rgba(0,255,255,0.02);
-  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  /* NO background blur — it was causing the haze on iframe content */
+  background: rgba(4, 0, 26, 0.6);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
   opacity: 0; transform: scale(0.93) translateY(16px);
   transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34,1.4,0.64,1), border-color 0.2s, box-shadow 0.2s;
   position: relative;
+  /* Isolate each card from parent filter/blur stacking contexts */
+  isolation: isolate;
+  will-change: transform;
 }
 .trailer-card.visible { opacity: 1; transform: scale(1) translateY(0); }
-.trailer-card:hover { border-color: rgba(0,255,255,0.3); box-shadow: 0 16px 56px rgba(0,0,0,0.6), 0 0 30px rgba(0,255,255,0.07); }
-.trailer-card:nth-child(even) { border-color: rgba(255,0,200,0.14); background: rgba(255,0,200,0.02); }
-.trailer-card:nth-child(even):hover { border-color: rgba(255,0,200,0.3); box-shadow: 0 16px 56px rgba(0,0,0,0.6), 0 0 30px rgba(255,0,200,0.07); }
+.trailer-card:hover {
+  border-color: rgba(0,255,255,0.35);
+  box-shadow: 0 16px 56px rgba(0,0,0,0.7), 0 0 30px rgba(0,255,255,0.1);
+  transform: translateY(-3px) scale(1.005);
+}
+.trailer-card:nth-child(even) {
+  border-color: rgba(255,0,200,0.18);
+  background: rgba(4, 0, 26, 0.6);
+}
+.trailer-card:nth-child(even):hover {
+  border-color: rgba(255,0,200,0.35);
+  box-shadow: 0 16px 56px rgba(0,0,0,0.7), 0 0 30px rgba(255,0,200,0.1);
+}
+
 .new-badge {
   position: absolute; top: 14px; right: 14px; z-index: 10;
   font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 900;
@@ -673,19 +941,59 @@ body {
   padding: 5px 12px; border-radius: 999px;
   box-shadow: 0 0 16px rgba(0,255,255,0.5);
   animation: pulseBadge 2s ease-in-out infinite;
+  pointer-events: none;
 }
 @keyframes pulseBadge { 0%,100%{box-shadow:0 0 16px rgba(0,255,255,0.5)} 50%{box-shadow:0 0 28px rgba(0,255,255,0.9)} }
-.embed-wrap { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #000; }
-.embed-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; display: block; }
-.card-label {
-  padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;
-  background: rgba(255,255,255,0.025); border-top: 1px solid rgba(255,255,255,0.05);
+
+/* The critical fix: embed wrapper must be a clean container with no filter */
+.embed-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: #000;
+  /* No filter, no backdrop-filter, no transform that would create a new compositor layer */
 }
-.card-label-title { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.6); }
-.card-label-year { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; color: rgba(255,255,255,0.22); }
-.trailer-card.tba .embed-wrap { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
+
+.embed-wrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  /* Ensure iframe renders at native resolution */
+  transform: none;
+  image-rendering: auto;
+}
+
+.card-label {
+  padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(0,0,0,0.25);
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.card-label-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px; font-weight: 900;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+}
+.card-label-year {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.25);
+}
+.trailer-card.tba .embed-wrap {
+  display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px;
+}
 .tba-icon { font-size: 48px; opacity: 0.15; }
-.tba-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 900; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.12); }
+.tba-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; font-weight: 900;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(255,255,255,0.12);
+}
 
 /* ── SHARED KEYFRAMES ─────────────────────────────── */
 @keyframes popIn {
@@ -695,6 +1003,9 @@ body {
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
 /* ── RESPONSIVE ───────────────────────────────────── */
+@media (max-width: 900px) {
+  .trailers-grid { grid-template-columns: 1fr 1fr; }
+}
 @media (max-width: 680px) {
   .trailers-grid { grid-template-columns: 1fr; }
   .viewer-inner  { flex-direction: column; align-items: center; gap: 20px; max-height: none; overflow-y: auto; }
@@ -710,6 +1021,11 @@ body {
   .nav-panel { padding: 70px 28px; }
   .music-wrap { width: 160px; }
   .music-title { max-width: 100px; }
+  .loading-corner { width: 40px; height: 40px; }
+  .loading-corner--tl, .loading-corner--tr { top: 18px; }
+  .loading-corner--tl, .loading-corner--bl { left: 18px; }
+  .loading-corner--tr, .loading-corner--br { right: 18px; }
+  .loading-corner--bl, .loading-corner--br { bottom: 18px; }
 }
 @media (max-width: 600px) {
   .page-main { padding: 80px 20px 60px; }
@@ -717,6 +1033,45 @@ body {
 </style>
 </head>
 <body>
+
+<!-- ══════════════════════════════════════════════════
+     LOADING SCREEN
+══════════════════════════════════════════════════ -->
+<div id="loading-screen">
+  <div class="loading-scanline"></div>
+
+  <!-- Corner accents -->
+  <div class="loading-corner loading-corner--tl"></div>
+  <div class="loading-corner loading-corner--tr"></div>
+  <div class="loading-corner loading-corner--bl"></div>
+  <div class="loading-corner loading-corner--br"></div>
+
+  <div class="loading-content">
+    <div class="loading-eyebrow">Welcome to</div>
+    <div class="loading-title">Leonida</div>
+
+    <div class="loading-divider">
+      <div class="loading-divider-line"></div>
+      <div class="loading-divider-diamond"></div>
+      <div class="loading-divider-line"></div>
+    </div>
+
+    <div class="loading-progress-wrap">
+      <div class="loading-bar-track">
+        <div class="loading-bar-fill" id="loadingBar"></div>
+      </div>
+      <div class="loading-status-text" id="loadingStatusText">Initializing…</div>
+    </div>
+
+    <div class="loading-dots">
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+    </div>
+
+    <div class="loading-date">November 19, 2026</div>
+  </div>
+</div>
 
 <!-- ── BG LAYERS ──────────────────────────────────── -->
 <div class="bg-darken"></div>
@@ -801,7 +1156,6 @@ body {
     <div class="platform-badge">Xbox Series X|S</div>
   </div>
 
-  <!-- Music player lives inside home page (absolute-positioned to viewport corners via fixed page) -->
   <div class="music-wrap">
     <div class="music-player" id="musicPlayer">
       <button class="music-play-btn" id="musicBtn" aria-label="Play/Pause">
@@ -842,7 +1196,6 @@ body {
 ══════════════════════════════════════════════════ -->
 <div id="page-places" class="page">
 
-  <!-- Lightbox -->
   <div class="lb-viewer" id="placesLB">
     <button class="lb-close" data-lb="places">✕</button>
     <img class="lb-img" id="places-lb-img" src="" alt="">
@@ -882,7 +1235,6 @@ body {
 ══════════════════════════════════════════════════ -->
 <div id="page-characters" class="page">
 
-  <!-- Lightbox -->
   <div class="lb-viewer" id="charLB">
     <button class="lb-close" data-lb="char">✕</button>
     <div class="viewer-inner">
@@ -931,7 +1283,6 @@ body {
 ══════════════════════════════════════════════════ -->
 <div id="page-screenshots" class="page">
 
-  <!-- Lightbox -->
   <div class="lb-viewer" id="ssLB">
     <button class="lb-close" data-lb="ss">✕</button>
     <img class="lb-img" id="ss-lb-img" src="" alt="">
@@ -983,26 +1334,36 @@ body {
     <div class="trailers-grid">
       <div class="trailer-card" style="transition-delay:0s">
         <div class="embed-wrap">
-          <iframe src="https://www.youtube.com/embed/QdBZY2fkU-0?rel=0&modestbranding=1"
+          <iframe
+            src="https://www.youtube.com/embed/QdBZY2fkU-0?rel=0&modestbranding=1"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen title="GTA VI Trailer 1"></iframe>
+            allowfullscreen
+            title="GTA VI Trailer 1"
+            loading="lazy">
+          </iframe>
         </div>
         <div class="card-label">
           <span class="card-label-title">Trailer 1</span>
           <span class="card-label-year">Dec 2023</span>
         </div>
       </div>
+
       <div class="trailer-card" style="transition-delay:0.1s">
         <div class="embed-wrap">
-          <iframe src="https://www.youtube.com/embed/VQRLujxTm3c?rel=0&modestbranding=1"
+          <iframe
+            src="https://www.youtube.com/embed/VQRLujxTm3c?rel=0&modestbranding=1"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen title="GTA VI Trailer 2"></iframe>
+            allowfullscreen
+            title="GTA VI Trailer 2"
+            loading="lazy">
+          </iframe>
         </div>
         <div class="card-label">
           <span class="card-label-title">Trailer 2</span>
           <span class="card-label-year">May 2025</span>
         </div>
       </div>
+
       <div class="trailer-card tba" style="transition-delay:0.2s">
         <div class="new-badge">NEW</div>
         <div class="embed-wrap">
@@ -1026,10 +1387,46 @@ body {
 <script>
 'use strict';
 
+/* ── LOADING SCREEN ─────────────────────────────── */
+(function() {
+  const screen   = document.getElementById('loading-screen');
+  const statusEl = document.getElementById('loadingStatusText');
+
+  const messages = [
+    'Connecting to Leonida…',
+    'Loading world assets…',
+    'Syncing location data…',
+    'Initializing map systems…',
+    'Loading character profiles…',
+    'Fetching screenshot archive…',
+    'Calibrating neon grid…',
+    'Scanning Vice City feeds…',
+    'Decrypting classified files…',
+    'Almost there…',
+    'Welcome to Leonida'
+  ];
+
+  let msgIdx = 0;
+  const msgInterval = setInterval(() => {
+    msgIdx = Math.min(msgIdx + 1, messages.length - 1);
+    statusEl.textContent = messages[msgIdx];
+    if (msgIdx === messages.length - 1) clearInterval(msgInterval);
+  }, 1300);
+
+  // Dismiss after 15s
+  setTimeout(() => {
+    statusEl.textContent = 'Welcome to Leonida';
+    screen.classList.add('fade-out');
+    setTimeout(() => {
+      screen.classList.add('gone');
+    }, 820);
+  }, 15000);
+})();
+
 /* ── RIPPLES ────────────────────────────────────── */
 document.addEventListener('click', e => {
-  // Don't ripple inside lightboxes
   if (e.target.closest('.lb-viewer.active')) return;
+  if (e.target.closest('#loading-screen')) return;
   const r = document.createElement('div');
   r.className = 'ripple';
   r.style.left = e.clientX + 'px';
@@ -1061,22 +1458,17 @@ const navAnchors = document.querySelectorAll('[data-page]');
 const initialized = {};
 
 function showPage(id) {
-  pages.forEach(p => {
-    p.classList.remove('active');
-  });
+  pages.forEach(p => { p.classList.remove('active'); });
   const page = document.getElementById('page-' + id);
   if (!page) return;
   page.classList.add('active');
 
-  // Update nav active states
   navAnchors.forEach(a => {
     a.classList.toggle('active', a.dataset.page === id);
   });
 
-  // Close nav menu
   toggleMenu(false);
 
-  // Lazy init
   if (!initialized[id]) {
     initialized[id] = true;
     if (id === 'map')         initMap();
@@ -1086,7 +1478,6 @@ function showPage(id) {
     if (id === 'trailers')    initTrailers();
   }
 
-  // Scroll page back to top
   page.scrollTop = 0;
 }
 
@@ -1099,7 +1490,6 @@ navAnchors.forEach(a => {
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
-    // Close any open lightbox first
     const openLB = document.querySelector('.lb-viewer.active');
     if (openLB) { openLB.classList.remove('active'); return; }
     if (overlay.classList.contains('open')) { toggleMenu(false); return; }
@@ -1288,8 +1678,8 @@ const CHARACTER_BIOS = {
   'drequan':    { fullName:"Dre'Quan Priest", role:'Aspiring Music Mogul · Only Raw Records', quote:"You're with the label now.", bio:["Dre'Quan was always more of a hustler than a gangster. Even when he was dealing on the streets to make ends meet, breaking into music was the goal.","Now that he's signed the Real Dimez, Dre'Quan's days of booking acts into Boobie's strip club might be numbered as he sets his sights on the Vice City scene."] },
   'dre quan':   { fullName:"Dre'Quan Priest", role:'Aspiring Music Mogul · Only Raw Records', quote:"You're with the label now.", bio:["Dre'Quan was always more of a hustler than a gangster.","Now that he's signed the Real Dimez, he sets his sights on the Vice City scene."] },
   'real dimez': { fullName:'Real Dimez (Bae-Luxe & Roxy)', role:'Rap Duo · Only Raw Records', quote:'All my dimes in this club. Meet my twin, make it a dub.', bio:["Bae-Luxe and Roxy aka Real Dimez have been friends since high school — girls with the savvy to turn their time shaking down local dealers into cold, hard cash via spicy rap tracks and a relentless social media presence.","An early hit single with local rapper DWNPLY took Real Dimez to new heights. Now, after five years and a whole lot of trouble, they're signed to Only Raw Records, hoping lightning can strike twice."] },
-  'realdimez':  { fullName:'Real Dimez (Bae-Luxe & Roxy)', role:'Rap Duo · Only Raw Records', quote:'All my dimes in this club. Meet my twin, make it a dub.', bio:["Bae-Luxe and Roxy aka Real Dimez have been friends since high school — girls with the savvy to turn their time shaking down local dealers into cold, hard cash via spicy rap tracks.","Now signed to Only Raw Records, hoping lightning can strike twice."] },
-  'bae luxe':   { fullName:'Bae-Luxe', role:'Real Dimez · Rapper', quote:'All my dimes in this club.', bio:["One half of the rap duo Real Dimez alongside her high-school friend Roxy. Together they turned their time shaking down local dealers into viral rap tracks.","After an early hit with DWNPLY, they're now signed to Only Raw Records."] },
+  'realdimez':  { fullName:'Real Dimez (Bae-Luxe & Roxy)', role:'Rap Duo · Only Raw Records', quote:'All my dimes in this club. Meet my twin, make it a dub.', bio:["Bae-Luxe and Roxy aka Real Dimez have been friends since high school.","Now signed to Only Raw Records, hoping lightning can strike twice."] },
+  'bae luxe':   { fullName:'Bae-Luxe', role:'Real Dimez · Rapper', quote:'All my dimes in this club.', bio:["One half of the rap duo Real Dimez alongside her high-school friend Roxy.","After an early hit with DWNPLY, they're now signed to Only Raw Records."] },
   'roxy':       { fullName:'Roxy', role:'Real Dimez · Rapper', quote:'All my dimes in this club.', bio:["One half of the rap duo Real Dimez alongside Bae-Luxe, her friend since high school.","After five years and a whole lot of trouble, they're now signed to Only Raw Records."] },
   'raul':       { fullName:'Raul Bautista', role:'Seasoned Bank Robber', quote:"Life is full of surprises, my friend. I think we'd all be wise to remember that.", bio:["Confidence, charm, and cunning — Raul's a seasoned bank robber always on the hunt for talent ready to take the risks that bring the biggest rewards.","Raul's recklessness raises the stakes with every score. Sooner or later, his crew will have to double down or pull their chips from the table."] },
   'brian':      { fullName:'Brian Heder', role:"Drug Runner · Jason's Landlord", quote:"I hauled so much grass in that plane, I could make the state of Leonida levitate.", bio:["Brian's a classic drug runner from the golden age of smuggling in the Keys. Still moving product through his boat yard with his third wife, Lori, Brian's been around long enough to let others do his dirty work.","Brian's letting Jason live rent-free at one of his properties — so long as he helps with local shakedowns, and stops by for Lori's sangria once in a while."] },
