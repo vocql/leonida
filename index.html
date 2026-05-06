@@ -899,7 +899,7 @@ body {
   box-shadow: 0 16px 56px rgba(0,0,0,0.7), 0 0 30px rgba(255,0,200,0.1);
 }
 
-/* Thumbnail wrapper — replaces the old embed-wrap for non-TBA cards */
+/* Thumbnail wrapper */
 .thumb-wrap {
   position: relative;
   width: 100%;
@@ -1849,6 +1849,7 @@ const TRAILERS = [
   { vid: 'VQRLujxTm3c', title: 'Trailer 2', year: 'May 2025' }
 ];
 let tlbIdx = 0;
+let tlbMusicWasPlaying = false; // ← tracks whether music was playing before trailer opened
 
 const tlbEl     = document.getElementById('trailerLB');
 const tlbVideo  = document.getElementById('tlbVideo');
@@ -1868,12 +1869,23 @@ function openTLB(idx) {
   tlbCur.textContent   = idx + 1;
   tlbEl.classList.add('active');
   document.body.style.overflow = 'hidden';
+  // Pause background music while trailer plays
+  if (!music.paused) {
+    music.pause();
+    setPlaying(false);
+    tlbMusicWasPlaying = true;
+  }
 }
 
 function closeTLB() {
   tlbEl.classList.remove('active');
   tlbVideo.innerHTML = '';
   document.body.style.overflow = '';
+  // Resume background music if it was playing before the trailer opened
+  if (tlbMusicWasPlaying) {
+    tlbMusicWasPlaying = false;
+    music.play().then(() => setPlaying(true)).catch(() => {});
+  }
 }
 
 function stepTLB(dir) {
