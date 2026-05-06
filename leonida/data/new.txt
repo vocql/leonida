@@ -33,6 +33,229 @@ body {
   background-repeat: no-repeat;
 }
 
+/* ══════════════════════════════════════════════════
+   LOADING SCREEN
+══════════════════════════════════════════════════ */
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #04001a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  pointer-events: all;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+#loading-screen.fade-out {
+  opacity: 0;
+  transform: scale(1.04);
+  pointer-events: none;
+}
+#loading-screen.gone {
+  display: none;
+}
+
+#loading-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 15% 20%, rgba(0,255,255,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 55% at 85% 80%, rgba(255,0,200,0.09) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(119,0,255,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+#loading-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,255,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 75% 65% at center, black 10%, transparent 75%);
+  pointer-events: none;
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+  position: relative;
+  z-index: 2;
+}
+
+.loading-scanline {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.08) 2px,
+    rgba(0,0,0,0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+  animation: scanMove 8s linear infinite;
+}
+@keyframes scanMove {
+  0%   { background-position: 0 0; }
+  100% { background-position: 0 100px; }
+}
+
+.loading-corner {
+  position: absolute;
+  width: 60px; height: 60px;
+  pointer-events: none;
+}
+.loading-corner--tl { top: 32px; left: 32px; border-top: 1.5px solid rgba(0,255,255,0.3); border-left: 1.5px solid rgba(0,255,255,0.3); }
+.loading-corner--tr { top: 32px; right: 32px; border-top: 1.5px solid rgba(0,255,255,0.3); border-right: 1.5px solid rgba(0,255,255,0.3); }
+.loading-corner--bl { bottom: 32px; left: 32px; border-bottom: 1.5px solid rgba(255,0,200,0.3); border-left: 1.5px solid rgba(255,0,200,0.3); }
+.loading-corner--br { bottom: 32px; right: 32px; border-bottom: 1.5px solid rgba(255,0,200,0.3); border-right: 1.5px solid rgba(255,0,200,0.3); }
+
+.loading-eyebrow {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.6);
+  animation: loadFadeUp 0.8s ease 0.1s both;
+}
+
+.loading-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(72px, 14vw, 148px);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.88;
+  background: linear-gradient(90deg, #00ffff, #bf00ff, #ff00c8, #00e5ff, #00ffff);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: textShimmer 8s linear infinite, loadFadeUp 0.9s cubic-bezier(0.34,1.4,0.64,1) 0.2s both;
+  filter: drop-shadow(0 2px 16px rgba(0,0,0,0.9)) drop-shadow(0 0 60px rgba(0,255,255,0.4));
+}
+
+@keyframes loadFadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.loading-progress-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 280px;
+  animation: loadFadeUp 0.8s ease 0.5s both;
+}
+
+.loading-bar-track {
+  width: 100%;
+  height: 2px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.loading-bar-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--cyan), var(--purple), var(--pink));
+  box-shadow: 0 0 12px rgba(0,255,255,0.6);
+  transition: width 0.1s ease;
+  animation: loadBarAnim 14s cubic-bezier(0.4, 0, 0.2, 1) 0.6s forwards;
+}
+
+@keyframes loadBarAnim {
+  0%   { width: 0%; }
+  30%  { width: 45%; }
+  60%  { width: 72%; }
+  85%  { width: 91%; }
+  100% { width: 100%; }
+}
+
+.loading-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  animation: barShimmer 3.5s ease 0.8s infinite;
+}
+@keyframes barShimmer {
+  0%   { left: -60%; }
+  100% { left: 120%; }
+}
+
+.loading-status-text {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  font-family: monospace;
+  min-height: 16px;
+}
+
+.loading-dots {
+  display: flex;
+  gap: 7px;
+  animation: loadFadeUp 0.8s ease 0.7s both;
+}
+.loading-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: rgba(0,255,255,0.25);
+  animation: dotPulseLoad 1.4s ease-in-out infinite;
+}
+.loading-dot:nth-child(1) { animation-delay: 0s; }
+.loading-dot:nth-child(2) { animation-delay: 0.18s; background: rgba(119,0,255,0.35); }
+.loading-dot:nth-child(3) { animation-delay: 0.36s; background: rgba(255,0,200,0.25); }
+@keyframes dotPulseLoad {
+  0%,100% { opacity: 0.25; transform: scale(0.8); }
+  50%     { opacity: 1; transform: scale(1.4); box-shadow: 0 0 8px currentColor; }
+}
+
+.loading-date {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: rgba(255,0,200,0.45);
+  text-shadow: 0 0 14px rgba(255,0,200,0.3);
+  animation: loadFadeUp 0.8s ease 0.8s both;
+}
+
+.loading-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 320px;
+  animation: loadFadeUp 0.8s ease 0.3s both;
+}
+.loading-divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+}
+.loading-divider-diamond {
+  width: 5px; height: 5px;
+  background: rgba(0,255,255,0.3);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
 /* ── SHARED BG LAYERS ─────────────────────────────── */
 .bg-darken {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
@@ -62,7 +285,6 @@ body {
   display: none;
   opacity: 0;
 }
-/* Only these three pages scroll */
 #page-places,
 #page-characters,
 #page-screenshots {
@@ -211,7 +433,7 @@ body {
 /* ── SHARED TEXT SHIMMER ──────────────────────────── */
 @keyframes textShimmer { 0%{background-position:0%} 100%{background-position:300%} }
 
-/* ── PAGE TITLE STYLE (used across pages) ─────────── */
+/* ── PAGE TITLE STYLE ─────────────────────────────── */
 .page-title-grad {
   font-family: 'Barlow Condensed', sans-serif;
   font-weight: 900; text-transform: uppercase; line-height: 0.9;
@@ -393,7 +615,7 @@ body {
 }
 .lb-close:hover { color: #fff; }
 
-/* ── MAIN CONTENT WRAPPER (scrollable pages) ──────── */
+/* ── MAIN CONTENT WRAPPER ─────────────────────────── */
 .page-main {
   position: relative;
   padding: 90px 40px 80px;
@@ -422,7 +644,6 @@ body {
   animation: textShimmer 8s linear infinite;
   filter: drop-shadow(0 2px 16px rgba(0,0,0,0.7)) drop-shadow(0 0 40px rgba(0,255,255,0.3));
 }
-/* Countdown */
 .pills {
   display: flex; align-items: center; gap: 10px;
   animation: popIn 1s cubic-bezier(0.34,1.56,0.64,1) 0.15s both;
@@ -497,7 +718,6 @@ body {
   transform: translateX(-50%) translateY(4px);
 }
 .pill:hover .pill-tooltip { opacity: 1; transform: translateX(-50%) translateY(0); }
-/* Home subtitle */
 .subtitle-wrap { animation: popIn 1s cubic-bezier(0.34,1.56,0.64,1) 0.3s both; }
 .subtitle {
   font-size: 11px; font-weight: 600; letter-spacing: 0.3em;
@@ -506,7 +726,6 @@ body {
 }
 .subtitle-divider { width: 28px; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent); }
 .subtitle span.date { color: var(--pink); text-shadow: 0 0 14px rgba(255,0,200,0.4); }
-/* Platforms */
 .platforms {
   display: flex; align-items: center; gap: 8px;
   animation: popIn 1s cubic-bezier(0.34,1.56,0.64,1) 0.4s both;
@@ -524,7 +743,6 @@ body {
   border-color: rgba(255,255,255,0.6); color: #ffffff;
   box-shadow: 0 0 14px rgba(255,255,255,0.15);
 }
-/* Music player */
 .music-wrap {
   position: absolute; bottom: 22px; left: 22px;
   width: 200px; height: 100px;
@@ -645,26 +863,88 @@ body {
 .bio-text p:last-child { margin-bottom: 0; }
 .bio-no-info { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.2); letter-spacing: 0.1em; text-transform: uppercase; padding: 30px 0; text-align: center; }
 
-/* ── TRAILERS PAGE ────────────────────────────────── */
+/* ══════════════════════════════════════════════════
+   TRAILERS PAGE
+══════════════════════════════════════════════════ */
+#page-trailers {
+  isolation: isolate;
+}
+#page-trailers .page-main {
+  overflow-y: auto;
+  height: 100%;
+}
 .trailers-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 24px;
 }
 #page-trailers .page-header { margin-bottom: 48px; }
+
 .trailer-card {
   border-radius: 16px; overflow: hidden;
   border: 1.5px solid rgba(0,255,255,0.14);
-  background: rgba(0,255,255,0.02);
-  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  background: rgba(4, 0, 26, 0.6);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
   opacity: 0; transform: scale(0.93) translateY(16px);
   transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34,1.4,0.64,1), border-color 0.2s, box-shadow 0.2s;
   position: relative;
+  isolation: isolate;
+  will-change: transform;
+  cursor: pointer;
 }
 .trailer-card.visible { opacity: 1; transform: scale(1) translateY(0); }
-.trailer-card:hover { border-color: rgba(0,255,255,0.3); box-shadow: 0 16px 56px rgba(0,0,0,0.6), 0 0 30px rgba(0,255,255,0.07); }
-.trailer-card:nth-child(even) { border-color: rgba(255,0,200,0.14); background: rgba(255,0,200,0.02); }
-.trailer-card:nth-child(even):hover { border-color: rgba(255,0,200,0.3); box-shadow: 0 16px 56px rgba(0,0,0,0.6), 0 0 30px rgba(255,0,200,0.07); }
+.trailer-card:hover {
+  border-color: rgba(0,255,255,0.35);
+  box-shadow: 0 16px 56px rgba(0,0,0,0.7), 0 0 30px rgba(0,255,255,0.1);
+  transform: translateY(-3px) scale(1.005);
+}
+.trailer-card:nth-child(even) {
+  border-color: rgba(255,0,200,0.18);
+  background: rgba(4, 0, 26, 0.6);
+}
+.trailer-card:nth-child(even):hover {
+  border-color: rgba(255,0,200,0.35);
+  box-shadow: 0 16px 56px rgba(0,0,0,0.7), 0 0 30px rgba(255,0,200,0.1);
+}
+
+/* Thumbnail wrapper — replaces the old embed-wrap for non-TBA cards */
+.thumb-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: #000;
+}
+.thumb-wrap img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 0.4s ease;
+}
+.trailer-card:hover .thumb-wrap img { transform: scale(1.04); }
+.thumb-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(0deg, rgba(4,0,26,0.6) 0%, transparent 60%);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.trailer-card:hover .thumb-overlay {
+  background: linear-gradient(0deg, rgba(4,0,26,0.4) 0%, transparent 60%);
+}
+.play-circle {
+  width: 62px; height: 62px; border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  border: 2px solid rgba(255,255,255,0.45);
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(6px);
+  transition: transform 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+.trailer-card:hover .play-circle {
+  transform: scale(1.12);
+  background: rgba(255,0,0,0.75);
+  border-color: #fff;
+  box-shadow: 0 0 28px rgba(255,0,0,0.4);
+}
+.play-circle svg { width: 24px; height: 24px; fill: #fff; margin-left: 4px; }
+
 .new-badge {
   position: absolute; top: 14px; right: 14px; z-index: 10;
   font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 900;
@@ -673,19 +953,130 @@ body {
   padding: 5px 12px; border-radius: 999px;
   box-shadow: 0 0 16px rgba(0,255,255,0.5);
   animation: pulseBadge 2s ease-in-out infinite;
+  pointer-events: none;
 }
 @keyframes pulseBadge { 0%,100%{box-shadow:0 0 16px rgba(0,255,255,0.5)} 50%{box-shadow:0 0 28px rgba(0,255,255,0.9)} }
-.embed-wrap { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #000; }
-.embed-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; display: block; }
+
 .card-label {
-  padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;
-  background: rgba(255,255,255,0.025); border-top: 1px solid rgba(255,255,255,0.05);
+  padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(0,0,0,0.25);
+  border-top: 1px solid rgba(255,255,255,0.06);
 }
-.card-label-title { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.6); }
-.card-label-year { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; color: rgba(255,255,255,0.22); }
-.trailer-card.tba .embed-wrap { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
+.card-label-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px; font-weight: 900;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+}
+.card-label-year {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.25);
+}
+.trailer-card.tba .thumb-wrap {
+  display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px;
+}
 .tba-icon { font-size: 48px; opacity: 0.15; }
-.tba-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 900; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.12); }
+.tba-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; font-weight: 900;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(255,255,255,0.12);
+}
+
+/* ══════════════════════════════════════════════════
+   TRAILER LIGHTBOX
+══════════════════════════════════════════════════ */
+#trailerLB {
+  position: fixed; inset: 0; z-index: 9000;
+  background: rgba(0,0,0,0.92);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+  backdrop-filter: blur(20px);
+}
+#trailerLB.active { opacity: 1; pointer-events: all; }
+
+.tlb-close {
+  position: fixed; top: 20px; right: 26px; z-index: 9001;
+  width: 46px; height: 46px; border-radius: 50%;
+  background: rgba(255,255,255,0.07);
+  border: 1.5px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.6);
+  font-size: 20px; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.15s;
+}
+.tlb-close:hover {
+  background: rgba(255,60,60,0.25); border-color: rgba(255,60,60,0.5);
+  color: #fff; transform: scale(1.08);
+}
+
+.tlb-inner {
+  width: 100%; max-width: 1060px;
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+}
+
+.tlb-video-wrap {
+  width: 100%; aspect-ratio: 16/9;
+  border-radius: 14px; overflow: hidden;
+  border: 1.5px solid rgba(0,255,255,0.2);
+  box-shadow: 0 0 60px rgba(0,255,255,0.08), 0 24px 70px rgba(0,0,0,0.85);
+  background: #000; position: relative;
+}
+.tlb-video-wrap iframe {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; border: none;
+}
+
+.tlb-footer {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.tlb-meta { display: flex; align-items: center; gap: 14px; }
+.tlb-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22px; font-weight: 900;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+}
+.tlb-year {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+}
+.tlb-sep {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: rgba(255,0,200,0.5);
+}
+
+.tlb-nav { display: flex; align-items: center; gap: 12px; }
+.tlb-btn {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 20px; font-weight: 900;
+  color: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 999px; padding: 8px 22px;
+  cursor: pointer; letter-spacing: 0.06em;
+  transition: color 0.15s, border-color 0.15s, background 0.15s, transform 0.15s;
+}
+.tlb-btn:hover {
+  color: #fff; border-color: rgba(0,255,255,0.4);
+  background: rgba(0,255,255,0.08); transform: scale(1.06);
+}
+.tlb-counter {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; font-weight: 900;
+  letter-spacing: 0.2em; color: rgba(255,255,255,0.25);
+  min-width: 60px; text-align: center;
+}
+.tlb-counter span { color: var(--cyan); }
 
 /* ── SHARED KEYFRAMES ─────────────────────────────── */
 @keyframes popIn {
@@ -695,12 +1086,16 @@ body {
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
 /* ── RESPONSIVE ───────────────────────────────────── */
+@media (max-width: 900px) {
+  .trailers-grid { grid-template-columns: 1fr 1fr; }
+}
 @media (max-width: 680px) {
   .trailers-grid { grid-template-columns: 1fr; }
   .viewer-inner  { flex-direction: column; align-items: center; gap: 20px; max-height: none; overflow-y: auto; }
   #char-lb-img   { max-width: 90vw; max-height: 50vw; }
   .viewer-bio-col{ max-height: none; width: 100%; }
   .map-wrap      { width: 92vw; height: 62vw; border-radius: 12px; }
+  .tlb-footer    { flex-direction: column; gap: 14px; align-items: flex-start; }
 }
 @media (max-width: 500px) {
   .pills { gap: 6px; }
@@ -710,6 +1105,11 @@ body {
   .nav-panel { padding: 70px 28px; }
   .music-wrap { width: 160px; }
   .music-title { max-width: 100px; }
+  .loading-corner { width: 40px; height: 40px; }
+  .loading-corner--tl, .loading-corner--tr { top: 18px; }
+  .loading-corner--tl, .loading-corner--bl { left: 18px; }
+  .loading-corner--tr, .loading-corner--br { right: 18px; }
+  .loading-corner--bl, .loading-corner--br { bottom: 18px; }
 }
 @media (max-width: 600px) {
   .page-main { padding: 80px 20px 60px; }
@@ -718,24 +1118,54 @@ body {
 </head>
 <body>
 
-<!-- ── BG LAYERS ──────────────────────────────────── -->
+<!-- LOADING SCREEN -->
+<div id="loading-screen">
+  <div class="loading-scanline"></div>
+  <div class="loading-corner loading-corner--tl"></div>
+  <div class="loading-corner loading-corner--tr"></div>
+  <div class="loading-corner loading-corner--bl"></div>
+  <div class="loading-corner loading-corner--br"></div>
+  <div class="loading-content">
+    <div class="loading-eyebrow">Welcome to</div>
+    <div class="loading-title">Leonida</div>
+    <div class="loading-divider">
+      <div class="loading-divider-line"></div>
+      <div class="loading-divider-diamond"></div>
+      <div class="loading-divider-line"></div>
+    </div>
+    <div class="loading-progress-wrap">
+      <div class="loading-bar-track">
+        <div class="loading-bar-fill" id="loadingBar"></div>
+      </div>
+      <div class="loading-status-text" id="loadingStatusText">Initializing…</div>
+    </div>
+    <div class="loading-dots">
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+    </div>
+    <div class="loading-date">November 19, 2026</div>
+  </div>
+</div>
+
+<!-- BG LAYERS -->
 <div class="bg-darken"></div>
 <div class="bg-tint"></div>
 <div class="bg-grid"></div>
 
-<!-- ── AUDIO ──────────────────────────────────────── -->
+<!-- AUDIO -->
 <audio id="bgMusic" loop preload="auto">
   <source src="leonida/music/relax.mp3" type="audio/mpeg">
 </audio>
 
-<!-- ── HAMBURGER ──────────────────────────────────── -->
+<!-- HAMBURGER -->
 <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle menu">
   <div class="bar"></div>
   <div class="bar"></div>
   <div class="bar"></div>
 </button>
 
-<!-- ── NAV OVERLAY ────────────────────────────────── -->
+<!-- NAV OVERLAY -->
 <div class="nav-overlay" id="navOverlay">
   <div class="nav-backdrop" id="navBackdrop"></div>
   <div class="nav-panel">
@@ -755,16 +1185,12 @@ body {
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     PAGE: HOME
-══════════════════════════════════════════════════ -->
+<!-- PAGE: HOME -->
 <div id="page-home" class="page active">
-
   <div class="title-wrap">
     <div class="welcome-small">Welcome to</div>
     <div class="leonida-text">Leonida</div>
   </div>
-
   <div class="pills">
     <div class="pill" id="pill-d">
       <div class="pill-tooltip" id="tip-d">200 days to go!</div>
@@ -787,7 +1213,6 @@ body {
       <span class="pill-lbl">Secs</span>
     </div>
   </div>
-
   <div class="subtitle-wrap">
     <div class="subtitle">
       <div class="subtitle-divider"></div>
@@ -795,13 +1220,10 @@ body {
       <div class="subtitle-divider"></div>
     </div>
   </div>
-
   <div class="platforms">
     <div class="platform-badge">PS5</div>
     <div class="platform-badge">Xbox Series X|S</div>
   </div>
-
-  <!-- Music player lives inside home page (absolute-positioned to viewport corners via fixed page) -->
   <div class="music-wrap">
     <div class="music-player" id="musicPlayer">
       <button class="music-play-btn" id="musicBtn" aria-label="Play/Pause">
@@ -816,33 +1238,21 @@ body {
       </div>
     </div>
   </div>
+</div>
 
-</div><!-- /page-home -->
-
-
-<!-- ══════════════════════════════════════════════════
-     PAGE: MAP
-══════════════════════════════════════════════════ -->
+<!-- PAGE: MAP -->
 <div id="page-map" class="page">
-
   <div class="map-title-block">
     <div class="map-page-label">Explore</div>
     <div class="page-title-grad map-page-title">State of Leonida</div>
   </div>
-
   <div class="map-wrap">
     <iframe id="mapIframe" src="" title="State of Leonida Map" allowfullscreen loading="lazy"></iframe>
   </div>
+</div>
 
-</div><!-- /page-map -->
-
-
-<!-- ══════════════════════════════════════════════════
-     PAGE: PLACES
-══════════════════════════════════════════════════ -->
+<!-- PAGE: PLACES -->
 <div id="page-places" class="page">
-
-  <!-- Lightbox -->
   <div class="lb-viewer" id="placesLB">
     <button class="lb-close" data-lb="places">✕</button>
     <img class="lb-img" id="places-lb-img" src="" alt="">
@@ -853,7 +1263,6 @@ body {
       <button class="viewer-btn" id="places-next">&#8594;</button>
     </div>
   </div>
-
   <div class="page-main">
     <div class="page-header">
       <div>
@@ -873,16 +1282,10 @@ body {
     </div>
     <div class="places-grid" id="places-gallery"></div>
   </div>
+</div>
 
-</div><!-- /page-places -->
-
-
-<!-- ══════════════════════════════════════════════════
-     PAGE: CHARACTERS
-══════════════════════════════════════════════════ -->
+<!-- PAGE: CHARACTERS -->
 <div id="page-characters" class="page">
-
-  <!-- Lightbox -->
   <div class="lb-viewer" id="charLB">
     <button class="lb-close" data-lb="char">✕</button>
     <div class="viewer-inner">
@@ -902,7 +1305,6 @@ body {
       </div>
     </div>
   </div>
-
   <div class="page-main">
     <div class="page-header">
       <div>
@@ -922,16 +1324,10 @@ body {
     </div>
     <div class="places-grid" id="char-gallery"></div>
   </div>
+</div>
 
-</div><!-- /page-characters -->
-
-
-<!-- ══════════════════════════════════════════════════
-     PAGE: SCREENSHOTS
-══════════════════════════════════════════════════ -->
+<!-- PAGE: SCREENSHOTS -->
 <div id="page-screenshots" class="page">
-
-  <!-- Lightbox -->
   <div class="lb-viewer" id="ssLB">
     <button class="lb-close" data-lb="ss">✕</button>
     <img class="lb-img" id="ss-lb-img" src="" alt="">
@@ -942,7 +1338,6 @@ body {
       <button class="viewer-btn" id="ss-next">&#8594;</button>
     </div>
   </div>
-
   <div class="page-main">
     <div class="page-header">
       <div>
@@ -962,15 +1357,10 @@ body {
     </div>
     <div class="places-grid" id="ss-gallery"></div>
   </div>
+</div>
 
-</div><!-- /page-screenshots -->
-
-
-<!-- ══════════════════════════════════════════════════
-     PAGE: TRAILERS
-══════════════════════════════════════════════════ -->
+<!-- PAGE: TRAILERS -->
 <div id="page-trailers" class="page">
-
   <div class="page-main">
     <div class="page-header">
       <div>
@@ -981,31 +1371,43 @@ body {
     </div>
 
     <div class="trailers-grid">
-      <div class="trailer-card" style="transition-delay:0s">
-        <div class="embed-wrap">
-          <iframe src="https://www.youtube.com/embed/QdBZY2fkU-0?rel=0&modestbranding=1"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen title="GTA VI Trailer 1"></iframe>
+
+      <!-- Trailer 1 -->
+      <div class="trailer-card" data-vid="QdBZY2fkU-0" data-title="Trailer 1" data-year="Dec 2023" style="transition-delay:0s">
+        <div class="thumb-wrap">
+          <img src="https://img.youtube.com/vi/QdBZY2fkU-0/maxresdefault.jpg" alt="GTA VI Trailer 1" loading="lazy">
+          <div class="thumb-overlay">
+            <div class="play-circle">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
         </div>
         <div class="card-label">
           <span class="card-label-title">Trailer 1</span>
           <span class="card-label-year">Dec 2023</span>
         </div>
       </div>
-      <div class="trailer-card" style="transition-delay:0.1s">
-        <div class="embed-wrap">
-          <iframe src="https://www.youtube.com/embed/VQRLujxTm3c?rel=0&modestbranding=1"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen title="GTA VI Trailer 2"></iframe>
+
+      <!-- Trailer 2 -->
+      <div class="trailer-card" data-vid="VQRLujxTm3c" data-title="Trailer 2" data-year="May 2025" style="transition-delay:0.1s">
+        <div class="thumb-wrap">
+          <img src="https://img.youtube.com/vi/VQRLujxTm3c/maxresdefault.jpg" alt="GTA VI Trailer 2" loading="lazy">
+          <div class="thumb-overlay">
+            <div class="play-circle">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
         </div>
         <div class="card-label">
           <span class="card-label-title">Trailer 2</span>
           <span class="card-label-year">May 2025</span>
         </div>
       </div>
+
+      <!-- Trailer 3 TBA -->
       <div class="trailer-card tba" style="transition-delay:0.2s">
         <div class="new-badge">NEW</div>
-        <div class="embed-wrap">
+        <div class="thumb-wrap">
           <div class="tba-icon">▶</div>
           <div class="tba-label">Coming Soon</div>
         </div>
@@ -1014,22 +1416,61 @@ body {
           <span class="card-label-year">2026</span>
         </div>
       </div>
+
     </div>
   </div>
+</div>
 
-</div><!-- /page-trailers -->
+<!-- TRAILER LIGHTBOX -->
+<div id="trailerLB">
+  <button class="tlb-close" id="tlbClose">✕</button>
+  <div class="tlb-inner">
+    <div class="tlb-video-wrap" id="tlbVideo"></div>
+    <div class="tlb-footer">
+      <div class="tlb-meta">
+        <span class="tlb-title" id="tlbTitle">Trailer 1</span>
+        <div class="tlb-sep"></div>
+        <span class="tlb-year" id="tlbYear">Dec 2023</span>
+      </div>
+      <div class="tlb-nav">
+        <button class="tlb-btn" id="tlbPrev">&#8592;</button>
+        <div class="tlb-counter"><span id="tlbCur">1</span> / <span id="tlbTot">2</span></div>
+        <button class="tlb-btn" id="tlbNext">&#8594;</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-
-<!-- ══════════════════════════════════════════════════
-     SCRIPTS
-══════════════════════════════════════════════════ -->
 <script>
 'use strict';
 
+/* ── LOADING SCREEN ─────────────────────────────── */
+(function() {
+  const screen   = document.getElementById('loading-screen');
+  const statusEl = document.getElementById('loadingStatusText');
+  const messages = [
+    'Connecting…','Loading assets…','Syncing locations…','Init map systems…',
+    'Loading profiles…','Fetching archive…','Calibrating grid…','Scanning feeds…',
+    'Decrypting files…','Almost there…','Welcome to Leonida'
+  ];
+  let msgIdx = 0;
+  const msgInterval = setInterval(() => {
+    msgIdx = Math.min(msgIdx + 1, messages.length - 1);
+    statusEl.textContent = messages[msgIdx];
+    if (msgIdx === messages.length - 1) clearInterval(msgInterval);
+  }, 1300);
+  setTimeout(() => {
+    statusEl.textContent = 'Welcome to Leonida';
+    screen.classList.add('fade-out');
+    setTimeout(() => { screen.classList.add('gone'); }, 820);
+  }, 15000);
+})();
+
 /* ── RIPPLES ────────────────────────────────────── */
 document.addEventListener('click', e => {
-  // Don't ripple inside lightboxes
   if (e.target.closest('.lb-viewer.active')) return;
+  if (e.target.closest('#trailerLB.active')) return;
+  if (e.target.closest('#loading-screen')) return;
   const r = document.createElement('div');
   r.className = 'ripple';
   r.style.left = e.clientX + 'px';
@@ -1044,11 +1485,11 @@ document.addEventListener('click', e => {
 const hBtn    = document.getElementById('hamburgerBtn');
 const overlay = document.getElementById('navOverlay');
 const backdrop= document.getElementById('navBackdrop');
-
 function toggleMenu(force) {
-  const open = typeof force === 'boolean' ? force : overlay.classList.toggle('open');
   if (typeof force === 'boolean') {
     if (force) overlay.classList.add('open'); else overlay.classList.remove('open');
+  } else {
+    overlay.classList.toggle('open');
   }
   hBtn.classList.toggle('open', overlay.classList.contains('open'));
 }
@@ -1059,24 +1500,13 @@ backdrop.addEventListener('click', () => toggleMenu(false));
 const pages      = document.querySelectorAll('.page');
 const navAnchors = document.querySelectorAll('[data-page]');
 const initialized = {};
-
 function showPage(id) {
-  pages.forEach(p => {
-    p.classList.remove('active');
-  });
+  pages.forEach(p => { p.classList.remove('active'); });
   const page = document.getElementById('page-' + id);
   if (!page) return;
   page.classList.add('active');
-
-  // Update nav active states
-  navAnchors.forEach(a => {
-    a.classList.toggle('active', a.dataset.page === id);
-  });
-
-  // Close nav menu
+  navAnchors.forEach(a => { a.classList.toggle('active', a.dataset.page === id); });
   toggleMenu(false);
-
-  // Lazy init
   if (!initialized[id]) {
     initialized[id] = true;
     if (id === 'map')         initMap();
@@ -1085,21 +1515,14 @@ function showPage(id) {
     if (id === 'screenshots') initScreenshots();
     if (id === 'trailers')    initTrailers();
   }
-
-  // Scroll page back to top
   page.scrollTop = 0;
 }
-
 navAnchors.forEach(a => {
-  a.addEventListener('click', e => {
-    e.preventDefault();
-    showPage(a.dataset.page);
-  });
+  a.addEventListener('click', e => { e.preventDefault(); showPage(a.dataset.page); });
 });
-
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
-    // Close any open lightbox first
+    if (document.getElementById('trailerLB').classList.contains('active')) { closeTLB(); return; }
     const openLB = document.querySelector('.lb-viewer.active');
     if (openLB) { openLB.classList.remove('active'); return; }
     if (overlay.classList.contains('open')) { toggleMenu(false); return; }
@@ -1188,18 +1611,14 @@ async function loadGithubImages(opts) {
     files = await res.json();
   } catch (err) { setStatus('err', 'GitHub API error — ' + err.message); emptyEl.classList.add('show'); return []; }
   if (!Array.isArray(files)) { setStatus('err', 'Unexpected response'); emptyEl.classList.add('show'); return []; }
-
   const images = files.filter(f => f.type === 'file' && IMAGE_EXTS.some(ext => f.name.toLowerCase().endsWith(ext)));
   if (!images.length) { setStatus('ok', path + '  ·  no images found yet'); emptyEl.classList.add('show'); return []; }
-
   setStatus('ok', `${path}  ·  ${images.length} image${images.length !== 1 ? 's' : ''} detected`);
   countEl.textContent = images.length;
   if (totEl) totEl.textContent = images.length;
-
   const obs = new IntersectionObserver(entries => {
     entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); obs.unobserve(en.target); } });
   }, { threshold: 0.05 });
-
   images.forEach((file, i) => {
     const src   = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${path}/${file.name}`;
     const label = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
@@ -1217,7 +1636,6 @@ async function loadGithubImages(opts) {
     gallery.appendChild(card); obs.observe(card);
     if (onCardCreated) onCardCreated(card, img, file, i, label);
   });
-
   return images;
 }
 
@@ -1288,14 +1706,13 @@ const CHARACTER_BIOS = {
   'drequan':    { fullName:"Dre'Quan Priest", role:'Aspiring Music Mogul · Only Raw Records', quote:"You're with the label now.", bio:["Dre'Quan was always more of a hustler than a gangster. Even when he was dealing on the streets to make ends meet, breaking into music was the goal.","Now that he's signed the Real Dimez, Dre'Quan's days of booking acts into Boobie's strip club might be numbered as he sets his sights on the Vice City scene."] },
   'dre quan':   { fullName:"Dre'Quan Priest", role:'Aspiring Music Mogul · Only Raw Records', quote:"You're with the label now.", bio:["Dre'Quan was always more of a hustler than a gangster.","Now that he's signed the Real Dimez, he sets his sights on the Vice City scene."] },
   'real dimez': { fullName:'Real Dimez (Bae-Luxe & Roxy)', role:'Rap Duo · Only Raw Records', quote:'All my dimes in this club. Meet my twin, make it a dub.', bio:["Bae-Luxe and Roxy aka Real Dimez have been friends since high school — girls with the savvy to turn their time shaking down local dealers into cold, hard cash via spicy rap tracks and a relentless social media presence.","An early hit single with local rapper DWNPLY took Real Dimez to new heights. Now, after five years and a whole lot of trouble, they're signed to Only Raw Records, hoping lightning can strike twice."] },
-  'realdimez':  { fullName:'Real Dimez (Bae-Luxe & Roxy)', role:'Rap Duo · Only Raw Records', quote:'All my dimes in this club. Meet my twin, make it a dub.', bio:["Bae-Luxe and Roxy aka Real Dimez have been friends since high school — girls with the savvy to turn their time shaking down local dealers into cold, hard cash via spicy rap tracks.","Now signed to Only Raw Records, hoping lightning can strike twice."] },
-  'bae luxe':   { fullName:'Bae-Luxe', role:'Real Dimez · Rapper', quote:'All my dimes in this club.', bio:["One half of the rap duo Real Dimez alongside her high-school friend Roxy. Together they turned their time shaking down local dealers into viral rap tracks.","After an early hit with DWNPLY, they're now signed to Only Raw Records."] },
+  'realdimez':  { fullName:'Real Dimez (Bae-Luxe & Roxy)', role:'Rap Duo · Only Raw Records', quote:'All my dimes in this club. Meet my twin, make it a dub.', bio:["Bae-Luxe and Roxy aka Real Dimez have been friends since high school.","Now signed to Only Raw Records, hoping lightning can strike twice."] },
+  'bae luxe':   { fullName:'Bae-Luxe', role:'Real Dimez · Rapper', quote:'All my dimes in this club.', bio:["One half of the rap duo Real Dimez alongside her high-school friend Roxy.","After an early hit with DWNPLY, they're now signed to Only Raw Records."] },
   'roxy':       { fullName:'Roxy', role:'Real Dimez · Rapper', quote:'All my dimes in this club.', bio:["One half of the rap duo Real Dimez alongside Bae-Luxe, her friend since high school.","After five years and a whole lot of trouble, they're now signed to Only Raw Records."] },
   'raul':       { fullName:'Raul Bautista', role:'Seasoned Bank Robber', quote:"Life is full of surprises, my friend. I think we'd all be wise to remember that.", bio:["Confidence, charm, and cunning — Raul's a seasoned bank robber always on the hunt for talent ready to take the risks that bring the biggest rewards.","Raul's recklessness raises the stakes with every score. Sooner or later, his crew will have to double down or pull their chips from the table."] },
   'brian':      { fullName:'Brian Heder', role:"Drug Runner · Jason's Landlord", quote:"I hauled so much grass in that plane, I could make the state of Leonida levitate.", bio:["Brian's a classic drug runner from the golden age of smuggling in the Keys. Still moving product through his boat yard with his third wife, Lori, Brian's been around long enough to let others do his dirty work.","Brian's letting Jason live rent-free at one of his properties — so long as he helps with local shakedowns, and stops by for Lori's sangria once in a while."] },
   'stefanie':   { fullName:'Stefanie G.', role:'Leonida Dept. of Corrections · Social Worker', quote:"Do you know why you're here?", bio:["Stefanie G. works for the Leonida Department of Corrections as a social worker. She was assigned as Lucia's correctional counselor during Lucia's incarceration at Leonida Penitentiary in Vice-Dale County.","Stefanie is the very first voice heard in Grand Theft Auto VI, opening the game's debut trailer with a single question to Lucia. Her last name remains unknown — only the initial G. is visible on her office nameplate."] }
 };
-
 function getBio(filename) {
   const stem = filename.replace(/\.[^.]+$/, '').toLowerCase().replace(/[-_]/g, ' ').trim();
   if (CHARACTER_BIOS[stem]) return CHARACTER_BIOS[stem];
@@ -1332,10 +1749,8 @@ function initCharacters() {
   const bioWrap  = document.getElementById('bioWrap');
   let charImages = [];
   let idx = 0;
-
   function labelFromFile(f) { return f.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()); }
   function getImgs() { return [...gallery.querySelectorAll('img[data-idx]')]; }
-
   function open(i) {
     const imgs = getImgs(); if (!imgs.length) return;
     idx = i;
@@ -1357,7 +1772,6 @@ function initCharacters() {
       imgEl.style.opacity = '1'; bioWrap.style.opacity = '1';
     }, 130);
   }
-
   lbEl.querySelector('.lb-close').addEventListener('click', close);
   lbEl.addEventListener('click', e => { if (e.target === lbEl) close(); });
   document.getElementById('char-prev').addEventListener('click', () => step(-1));
@@ -1367,7 +1781,6 @@ function initCharacters() {
     if (e.key === 'ArrowLeft')  step(-1);
     if (e.key === 'ArrowRight') step(1);
   });
-
   loadGithubImages({
     user: 'vocql', repo: 'leonidagta', branch: 'main', path: 'leonida/people',
     dotEl: document.getElementById('char-dot'),
@@ -1377,10 +1790,7 @@ function initCharacters() {
     gallery,
     emptyEl: document.getElementById('char-empty'),
     cardClass: 'place-card',
-  }).then(images => {
-    charImages = images;
-  });
-
+  }).then(images => { charImages = images; });
   gallery.addEventListener('click', e => {
     const img = e.target.closest('img[data-idx]');
     if (img) open(parseInt(img.dataset.idx, 10));
@@ -1402,22 +1812,18 @@ function initScreenshots() {
     document.getElementById('ss-next'),
     () => [...gallery.querySelectorAll('img[data-idx]')]
   );
-
   const dotEl    = document.getElementById('ss-dot');
   const statusEl = document.getElementById('ss-status');
   const countEl  = document.getElementById('ss-count');
   const emptyEl  = document.getElementById('ss-empty');
-
   function setStatus(type, msg) {
     dotEl.className    = 'status-dot ' + type;
     statusEl.className = 'status-text ' + (type === 'loading' ? '' : type);
     statusEl.textContent = msg;
   }
-
   const obs = new IntersectionObserver(entries => {
     entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); obs.unobserve(en.target); } });
   }, { threshold: 0.05 });
-
   function addCard(num, seqIdx) {
     const src  = IMAGES_PATH + num + '.jpg';
     const label = 'Screenshot ' + num;
@@ -1432,7 +1838,6 @@ function initScreenshots() {
     card.appendChild(imgWrap); card.appendChild(cardBody);
     gallery.appendChild(card); obs.observe(card);
   }
-
   setStatus('loading', 'Loading ' + IMAGES_PATH + ' 1–' + TOTAL + '.jpg …');
   const promises = Array.from({ length: TOTAL }, (_, i) => {
     const num = i + 1;
@@ -1450,7 +1855,6 @@ function initScreenshots() {
     loaded.forEach(num => { seq++; addCard(num, seq); countEl.textContent = seq; });
     setStatus('ok', IMAGES_PATH + '  ·  ' + seq + ' screenshot' + (seq !== 1 ? 's' : '') + ' loaded');
   });
-
   gallery.addEventListener('click', e => {
     const img = e.target.closest('img[data-idx]');
     if (img) lb.open(parseInt(img.dataset.idx, 10));
@@ -1458,11 +1862,63 @@ function initScreenshots() {
 }
 
 /* ── TRAILERS INIT ──────────────────────────────── */
+const TRAILERS = [
+  { vid: 'QdBZY2fkU-0', title: 'Trailer 1', year: 'Dec 2023' },
+  { vid: 'VQRLujxTm3c', title: 'Trailer 2', year: 'May 2025' }
+];
+let tlbIdx = 0;
+
+const tlbEl     = document.getElementById('trailerLB');
+const tlbVideo  = document.getElementById('tlbVideo');
+const tlbTitle  = document.getElementById('tlbTitle');
+const tlbYear   = document.getElementById('tlbYear');
+const tlbCur    = document.getElementById('tlbCur');
+const tlbTot    = document.getElementById('tlbTot');
+
+tlbTot.textContent = TRAILERS.length;
+
+function openTLB(idx) {
+  tlbIdx = idx;
+  const t = TRAILERS[idx];
+  tlbVideo.innerHTML = `<iframe src="https://www.youtube.com/embed/${t.vid}?autoplay=1&rel=0&modestbranding=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  tlbTitle.textContent = t.title;
+  tlbYear.textContent  = t.year;
+  tlbCur.textContent   = idx + 1;
+  tlbEl.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeTLB() {
+  tlbEl.classList.remove('active');
+  tlbVideo.innerHTML = '';
+  document.body.style.overflow = '';
+}
+
+function stepTLB(dir) {
+  tlbIdx = (tlbIdx + dir + TRAILERS.length) % TRAILERS.length;
+  tlbVideo.innerHTML = '';
+  setTimeout(() => openTLB(tlbIdx), 80);
+}
+
+document.getElementById('tlbClose').addEventListener('click', closeTLB);
+tlbEl.addEventListener('click', e => { if (e.target === tlbEl) closeTLB(); });
+document.getElementById('tlbPrev').addEventListener('click', () => stepTLB(-1));
+document.getElementById('tlbNext').addEventListener('click', () => stepTLB(1));
+
 function initTrailers() {
   const obs = new IntersectionObserver(entries => {
     entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); obs.unobserve(en.target); } });
   }, { threshold: 0.08 });
-  document.querySelectorAll('.trailer-card').forEach(el => obs.observe(el));
+
+  document.querySelectorAll('.trailer-card').forEach(el => {
+    obs.observe(el);
+    if (el.classList.contains('tba')) return;
+    el.addEventListener('click', () => {
+      const vid = el.dataset.vid;
+      const idx = TRAILERS.findIndex(t => t.vid === vid);
+      if (idx >= 0) openTLB(idx);
+    });
+  });
 }
 
 </script>
