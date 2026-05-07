@@ -199,7 +199,7 @@ const TRAILERS = [
 ];
 ```
 
-**Step 2 — Count badge** (search `<span>2</span> trailers`):
+**Step 2 — Count badge Line 1239** (search `<span>2</span> trailers`):
 ```html
 <!-- BEFORE -->
 <div class="count-badge"><span>2</span> trailers</div>
