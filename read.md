@@ -184,12 +184,46 @@ const TRAILERS = [
 
 **When adding Trailer 3, update 3 things:**
 
-1. Add entry to `TRAILERS` array (above)
-2. Update the count badge — find `<span>2</span> trailers` → change to `3`
-3. Replace the TBA card HTML with a real trailer card (see below)
+| What | How to find it | Change |
+|------|---------------|--------|
+| Count badge | Search `<span>2</span> trailers` | `2` → `3` |
+| TBA card | Search `trailer-card tba` | Replace whole div |
+| TRAILERS array | Search `const TRAILERS` | Add third entry |
 
-**Real trailer card template:**
+**Step 1 — TRAILERS array** (search `const TRAILERS`):
+```js
+const TRAILERS = [
+  { vid: 'QdBZY2fkU-0', title: 'Trailer 1', year: 'Dec 2023' },
+  { vid: 'VQRLujxTm3c', title: 'Trailer 2', year: 'May 2025' },
+  { vid: 'XXXXXXXXXXX', title: 'Trailer 3', year: '2026' },  // ← add this line
+];
+```
+
+**Step 2 — Count badge** (search `<span>2</span> trailers`):
 ```html
+<!-- BEFORE -->
+<div class="count-badge"><span>2</span> trailers</div>
+
+<!-- AFTER -->
+<div class="count-badge"><span>3</span> trailers</div>
+```
+
+**Step 3 — Replace the TBA card** (search `trailer-card tba`, replace the whole block):
+```html
+<!-- REMOVE THIS ↓ -->
+<div class="trailer-card tba" style="transition-delay:0.2s">
+  <div class="new-badge">NEW</div>
+  <div class="thumb-wrap">
+    <div class="tba-icon">▶</div>
+    <div class="tba-label">Coming Soon</div>
+  </div>
+  <div class="card-label">
+    <span class="card-label-title">Trailer 3</span>
+    <span class="card-label-year">2026</span>
+  </div>
+</div>
+
+<!-- REPLACE WITH THIS ↓ -->
 <div class="trailer-card" data-vid="XXXXXXXXXXX" data-title="Trailer 3" data-year="2026" style="transition-delay:0.2s">
   <div class="thumb-wrap">
     <img src="https://img.youtube.com/vi/XXXXXXXXXXX/maxresdefault.jpg" alt="GTA VI Trailer 3" loading="lazy">
@@ -200,7 +234,7 @@ const TRAILERS = [
   </div>
 </div>
 ```
-Replace `XXXXXXXXXXX` with the actual YouTube video ID in both places.
+Replace both instances of `XXXXXXXXXXX` with the actual YouTube video ID.
 
 ---
 
@@ -291,4 +325,4 @@ Three pages (Places, Characters, Screenshots) pull images from GitHub. All setti
 
 ---
 
-*Last updated: May 2026*
+*Last updated: May 2026 — added Trailer 3 step-by-step guide*
