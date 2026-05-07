@@ -208,7 +208,7 @@ const TRAILERS = [
 <div class="count-badge"><span>3</span> trailers</div>
 ```
 
-**Step 3 — Replace the TBA card** (search `trailer-card tba`, replace the whole block):
+**Step 3 — Replace the TBA card Lines 1265–1275** (search `trailer-card tba`, replace the whole block):
 ```html
 <!-- REMOVE THIS ↓ -->
 <div class="trailer-card tba" style="transition-delay:0.2s">
