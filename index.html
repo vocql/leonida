@@ -899,7 +899,6 @@ body {
   box-shadow: 0 16px 56px rgba(0,0,0,0.7), 0 0 30px rgba(255,0,200,0.1);
 }
 
-/* Thumbnail wrapper */
 .thumb-wrap {
   position: relative;
   width: 100%;
@@ -1163,7 +1162,7 @@ body {
   <div class="nav-panel">
     <div class="nav-label">Navigation</div>
     <ul class="nav-links" id="navLinks">
-      <li><a data-page="home"class="active">Home</a></li>
+      <li><a data-page="home" class="active">Home</a></li>
       <li><a data-page="map">Map</a></li>
       <li><a data-page="places">Places</a></li>
       <li><a data-page="characters">Characters</a></li>
@@ -1245,16 +1244,6 @@ body {
 
 <!-- PAGE: PLACES -->
 <div id="page-places" class="page">
-  <div class="lb-viewer" id="placesLB">
-    <button class="lb-close" data-lb="places">✕</button>
-    <img class="lb-img" id="places-lb-img" src="" alt="">
-    <div class="lb-label" id="places-lb-label"></div>
-    <div class="viewer-controls">
-      <button class="viewer-btn" id="places-prev">&#8592;</button>
-      <div class="viewer-counter"><span id="places-cur">1</span> / <span id="places-tot">0</span></div>
-      <button class="viewer-btn" id="places-next">&#8594;</button>
-    </div>
-  </div>
   <div class="page-main">
     <div class="page-header">
       <div>
@@ -1278,25 +1267,6 @@ body {
 
 <!-- PAGE: CHARACTERS -->
 <div id="page-characters" class="page">
-  <div class="lb-viewer" id="charLB">
-    <button class="lb-close" data-lb="char">✕</button>
-    <div class="viewer-inner">
-      <div class="viewer-img-col">
-        <img id="char-lb-img" src="" alt="">
-        <div class="lb-label" id="char-lb-label"></div>
-        <div class="viewer-controls">
-          <button class="viewer-btn" id="char-prev">&#8592;</button>
-          <div class="viewer-counter"><span id="char-cur">1</span> / <span id="char-tot">0</span></div>
-          <button class="viewer-btn" id="char-next">&#8594;</button>
-        </div>
-      </div>
-      <div class="viewer-bio-col">
-        <div class="bio-wrap" id="bioWrap">
-          <div class="bio-no-info">No bio available</div>
-        </div>
-      </div>
-    </div>
-  </div>
   <div class="page-main">
     <div class="page-header">
       <div>
@@ -1320,16 +1290,6 @@ body {
 
 <!-- PAGE: SCREENSHOTS -->
 <div id="page-screenshots" class="page">
-  <div class="lb-viewer" id="ssLB">
-    <button class="lb-close" data-lb="ss">✕</button>
-    <img class="lb-img" id="ss-lb-img" src="" alt="">
-    <div class="lb-label" id="ss-lb-label"></div>
-    <div class="viewer-controls">
-      <button class="viewer-btn" id="ss-prev">&#8592;</button>
-      <div class="viewer-counter"><span id="ss-cur">1</span> / <span id="ss-tot">0</span></div>
-      <button class="viewer-btn" id="ss-next">&#8594;</button>
-    </div>
-  </div>
   <div class="page-main">
     <div class="page-header">
       <div>
@@ -1359,7 +1319,7 @@ body {
         <div class="eyebrow">Leonida ·</div>
         <div class="page-title-grad" style="font-size:clamp(36px,6vw,72px)">Trailers</div>
       </div>
-      <div class="count-badge"><span>3</span> trailers</div> <!-- PAGE: CHANGE TRAILER AMOUNT -->
+      <div class="count-badge"><span>3</span> trailers</div>
     </div>
 
     <div class="trailers-grid">
@@ -1386,17 +1346,68 @@ body {
         </div>
       </div>
 
-     <div class="trailer-card" data-vid="XJhz0IuSZNo" data-title="Trailer 3" data-year="2026" style="transition-delay:0.2s">
-  <div class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/XJhz0IuSZNo/hqdefault.jpg" alt="GTA VI Trailer 3" loading="lazy">
-  </div>
-  <div class="card-label">
-    <span class="card-label-title">Trailer 3</span>
-    <span class="card-label-year">2026</span>
+      <!-- Trailer 3 -->
+      <div class="trailer-card" data-vid="XJhz0IuSZNo" data-title="Trailer 3" data-year="2026" style="transition-delay:0.2s">
+        <div class="thumb-wrap">
+          <img src="https://img.youtube.com/vi/XJhz0IuSZNo/hqdefault.jpg" alt="GTA VI Trailer 3" loading="lazy">
+        </div>
+        <div class="card-label">
+          <span class="card-label-title">Trailer 3</span>
+          <span class="card-label-year">2026</span>
+        </div>
+      </div>
+
+    </div>
   </div>
 </div>
 
+<!-- ═══════════════════════════════════════════════════════════
+     LIGHTBOXES — kept at body level so position:fixed works
+     correctly and is never trapped by a scrolling ancestor.
+════════════════════════════════════════════════════════════ -->
+
+<!-- PLACES LIGHTBOX -->
+<div class="lb-viewer" id="placesLB">
+  <button class="lb-close" data-lb="places">✕</button>
+  <img class="lb-img" id="places-lb-img" src="" alt="">
+  <div class="lb-label" id="places-lb-label"></div>
+  <div class="viewer-controls">
+    <button class="viewer-btn" id="places-prev">&#8592;</button>
+    <div class="viewer-counter"><span id="places-cur">1</span> / <span id="places-tot">0</span></div>
+    <button class="viewer-btn" id="places-next">&#8594;</button>
+  </div>
+</div>
+
+<!-- CHARACTERS LIGHTBOX -->
+<div class="lb-viewer" id="charLB">
+  <button class="lb-close" data-lb="char">✕</button>
+  <div class="viewer-inner">
+    <div class="viewer-img-col">
+      <img id="char-lb-img" src="" alt="">
+      <div class="lb-label" id="char-lb-label"></div>
+      <div class="viewer-controls">
+        <button class="viewer-btn" id="char-prev">&#8592;</button>
+        <div class="viewer-counter"><span id="char-cur">1</span> / <span id="char-tot">0</span></div>
+        <button class="viewer-btn" id="char-next">&#8594;</button>
+      </div>
     </div>
+    <div class="viewer-bio-col">
+      <div class="bio-wrap" id="bioWrap">
+        <div class="bio-no-info">No bio available</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREENSHOTS LIGHTBOX -->
+<div class="lb-viewer" id="ssLB">
+  <button class="lb-close" data-lb="ss">✕</button>
+  <img class="lb-img" id="ss-lb-img" src="" alt="">
+  <div class="lb-label" id="ss-lb-label"></div>
+  <div class="viewer-controls">
+    <button class="viewer-btn" id="ss-prev">&#8592;</button>
+    <div class="viewer-counter"><span id="ss-cur">1</span> / <span id="ss-tot">0</span></div>
+    <button class="viewer-btn" id="ss-next">&#8594;</button>
   </div>
 </div>
 
@@ -1847,7 +1858,7 @@ const TRAILERS = [
   { vid: 'XJhz0IuSZNo', title: 'Trailer 3', year: 'May 2026' }
 ];
 let tlbIdx = 0;
-let tlbMusicWasPlaying = false; // ← tracks whether music was playing before trailer opened
+let tlbMusicWasPlaying = false;
 
 const tlbEl     = document.getElementById('trailerLB');
 const tlbVideo  = document.getElementById('tlbVideo');
@@ -1867,7 +1878,6 @@ function openTLB(idx) {
   tlbCur.textContent   = idx + 1;
   tlbEl.classList.add('active');
   document.body.style.overflow = 'hidden';
-  // Pause background music while trailer plays
   if (!music.paused) {
     music.pause();
     setPlaying(false);
@@ -1879,7 +1889,6 @@ function closeTLB() {
   tlbEl.classList.remove('active');
   tlbVideo.innerHTML = '';
   document.body.style.overflow = '';
-  // Resume background music if it was playing before the trailer opened
   if (tlbMusicWasPlaying) {
     tlbMusicWasPlaying = false;
     music.play().then(() => setPlaying(true)).catch(() => {});
@@ -1912,7 +1921,6 @@ function initTrailers() {
     });
   });
 }
-
 </script>
 </body>
 </html>
