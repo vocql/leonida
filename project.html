@@ -1178,13 +1178,8 @@ body {
 .news-list {
   list-style: none;
   padding: 6px 0 0;
-  max-height: 400px;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.1) transparent;
+  overflow: hidden;
 }
-.news-list::-webkit-scrollbar { width: 4px; }
-.news-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
 
 .news-row {
   display: flex;
@@ -1744,20 +1739,40 @@ body {
                        shows a "NEW" label next to the title
 ══════════════════════════════════════════════════ */
 const NEWS_ITEMS = [
- 
   {
-    date:  'May 6th',
-    tag:   'Site',
-    title: 'Fullscreen Screenshots Fixed',
-    body:  'There was a bug with the screenshots page the other day that when you clicked on a image you could scroll so its locked now no more scrolling.',
+    date:  'May 6',
+    tag:   'Trailer',
+    title: 'Trailer 3 is out soon??',
+    body:  'There’s a chance we’ll get Trailer 3 on May 12th or the 19th.',
     new:   true
   },
-    {
-    date:  'May',
-    tag:   'Trailer,
-    title: 'Trailer 3 Releasing this Month?',
-    body:  'there is a chance we will get trailer 3 on may 12th or the 19th',
+  {
+    date:  'May 6',
+    tag:   'Screenshots',
+    title: 'Sceenshots Error (Fixed) ',
+    body:  'There was a bug with the screenshots page the other day. When you clicked on an image, you could still scroll the page. Its now fixed scrolling is locked so you cant scroll anymore.',
     new:   true
+  },
+  {
+    date:  'Apr 18',
+    tag:   'Characters',
+    title: 'Character bios expanded',
+    body:  'Full bios for Raul, Dre\'Quan, and Stefanie added.',
+    new:   false
+  },
+  {
+    date:  'Apr 5',
+    tag:   'Site',
+    title: 'Screenshots page launched',
+    body:  'Browse the growing collection of official screenshots.',
+    new:   false
+  },
+  {
+    date:  'Mar 12',
+    tag:   'Release',
+    title: 'Release date confirmed — Nov 19, 2026',
+    body:  'Rockstar officially confirmed the launch date for PS5 and Xbox Series X|S.',
+    new:   false
   }
 ];
 /* ══════════════════════════════════════════════════ */
@@ -1766,7 +1781,7 @@ const NEWS_ITEMS = [
 /* ── Build news rows ────────────────────────────── */
 (function buildNews() {
   const list = document.getElementById('newsList');
-  NEWS_ITEMS.forEach(item => {
+  NEWS_ITEMS.slice(0, 3).forEach(item => {
     const li = document.createElement('li');
     li.className = 'news-row' + (item.new ? ' is-new' : '');
     li.innerHTML = `
