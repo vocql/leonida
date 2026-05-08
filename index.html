@@ -1069,272 +1069,6 @@ body {
 }
 .tlb-counter span { color: var(--cyan); }
 
-/* ══════════════════════════════════════════════════
-   NEWS POPUP  —  transparent / frosted-glass
-   ─────────────────────────────────────────────────
-   To add a news item, push an object into NEWS_ITEMS
-   (see the <script> section below). Fields:
-     date  : string  — displayed on the left  e.g. "May 7"
-     tag   : string  — small label badge       e.g. "Update"
-     title : string  — bold headline
-     body  : string  — (optional) one-line sub-text
-     new   : bool    — shows a "NEW" dot if true
-══════════════════════════════════════════════════ */
-#news-popup {
-  position: fixed;
-  inset: 0;
-  z-index: 8000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  /* translucent dark scrim */
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.45s ease;
-}
-#news-popup.visible {
-  opacity: 1;
-  pointer-events: all;
-}
-
-.news-panel {
-  /* frosted glass card — NO coloured borders, fully neutral */
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(28px) saturate(160%);
-  -webkit-backdrop-filter: blur(28px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 20px;
-  box-shadow:
-    0 32px 80px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14);
-  width: 100%;
-  max-width: 540px;
-  overflow: hidden;
-  transform: translateY(18px) scale(0.97);
-  transition: transform 0.45s cubic-bezier(0.34, 1.4, 0.64, 1), opacity 0.45s ease;
-  opacity: 0;
-}
-#news-popup.visible .news-panel {
-  transform: translateY(0) scale(1);
-  opacity: 1;
-}
-
-/* ── Header bar ─────────────────────────────────── */
-.news-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 22px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-.news-header-left {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.news-eyebrow {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.35);
-}
-.news-title-text {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 22px;
-  font-weight: 900;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.82);
-  line-height: 1;
-}
-.news-close-btn {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.45);
-  font-size: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.18s, color 0.18s, border-color 0.18s, transform 0.18s;
-  flex-shrink: 0;
-}
-.news-close-btn:hover {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.3);
-  color: #fff;
-  transform: scale(1.1) rotate(90deg);
-}
-
-/* ── Row list ────────────────────────────────────── */
-.news-list {
-  list-style: none;
-  padding: 6px 0 0;
-  overflow: hidden;
-}
-
-.news-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 14px 22px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  transition: background 0.15s;
-  opacity: 0;
-  transform: translateY(8px);
-  animation: newsRowIn 0.4s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
-}
-.news-row:last-child { border-bottom: none; }
-.news-row:hover { background: rgba(255, 255, 255, 0.04); }
-
-/* stagger each row */
-.news-row:nth-child(1) { animation-delay: 0.05s; }
-.news-row:nth-child(2) { animation-delay: 0.10s; }
-.news-row:nth-child(3) { animation-delay: 0.15s; }
-.news-row:nth-child(4) { animation-delay: 0.20s; }
-.news-row:nth-child(5) { animation-delay: 0.25s; }
-.news-row:nth-child(6) { animation-delay: 0.30s; }
-.news-row:nth-child(7) { animation-delay: 0.35s; }
-.news-row:nth-child(8) { animation-delay: 0.40s; }
-
-@keyframes newsRowIn {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* date column */
-.news-date {
-  flex-shrink: 0;
-  width: 46px;
-  text-align: right;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.28);
-  padding-top: 2px;
-  line-height: 1.3;
-  word-break: break-word;
-}
-
-/* vertical divider dot */
-.news-dot {
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 4px;
-  gap: 0;
-}
-.news-dot-circle {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.22);
-  border: 1.5px solid rgba(255, 255, 255, 0.35);
-  flex-shrink: 0;
-}
-.news-row.is-new .news-dot-circle {
-  background: rgba(255, 255, 255, 0.85);
-  border-color: #fff;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
-}
-.news-dot-line {
-  width: 1px;
-  flex: 1;
-  min-height: 18px;
-  background: rgba(255, 255, 255, 0.07);
-  margin-top: 4px;
-}
-.news-list .news-row:last-child .news-dot-line { display: none; }
-
-/* text area */
-.news-content { flex: 1; min-width: 0; }
-.news-tag {
-  display: inline-block;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  padding: 2px 7px;
-  margin-bottom: 5px;
-}
-.news-row-title {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 17px;
-  font-weight: 900;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.78);
-  line-height: 1.1;
-  margin-bottom: 3px;
-}
-.news-row-body {
-  font-size: 12px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.35);
-  line-height: 1.5;
-}
-.new-label {
-  display: inline-block;
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.9);
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.25);
-  border-radius: 4px;
-  padding: 1px 6px;
-  margin-left: 7px;
-  vertical-align: middle;
-}
-
-/* ── Footer ─────────────────────────────────────── */
-.news-footer {
-  padding: 14px 22px 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.news-footer-note {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.18);
-}
-.news-dismiss-btn {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 13px;
-  font-weight: 900;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
-  padding: 7px 18px;
-  cursor: pointer;
-  transition: background 0.18s, color 0.18s, border-color 0.18s;
-}
-.news-dismiss-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.3);
-  color: #fff;
-}
-
 /* ── SHARED KEYFRAMES ─────────────────────────────── */
 @keyframes popIn {
   from { opacity: 0; transform: scale(0.9) translateY(10px); }
@@ -1353,7 +1087,6 @@ body {
   .viewer-bio-col{ max-height: none; width: 100%; }
   .map-wrap      { width: 92vw; height: 62vw; border-radius: 12px; }
   .tlb-footer    { flex-direction: column; gap: 14px; align-items: flex-start; }
-  .news-panel    { max-width: 100%; }
 }
 @media (max-width: 500px) {
   .pills { gap: 6px; }
@@ -1368,7 +1101,6 @@ body {
   .loading-corner--tl, .loading-corner--bl { left: 18px; }
   .loading-corner--tr, .loading-corner--br { right: 18px; }
   .loading-corner--bl, .loading-corner--br { bottom: 18px; }
-  .news-date { width: 36px; font-size: 9px; }
 }
 @media (max-width: 600px) {
   .page-main { padding: 80px 20px 60px; }
@@ -1591,6 +1323,7 @@ body {
     </div>
 
     <div class="trailers-grid">
+
       <!-- Trailer 1 -->
       <div class="trailer-card" data-vid="QdBZY2fkU-0" data-title="Trailer 1" data-year="Dec 2023" style="transition-delay:0s">
         <div class="thumb-wrap">
@@ -1623,41 +1356,14 @@ body {
           <span class="card-label-year">2026</span>
         </div>
       </div>
+
     </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════
-     NEWS POPUP  —  appears after loading finishes
-════════════════════════════════════════════════ -->
-<div id="news-popup" role="dialog" aria-modal="true" aria-label="Site News">
-  <div class="news-panel">
-
-    <div class="news-header">
-      <div class="news-header-left">
-        <div class="news-eyebrow">Welcome to Leonida</div>
-        <div class="news-title-text">Latest News</div>
-      </div>
-      <button class="news-close-btn" id="newsCloseBtn" aria-label="Close news">✕</button>
-    </div>
-
-    <!-- ─────────────────────────────────────────────
-         NEWS ROWS — built automatically from NEWS_ITEMS
-         in the <script> below. You don't need to
-         touch this <ul> directly.
-    ───────────────────────────────────────────── -->
-    <ul class="news-list" id="newsList"></ul>
-
-    <div class="news-footer">
-      <span class="news-footer-note">Updated regularly</span>
-      <button class="news-dismiss-btn" id="newsDismissBtn">Got it</button>
-    </div>
-
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════
-     LIGHTBOXES
+     LIGHTBOXES — kept at body level so position:fixed works
+     correctly and is never trapped by a scrolling ancestor.
 ════════════════════════════════════════════════════════════ -->
 
 <!-- PLACES LIGHTBOX -->
@@ -1728,85 +1434,6 @@ body {
 <script>
 'use strict';
 
-/* ══════════════════════════════════════════════════
-   NEWS ITEMS — edit this array to add / remove rows.
-   Fields:
-     date  : short date string shown on the left
-     tag   : small badge label (e.g. "Update", "Event")
-     title : main headline (required)
-     body  : optional sub-text below the headline
-     new   : true  →  highlights the timeline dot and
-                       shows a "NEW" label next to the title
-══════════════════════════════════════════════════ */
-const NEWS_ITEMS = [
-   {
-    date: 'May 7th',
-    tag: 'Trailer',
-    title: 'Trailer 3 out soon??',
-    body: 'There’s a chance we’ll get Trailer 3 on May 12th or 19th.',
-    new: true
-  },
-  {
-    date: 'May 6th',
-    tag: 'Site',
-    title: 'Screenshots Bug (Fixed)',
-    body: 'There was a bug on the screenshots page where you could still scroll after clicking an image. It’s fixed now — scrolling is locked.',
-    new: true
-  },
-  {
-    date: 'May 2nd',
-    tag: 'Map',
-    title: 'Interactive map updated',
-    body: 'Added some new locations to the map.',
-    new: false
-  }
-];
-/* ══════════════════════════════════════════════════ */
-
-
-/* ── Build news rows ────────────────────────────── */
-(function buildNews() {
-  const list = document.getElementById('newsList');
-  NEWS_ITEMS.slice(0, 3).forEach(item => {
-    const li = document.createElement('li');
-    li.className = 'news-row' + (item.new ? ' is-new' : '');
-    li.innerHTML = `
-      <div class="news-date">${item.date || ''}</div>
-      <div class="news-dot">
-        <div class="news-dot-circle"></div>
-        <div class="news-dot-line"></div>
-      </div>
-      <div class="news-content">
-        ${item.tag ? `<div class="news-tag">${item.tag}</div>` : ''}
-        <div class="news-row-title">
-          ${item.title}
-          ${item.new ? '<span class="new-label">NEW</span>' : ''}
-        </div>
-        ${item.body ? `<div class="news-row-body">${item.body}</div>` : ''}
-      </div>
-    `;
-    list.appendChild(li);
-  });
-})();
-
-
-/* ── News popup open / close ────────────────────── */
-const newsPopup = document.getElementById('news-popup');
-
-function openNews() {
-  newsPopup.classList.add('visible');
-}
-function closeNews() {
-  newsPopup.classList.remove('visible');
-}
-
-document.getElementById('newsCloseBtn').addEventListener('click', closeNews);
-document.getElementById('newsDismissBtn').addEventListener('click', closeNews);
-newsPopup.addEventListener('click', e => {
-  if (e.target === newsPopup) closeNews();
-});
-
-
 /* ── LOADING SCREEN ─────────────────────────────── */
 (function() {
   const screen   = document.getElementById('loading-screen');
@@ -1822,25 +1449,18 @@ newsPopup.addEventListener('click', e => {
     statusEl.textContent = messages[msgIdx];
     if (msgIdx === messages.length - 1) clearInterval(msgInterval);
   }, 1300);
-
   setTimeout(() => {
     statusEl.textContent = 'Welcome to Leonida';
     screen.classList.add('fade-out');
-    setTimeout(() => {
-      screen.classList.add('gone');
-      /* ← News popup appears 300 ms after loading screen disappears */
-      setTimeout(openNews, 300);
-    }, 820);
+    setTimeout(() => { screen.classList.add('gone'); }, 820);
   }, 15000);
 })();
-
 
 /* ── RIPPLES ────────────────────────────────────── */
 document.addEventListener('click', e => {
   if (e.target.closest('.lb-viewer.active')) return;
   if (e.target.closest('#trailerLB.active')) return;
   if (e.target.closest('#loading-screen')) return;
-  if (e.target.closest('#news-popup')) return;
   const r = document.createElement('div');
   r.className = 'ripple';
   r.style.left = e.clientX + 'px';
@@ -1850,7 +1470,6 @@ document.addEventListener('click', e => {
   document.body.appendChild(r);
   setTimeout(() => r.remove(), 950);
 });
-
 
 /* ── HAMBURGER ──────────────────────────────────── */
 const hBtn    = document.getElementById('hamburgerBtn');
@@ -1866,7 +1485,6 @@ function toggleMenu(force) {
 }
 hBtn.addEventListener('click', () => toggleMenu());
 backdrop.addEventListener('click', () => toggleMenu(false));
-
 
 /* ── PAGE ROUTING ───────────────────────────────── */
 const pages      = document.querySelectorAll('.page');
@@ -1894,14 +1512,12 @@ navAnchors.forEach(a => {
 });
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
-    if (newsPopup.classList.contains('visible')) { closeNews(); return; }
     if (document.getElementById('trailerLB').classList.contains('active')) { closeTLB(); return; }
     const openLB = document.querySelector('.lb-viewer.active');
     if (openLB) { openLB.classList.remove('active'); return; }
     if (overlay.classList.contains('open')) { toggleMenu(false); return; }
   }
 });
-
 
 /* ── COUNTDOWN ──────────────────────────────────── */
 const prev = { d:'', h:'', m:'', s:'' };
@@ -1927,7 +1543,6 @@ function tick() {
   if (s !== prev.s) { document.getElementById('n-s').textContent = s; bounce('s'); prev.s = s; }
 }
 tick(); setInterval(tick, 1000);
-
 
 /* ── MUSIC PLAYER ───────────────────────────────── */
 const music     = document.getElementById('bgMusic');
@@ -1962,12 +1577,10 @@ music.play().then(() => setPlaying(true)).catch(() => {
   document.addEventListener('touchstart', unlock, { once: true });
 });
 
-
 /* ── MAP INIT ───────────────────────────────────── */
 function initMap() {
   document.getElementById('mapIframe').src = 'https://map.stateofleonida.net/';
 }
-
 
 /* ── GITHUB IMAGE LOADER HELPER ─────────────────── */
 async function loadGithubImages(opts) {
@@ -2016,7 +1629,6 @@ async function loadGithubImages(opts) {
   return images;
 }
 
-
 /* ── LIGHTBOX HELPER ────────────────────────────── */
 function makeLightbox(lbEl, imgEl, labelEl, curEl, totEl, prevBtn, nextBtn, getImgs) {
   let idx = 0;
@@ -2046,7 +1658,6 @@ function makeLightbox(lbEl, imgEl, labelEl, curEl, totEl, prevBtn, nextBtn, getI
   return { open, close, step };
 }
 
-
 /* ── PLACES INIT ────────────────────────────────── */
 function initPlaces() {
   const gallery = document.getElementById('places-gallery');
@@ -2075,7 +1686,6 @@ function initPlaces() {
     if (img) lb.open(parseInt(img.dataset.idx, 10));
   });
 }
-
 
 /* ── CHARACTERS DATA ────────────────────────────── */
 const CHARACTER_BIOS = {
@@ -2117,7 +1727,6 @@ function renderBio(filename, label) {
     <div class="bio-text">${data.bio.map(p => `<p>${p}</p>`).join('')}</div>
   `;
 }
-
 
 /* ── CHARACTERS INIT ────────────────────────────── */
 function initCharacters() {
@@ -2177,7 +1786,6 @@ function initCharacters() {
     if (img) open(parseInt(img.dataset.idx, 10));
   });
 }
-
 
 /* ── SCREENSHOTS INIT ───────────────────────────── */
 function initScreenshots() {
@@ -2242,7 +1850,6 @@ function initScreenshots() {
     if (img) lb.open(parseInt(img.dataset.idx, 10));
   });
 }
-
 
 /* ── TRAILERS INIT ──────────────────────────────── */
 const TRAILERS = [
