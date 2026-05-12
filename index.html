@@ -33,229 +33,6 @@ body {
   background-repeat: no-repeat;
 }
 
-/* ══════════════════════════════════════════════════
-   LOADING SCREEN
-══════════════════════════════════════════════════ */
-#loading-screen {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: #04001a;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-  pointer-events: all;
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-#loading-screen.fade-out {
-  opacity: 0;
-  transform: scale(1.04);
-  pointer-events: none;
-}
-#loading-screen.gone {
-  display: none;
-}
-
-#loading-screen::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(ellipse 80% 60% at 15% 20%, rgba(0,255,255,0.07) 0%, transparent 60%),
-    radial-gradient(ellipse 70% 55% at 85% 80%, rgba(255,0,200,0.09) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(119,0,255,0.05) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-#loading-screen::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(0,255,255,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,255,255,0.04) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: radial-gradient(ellipse 75% 65% at center, black 10%, transparent 75%);
-  pointer-events: none;
-}
-
-.loading-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 36px;
-  position: relative;
-  z-index: 2;
-}
-
-.loading-scanline {
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0,0,0,0.08) 2px,
-    rgba(0,0,0,0.08) 4px
-  );
-  pointer-events: none;
-  z-index: 1;
-  animation: scanMove 8s linear infinite;
-}
-@keyframes scanMove {
-  0%   { background-position: 0 0; }
-  100% { background-position: 0 100px; }
-}
-
-.loading-corner {
-  position: absolute;
-  width: 60px; height: 60px;
-  pointer-events: none;
-}
-.loading-corner--tl { top: 32px; left: 32px; border-top: 1.5px solid rgba(0,255,255,0.3); border-left: 1.5px solid rgba(0,255,255,0.3); }
-.loading-corner--tr { top: 32px; right: 32px; border-top: 1.5px solid rgba(0,255,255,0.3); border-right: 1.5px solid rgba(0,255,255,0.3); }
-.loading-corner--bl { bottom: 32px; left: 32px; border-bottom: 1.5px solid rgba(255,0,200,0.3); border-left: 1.5px solid rgba(255,0,200,0.3); }
-.loading-corner--br { bottom: 32px; right: 32px; border-bottom: 1.5px solid rgba(255,0,200,0.3); border-right: 1.5px solid rgba(255,0,200,0.3); }
-
-.loading-eyebrow {
-  font-size: 26px;
-  font-weight: 600;
-  letter-spacing: 0.45em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.55);
-  text-shadow: 0 1px 8px rgba(0,0,0,0.6);
-  animation: loadFadeUp 0.8s ease 0.1s both;
-}
-
-.loading-title {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: clamp(72px, 14vw, 148px);
-  font-weight: 900;
-  text-transform: uppercase;
-  line-height: 0.88;
-  background: linear-gradient(90deg, #00ffff, #bf00ff, #ff00c8, #00e5ff, #00ffff);
-  background-size: 300% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: textShimmer 8s linear infinite, loadFadeUp 0.9s cubic-bezier(0.34,1.4,0.64,1) 0.2s both;
-  filter: drop-shadow(0 2px 16px rgba(0,0,0,0.9)) drop-shadow(0 0 60px rgba(0,255,255,0.4));
-}
-
-@keyframes loadFadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.loading-progress-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  width: 280px;
-  animation: loadFadeUp 0.8s ease 0.5s both;
-}
-
-.loading-bar-track {
-  width: 100%;
-  height: 2px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 999px;
-  overflow: hidden;
-  position: relative;
-}
-
-.loading-bar-fill {
-  height: 100%;
-  width: 0%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--cyan), var(--purple), var(--pink));
-  box-shadow: 0 0 12px rgba(0,255,255,0.6);
-  transition: width 0.1s ease;
-  animation: loadBarAnim 14s cubic-bezier(0.4, 0, 0.2, 1) 0.6s forwards;
-}
-
-@keyframes loadBarAnim {
-  0%   { width: 0%; }
-  30%  { width: 45%; }
-  60%  { width: 72%; }
-  85%  { width: 91%; }
-  100% { width: 100%; }
-}
-
-.loading-bar-fill::after {
-  content: '';
-  position: absolute;
-  top: 0; left: -100%; width: 60%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-  animation: barShimmer 3.5s ease 0.8s infinite;
-}
-@keyframes barShimmer {
-  0%   { left: -60%; }
-  100% { left: 120%; }
-}
-
-.loading-status-text {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.6);
-  font-family: monospace;
-  min-height: 16px;
-}
-
-.loading-dots {
-  display: flex;
-  gap: 7px;
-  animation: loadFadeUp 0.8s ease 0.7s both;
-}
-.loading-dot {
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  background: rgba(0,255,255,0.25);
-  animation: dotPulseLoad 1.4s ease-in-out infinite;
-}
-.loading-dot:nth-child(1) { animation-delay: 0s; }
-.loading-dot:nth-child(2) { animation-delay: 0.18s; background: rgba(119,0,255,0.35); }
-.loading-dot:nth-child(3) { animation-delay: 0.36s; background: rgba(255,0,200,0.25); }
-@keyframes dotPulseLoad {
-  0%,100% { opacity: 0.25; transform: scale(0.8); }
-  50%     { opacity: 1; transform: scale(1.4); box-shadow: 0 0 8px currentColor; }
-}
-
-.loading-date {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.4em;
-  text-transform: uppercase;
-  color: rgba(255,0,200,0.45);
-  text-shadow: 0 0 14px rgba(255,0,200,0.3);
-  animation: loadFadeUp 0.8s ease 0.8s both;
-}
-
-.loading-divider {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  width: 320px;
-  animation: loadFadeUp 0.8s ease 0.3s both;
-}
-.loading-divider-line {
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
-}
-.loading-divider-diamond {
-  width: 5px; height: 5px;
-  background: rgba(0,255,255,0.3);
-  transform: rotate(45deg);
-  flex-shrink: 0;
-}
-
 /* ── SHARED BG LAYERS ─────────────────────────────── */
 .bg-darken {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
@@ -409,18 +186,6 @@ body {
   animation: dotPulse 2s ease-in-out infinite;
 }
 @keyframes dotPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(0.55)} }
-
-/* ── RIPPLE ───────────────────────────────────────── */
-.ripple {
-  position: fixed; border-radius: 50%; pointer-events: none; z-index: 4;
-  border: 1.5px solid rgba(0,255,255,0.4);
-  transform: translate(-50%,-50%) scale(0);
-  animation: rippleOut 0.9s cubic-bezier(0.2,0.8,0.4,1) forwards;
-}
-@keyframes rippleOut {
-  0%  { transform: translate(-50%,-50%) scale(0); opacity: 0.7; }
-  100%{ transform: translate(-50%,-50%) scale(3.5); opacity: 0; }
-}
 
 /* ── SHARED TEXT SHIMMER ──────────────────────────── */
 @keyframes textShimmer { 0%{background-position:0%} 100%{background-position:300%} }
@@ -735,45 +500,258 @@ body {
   border-color: rgba(255,255,255,0.6); color: #ffffff;
   box-shadow: 0 0 14px rgba(255,255,255,0.15);
 }
-.music-wrap {
-  position: absolute; bottom: 22px; left: 22px;
-  width: 200px; height: 100px;
+/* ── RADIO PLAYER ─────────────────────────────────── */
+.radio-toggle-btn {
+  position: fixed; bottom: 22px; left: 22px; z-index: 200;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(4,0,26,0.7);
+  border: 1.5px solid rgba(0,255,255,0.3);
+  box-shadow: 0 0 20px rgba(0,255,255,0.15), inset 0 1px 0 rgba(255,255,255,0.08);
+  backdrop-filter: blur(16px);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1);
+  animation: fadeSlideInLeft 0.8s cubic-bezier(0.34,1.4,0.64,1) both;
 }
-.music-player {
-  position: absolute; bottom: 0; left: 0;
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 16px 10px 12px; border-radius: 40px;
-  background: rgba(4,0,26,0.75);
+@keyframes fadeSlideInLeft {
+  from { opacity: 0; transform: translateX(-20px) scale(0.8); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+.radio-toggle-btn:hover {
+  border-color: var(--cyan);
+  box-shadow: 0 0 32px rgba(0,255,255,0.3), inset 0 1px 0 rgba(255,255,255,0.12);
+  transform: scale(1.1);
+}
+.radio-toggle-btn.active {
+  border-color: var(--pink);
+  box-shadow: 0 0 28px rgba(255,0,200,0.35);
+  background: rgba(255,0,200,0.08);
+}
+.radio-toggle-btn svg { width: 22px; height: 22px; fill: var(--cyan); transition: fill 0.3s; }
+.radio-toggle-btn.active svg { fill: var(--pink); }
+
+/* pulse ring when playing */
+.radio-toggle-btn.playing::before {
+  content: '';
+  position: absolute; inset: -6px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,0,200,0.35);
+  animation: radioRing 2s ease-out infinite;
+}
+@keyframes radioRing {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* panel */
+.radio-panel {
+  position: fixed; bottom: 84px; left: 22px; z-index: 199;
+  width: 320px;
+  background: rgba(4,0,26,0.55);
   border: 1px solid rgba(0,255,255,0.18);
-  box-shadow: 0 0 24px rgba(0,255,255,0.08), 0 8px 32px rgba(0,0,0,0.5);
-  backdrop-filter: blur(20px);
-  white-space: nowrap; opacity: 0;
-  transform: translateY(10px) scale(0.9); pointer-events: none;
-  transition: opacity 0.4s cubic-bezier(0.34,1.4,0.64,1), transform 0.4s cubic-bezier(0.34,1.4,0.64,1), border-color 0.3s, box-shadow 0.3s;
+  border-radius: 18px;
+  box-shadow: 0 0 40px rgba(0,255,255,0.07), 0 0 80px rgba(255,0,200,0.05), 0 16px 60px rgba(0,0,0,0.7);
+  backdrop-filter: blur(28px);
+  overflow: hidden;
   transform-origin: bottom left;
+  transform: scale(0.88) translateY(12px);
+  opacity: 0; pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.34,1.4,0.64,1), opacity 0.3s ease;
 }
-.music-wrap:hover .music-player { opacity: 1; transform: translateY(0) scale(1); pointer-events: all; }
-.music-player.playing { border-color: rgba(255,0,200,0.3); box-shadow: 0 0 28px rgba(255,0,200,0.12), 0 8px 32px rgba(0,0,0,0.5); }
-.music-play-btn {
-  width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
-  background: rgba(0,255,255,0.08); border: 1px solid rgba(0,255,255,0.3);
-  cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+.radio-panel.open {
+  transform: scale(1) translateY(0);
+  opacity: 1; pointer-events: all;
 }
-.music-play-btn:hover { background: rgba(0,255,255,0.16); box-shadow: 0 0 14px rgba(0,255,255,0.2); transform: scale(1.08); }
-.music-player.playing .music-play-btn { background: rgba(255,0,200,0.1); border-color: rgba(255,0,200,0.35); }
-.music-play-btn svg { width: 14px; height: 14px; fill: var(--cyan); }
-.music-player.playing .music-play-btn svg { fill: var(--pink); }
-.music-info { display: flex; flex-direction: column; gap: 2px; }
-.music-title { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.55); white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
-.music-bars { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
-.music-bars span { width: 3px; border-radius: 2px; background: var(--cyan); opacity: 0.5; transform-origin: bottom; }
-.music-player.playing .music-bars span { opacity: 1; animation: barDance var(--spd) ease-in-out infinite alternate; background: var(--pink); }
-.music-bars span:nth-child(1){ height: 5px;  --spd: 0.55s; }
-.music-bars span:nth-child(2){ height: 10px; --spd: 0.40s; }
-.music-bars span:nth-child(3){ height: 7px;  --spd: 0.65s; }
-.music-bars span:nth-child(4){ height: 12px; --spd: 0.45s; }
-.music-bars span:nth-child(5){ height: 6px;  --spd: 0.58s; }
-@keyframes barDance { from{transform:scaleY(0.25)} to{transform:scaleY(1)} }
+
+/* scanline overlay */
+.radio-panel::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 3px, rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px
+  );
+}
+
+.radio-header {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.radio-station-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; font-weight: 900; letter-spacing: 0.3em;
+  text-transform: uppercase; color: rgba(0,255,255,0.7);
+  text-shadow: 0 0 12px rgba(0,255,255,0.4);
+}
+.radio-freq {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.15em;
+  color: rgba(255,0,200,0.5);
+}
+
+/* now playing */
+.radio-now {
+  position: relative; z-index: 1;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.radio-now-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.4em;
+  text-transform: uppercase; color: rgba(255,255,255,0.2); margin-bottom: 4px;
+}
+.radio-now-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22px; font-weight: 900; line-height: 1;
+  letter-spacing: 0.03em; text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.radio-now-title.marquee-active {
+  animation: radioMarquee 10s linear infinite;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+@keyframes radioMarquee {
+  0%   { transform: translateX(0); }
+  30%  { transform: translateX(0); }
+  80%  { transform: translateX(-60%); }
+  100% { transform: translateX(0); }
+}
+
+/* waveform bars */
+.radio-wave {
+  display: flex; align-items: flex-end; gap: 3px; height: 22px; margin-top: 8px;
+}
+.radio-wave span {
+  flex: 1; border-radius: 2px;
+  background: linear-gradient(180deg, var(--pink), var(--purple));
+  opacity: 0.3; transform-origin: bottom;
+  transition: opacity 0.3s;
+}
+.radio-wave.playing span {
+  opacity: 1;
+  animation: wvDance var(--ws) ease-in-out infinite alternate;
+}
+.radio-wave span:nth-child(1)  { height: 6px;  --ws: 0.52s; }
+.radio-wave span:nth-child(2)  { height: 14px; --ws: 0.38s; }
+.radio-wave span:nth-child(3)  { height: 9px;  --ws: 0.61s; }
+.radio-wave span:nth-child(4)  { height: 18px; --ws: 0.44s; }
+.radio-wave span:nth-child(5)  { height: 11px; --ws: 0.57s; }
+.radio-wave span:nth-child(6)  { height: 20px; --ws: 0.35s; }
+.radio-wave span:nth-child(7)  { height: 8px;  --ws: 0.66s; }
+.radio-wave span:nth-child(8)  { height: 15px; --ws: 0.41s; }
+.radio-wave span:nth-child(9)  { height: 12px; --ws: 0.53s; }
+.radio-wave span:nth-child(10) { height: 17px; --ws: 0.48s; }
+.radio-wave span:nth-child(11) { height: 7px;  --ws: 0.62s; }
+.radio-wave span:nth-child(12) { height: 13px; --ws: 0.37s; }
+@keyframes wvDance { from{transform:scaleY(0.2)} to{transform:scaleY(1)} }
+
+/* controls */
+.radio-controls {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.radio-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.45);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s cubic-bezier(0.34,1.4,0.64,1);
+}
+.radio-btn:hover {
+  background: rgba(0,255,255,0.08);
+  border-color: rgba(0,255,255,0.35);
+  color: var(--cyan); transform: scale(1.12);
+  box-shadow: 0 0 14px rgba(0,255,255,0.2);
+}
+.radio-btn svg { width: 14px; height: 14px; fill: currentColor; }
+.radio-btn-play {
+  width: 46px; height: 46px;
+  background: rgba(0,255,255,0.07);
+  border-color: rgba(0,255,255,0.3);
+  color: var(--cyan);
+}
+.radio-btn-play:hover {
+  background: rgba(0,255,255,0.15);
+  box-shadow: 0 0 22px rgba(0,255,255,0.3);
+}
+.radio-btn-play svg { width: 18px; height: 18px; }
+.radio-btn-play.playing {
+  background: rgba(255,0,200,0.08);
+  border-color: rgba(255,0,200,0.35);
+  color: var(--pink);
+  box-shadow: 0 0 18px rgba(255,0,200,0.2);
+}
+
+/* volume */
+.radio-vol-wrap {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 16px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.radio-vol-icon { color: rgba(255,255,255,0.25); flex-shrink: 0; }
+.radio-vol-icon svg { width: 13px; height: 13px; fill: currentColor; display: block; }
+.radio-vol-slider {
+  flex: 1; -webkit-appearance: none; appearance: none;
+  height: 3px; border-radius: 999px;
+  background: rgba(255,255,255,0.1); outline: none; cursor: pointer;
+}
+.radio-vol-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%;
+  background: var(--cyan); box-shadow: 0 0 8px rgba(0,255,255,0.5);
+  cursor: pointer; transition: transform 0.15s;
+}
+.radio-vol-slider::-webkit-slider-thumb:hover { transform: scale(1.3); }
+.radio-vol-val {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; font-weight: 900; letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.2); min-width: 28px; text-align: right;
+}
+
+/* tracklist */
+.radio-tracklist {
+  position: relative; z-index: 1;
+  max-height: 200px; overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,255,255,0.15) transparent;
+}
+.radio-tracklist::-webkit-scrollbar { width: 3px; }
+.radio-tracklist::-webkit-scrollbar-track { background: transparent; }
+.radio-tracklist::-webkit-scrollbar-thumb { background: rgba(0,255,255,0.15); border-radius: 4px; }
+
+.radio-track {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 16px; cursor: pointer;
+  transition: background 0.15s;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.radio-track:hover { background: rgba(0,255,255,0.05); }
+.radio-track.active { background: rgba(255,0,200,0.06); }
+.radio-track-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px; font-weight: 900; letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.15); min-width: 22px;
+}
+.radio-track.active .radio-track-num { color: var(--pink); }
+.radio-track-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px; font-weight: 700; letter-spacing: 0.04em;
+  text-transform: uppercase; color: rgba(255,255,255,0.45); flex: 1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.radio-track.active .radio-track-name { color: rgba(255,255,255,0.85); }
+.radio-track-playing-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--pink); box-shadow: 0 0 6px var(--pink);
+  flex-shrink: 0; opacity: 0;
+  animation: dotPulse 1.4s ease-in-out infinite;
+}
+.radio-track.active .radio-track-playing-dot { opacity: 1; }
 
 /* ── MAP PAGE ─────────────────────────────────────── */
 #page-map.active {
@@ -1096,11 +1074,6 @@ body {
   .nav-panel { padding: 70px 28px; }
   .music-wrap { width: 160px; }
   .music-title { max-width: 100px; }
-  .loading-corner { width: 40px; height: 40px; }
-  .loading-corner--tl, .loading-corner--tr { top: 18px; }
-  .loading-corner--tl, .loading-corner--bl { left: 18px; }
-  .loading-corner--tr, .loading-corner--br { right: 18px; }
-  .loading-corner--bl, .loading-corner--br { bottom: 18px; }
 }
 @media (max-width: 600px) {
   .page-main { padding: 80px 20px 60px; }
@@ -1108,36 +1081,6 @@ body {
 </style>
 </head>
 <body>
-
-<!-- LOADING SCREEN -->
-<div id="loading-screen">
-  <div class="loading-scanline"></div>
-  <div class="loading-corner loading-corner--tl"></div>
-  <div class="loading-corner loading-corner--tr"></div>
-  <div class="loading-corner loading-corner--bl"></div>
-  <div class="loading-corner loading-corner--br"></div>
-  <div class="loading-content">
-    <div class="loading-eyebrow">Welcome to</div>
-    <div class="loading-title">Leonida</div>
-    <div class="loading-divider">
-      <div class="loading-divider-line"></div>
-      <div class="loading-divider-diamond"></div>
-      <div class="loading-divider-line"></div>
-    </div>
-    <div class="loading-progress-wrap">
-      <div class="loading-bar-track">
-        <div class="loading-bar-fill" id="loadingBar"></div>
-      </div>
-      <div class="loading-status-text" id="loadingStatusText">Initializing…</div>
-    </div>
-    <div class="loading-dots">
-      <div class="loading-dot"></div>
-      <div class="loading-dot"></div>
-      <div class="loading-dot"></div>
-    </div>
-    <div class="loading-date">November 19, 2026</div>
-  </div>
-</div>
 
 <!-- BG LAYERS -->
 <div class="bg-darken"></div>
@@ -1214,20 +1157,6 @@ body {
   <div class="platforms">
     <div class="platform-badge">PS5</div>
     <div class="platform-badge">Xbox Series X|S</div>
-  </div>
-  <div class="music-wrap">
-    <div class="music-player" id="musicPlayer">
-      <button class="music-play-btn" id="musicBtn" aria-label="Play/Pause">
-        <svg id="iconPlay"  viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-        <svg id="iconPause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-      </button>
-      <div class="music-info">
-        <div class="music-title" id="musicTitle">Music</div>
-        <div class="music-bars">
-          <span></span><span></span><span></span><span></span><span></span>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -1361,9 +1290,54 @@ body {
   </div>
 </div>
 
+<!-- RADIO TOGGLE BUTTON -->
+<button class="radio-toggle-btn" id="radioToggleBtn" aria-label="Toggle radio">
+  <svg viewBox="0 0 24 24"><path d="M20 6H4l-2-4h20l-2 4zm1 1H3a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1zM8 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-2a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm9-3h-4v-1h4v1zm0 2h-4v-1h4v1zm0 2h-4v-1h4v1z"/></svg>
+</button>
+
+<!-- RADIO PANEL -->
+<div class="radio-panel" id="radioPanel">
+  <div class="radio-header">
+    <div class="radio-station-name">Leonida FM</div>
+    <div class="radio-freq">102.3 MHz</div>
+  </div>
+  <div class="radio-now">
+    <div class="radio-now-label">Now Playing</div>
+    <div class="radio-now-title" id="radioNowTitle">Select a track</div>
+    <div class="radio-wave" id="radioWave">
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span>
+    </div>
+  </div>
+  <div class="radio-controls">
+    <button class="radio-btn" id="radioPrevBtn" title="Previous">
+      <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+    </button>
+    <button class="radio-btn radio-btn-play" id="radioPlayBtn" title="Play / Pause">
+      <svg id="radioIconPlay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      <svg id="radioIconPause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+    </button>
+    <button class="radio-btn" id="radioNextBtn" title="Next">
+      <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zm2.5-6 5.5-4v8l-5.5-4zM16 6h2v12h-2z"/></svg>
+    </button>
+    <button class="radio-btn" id="radioShuffleBtn" title="Shuffle" style="margin-left:4px">
+      <svg viewBox="0 0 24 24"><path d="M10.59 9.17 5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+    </button>
+  </div>
+  <div class="radio-vol-wrap">
+    <div class="radio-vol-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></div>
+    <input class="radio-vol-slider" id="radioVolSlider" type="range" min="0" max="100" value="50">
+    <div class="radio-vol-val" id="radioVolVal">50</div>
+  </div>
+  <div class="radio-tracklist" id="radioTracklist"></div>
+</div>
+
+<!-- AUDIO ELEMENT -->
+<audio id="radioAudio" preload="none"></audio>
+
 <!-- ═══════════════════════════════════════════════════════════
-     LIGHTBOXES — kept at body level so position:fixed works
-     correctly and is never trapped by a scrolling ancestor.
+     LIGHTBOXES
 ════════════════════════════════════════════════════════════ -->
 
 <!-- PLACES LIGHTBOX -->
@@ -1433,43 +1407,6 @@ body {
 
 <script>
 'use strict';
-
-/* ── LOADING SCREEN ─────────────────────────────── */
-(function() {
-  const screen   = document.getElementById('loading-screen');
-  const statusEl = document.getElementById('loadingStatusText');
-  const messages = [
-    'Connecting…','Loading assets…','Syncing locations…','Init map systems…',
-    'Loading profiles…','Fetching archive…','Calibrating grid…','Scanning feeds…',
-    'Decrypting files…','Almost there…','Welcome to Leonida'
-  ];
-  let msgIdx = 0;
-  const msgInterval = setInterval(() => {
-    msgIdx = Math.min(msgIdx + 1, messages.length - 1);
-    statusEl.textContent = messages[msgIdx];
-    if (msgIdx === messages.length - 1) clearInterval(msgInterval);
-  }, 1300);
-  setTimeout(() => {
-    statusEl.textContent = 'Welcome to Leonida';
-    screen.classList.add('fade-out');
-    setTimeout(() => { screen.classList.add('gone'); }, 820);
-  }, 15000);
-})();
-
-/* ── RIPPLES ────────────────────────────────────── */
-document.addEventListener('click', e => {
-  if (e.target.closest('.lb-viewer.active')) return;
-  if (e.target.closest('#trailerLB.active')) return;
-  if (e.target.closest('#loading-screen')) return;
-  const r = document.createElement('div');
-  r.className = 'ripple';
-  r.style.left = e.clientX + 'px';
-  r.style.top  = e.clientY + 'px';
-  r.style.width = r.style.height = '70px';
-  r.style.borderColor = Math.random() > .5 ? 'rgba(255,0,200,0.5)' : 'rgba(0,255,255,0.5)';
-  document.body.appendChild(r);
-  setTimeout(() => r.remove(), 950);
-});
 
 /* ── HAMBURGER ──────────────────────────────────── */
 const hBtn    = document.getElementById('hamburgerBtn');
@@ -1544,38 +1481,144 @@ function tick() {
 }
 tick(); setInterval(tick, 1000);
 
-/* ── MUSIC PLAYER ───────────────────────────────── */
-const music     = document.getElementById('bgMusic');
-const musicBtn  = document.getElementById('musicBtn');
-const player    = document.getElementById('musicPlayer');
-const iconPlay  = document.getElementById('iconPlay');
-const iconPause = document.getElementById('iconPause');
-const titleEl   = document.getElementById('musicTitle');
-music.volume = 0.12;
-const src      = music.querySelector('source')?.src || '';
-const fileName = src.split('/').pop().replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ') || 'Music';
-titleEl.textContent = fileName;
-function setPlaying(state) {
-  player.classList.toggle('playing', state);
-  iconPlay.style.display  = state ? 'none' : '';
-  iconPause.style.display = state ? '' : 'none';
+/* ── RADIO PLAYER ───────────────────────────────── */
+const songs = [
+  {n:"Hot Together",s:"leonida/music/together.mp3"},{n:"Love Is A Long Road",s:"leonida/music/long.mp3"},
+  {n:"Night",s:"leonida/music/night.mp3"},{n:"Ocean Breeze",s:"leonida/music/ocean.mp3"},
+  {n:"Self Control",s:"leonida/music/self.mp3"},{n:"Atomic",s:"leonida/music/tomic.mp3"},
+  {n:"Sun Glasses At Night",s:"leonida/music/sun.mp3"},{n:"All Night Long",s:"leonida/music/all.mp3"},
+  {n:"Shame",s:"leonida/music/shame.mp3"},{n:"Vice City",s:"leonida/music/vice.mp3"},
+  {n:"I Walk This Earth All By Myself",s:"leonida/music/earth.mp3"},{n:"Owner Of A Lonely Heart",s:"leonida/music/heart.mp3"},
+  {n:"Tempted",s:"leonida/music/tempt.mp3"},{n:"Poison Arrow",s:"leonida/music/arrow.mp3"},
+  {n:"Is It A Crime",s:"leonida/music/crime.mp3"},{n:"Here We Are",s:"leonida/music/are.mp3"},
+  {n:"Through The Fire",s:"leonida/music/fire.mp3"},{n:"Heart Of Mine",s:"leonida/music/mine.mp3"},
+  {n:"Fly Away",s:"leonida/music/fly.mp3"},{n:"Ain't Nobody",s:"leonida/music/nobody.mp3"},
+  {n:"Thinking Of You",s:"leonida/music/you.mp3"},{n:"Sweet Love",s:"leonida/music/love.mp3"},
+  {n:"I Still Remember You",s:"leonida/music/remember.mp3"},{n:"Gamble With My Love",s:"leonida/music/gamble.mp3"},
+  {n:"Sukiyaki",s:"leonida/music/suki.mp3"}
+];
+
+const radioAudio      = document.getElementById('radioAudio');
+const radioPanel      = document.getElementById('radioPanel');
+const radioToggleBtn  = document.getElementById('radioToggleBtn');
+const radioPlayBtn    = document.getElementById('radioPlayBtn');
+const radioIconPlay   = document.getElementById('radioIconPlay');
+const radioIconPause  = document.getElementById('radioIconPause');
+const radioPrevBtn    = document.getElementById('radioPrevBtn');
+const radioNextBtn    = document.getElementById('radioNextBtn');
+const radioShuffleBtn = document.getElementById('radioShuffleBtn');
+const radioNowTitle   = document.getElementById('radioNowTitle');
+const radioWave       = document.getElementById('radioWave');
+const radioTracklist  = document.getElementById('radioTracklist');
+const radioVolSlider  = document.getElementById('radioVolSlider');
+const radioVolVal     = document.getElementById('radioVolVal');
+
+let radioIdx     = 0;
+let radioPlaying = false;
+let radioShuffle = false;
+let radioOrder   = songs.map((_, i) => i);
+
+radioAudio.volume = 0.5;
+
+// build tracklist
+songs.forEach((song, i) => {
+  const row = document.createElement('div');
+  row.className = 'radio-track';
+  row.dataset.idx = i;
+  row.innerHTML = `
+    <span class="radio-track-num">${String(i+1).padStart(2,'0')}</span>
+    <span class="radio-track-name">${song.n}</span>
+    <span class="radio-track-playing-dot"></span>
+  `;
+  row.addEventListener('click', () => radioPlayIdx(i));
+  radioTracklist.appendChild(row);
+});
+
+function radioSetPlaying(state) {
+  radioPlaying = state;
+  radioPlayBtn.classList.toggle('playing', state);
+  radioIconPlay.style.display  = state ? 'none' : '';
+  radioIconPause.style.display = state ? '' : 'none';
+  radioWave.classList.toggle('playing', state);
+  radioToggleBtn.classList.toggle('playing', state);
 }
-musicBtn.addEventListener('click', () => {
-  if (music.paused) { music.play().then(() => setPlaying(true)).catch(() => {}); }
-  else              { music.pause(); setPlaying(false); }
+
+function radioUpdateTrack() {
+  const song = songs[radioIdx];
+  radioNowTitle.textContent = song.n;
+  // marquee if long
+  radioNowTitle.classList.remove('marquee-active');
+  void radioNowTitle.offsetWidth;
+  if (song.n.length > 18) radioNowTitle.classList.add('marquee-active');
+  // highlight active row
+  document.querySelectorAll('.radio-track').forEach(r => {
+    r.classList.toggle('active', parseInt(r.dataset.idx) === radioIdx);
+  });
+  // scroll active into view
+  const active = radioTracklist.querySelector('.radio-track.active');
+  if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+
+function radioPlayIdx(idx) {
+  radioIdx = idx;
+  const song = songs[radioIdx];
+  radioAudio.src = song.s;
+  radioAudio.load();
+  radioAudio.play().then(() => radioSetPlaying(true)).catch(() => radioSetPlaying(false));
+  radioUpdateTrack();
+}
+
+function radioNext() {
+  if (radioShuffle) {
+    const remaining = radioOrder.filter(i => i !== radioIdx);
+    radioIdx = remaining[Math.floor(Math.random() * remaining.length)] ?? 0;
+  } else {
+    radioIdx = (radioIdx + 1) % songs.length;
+  }
+  radioPlayIdx(radioIdx);
+}
+
+function radioPrev() {
+  if (radioAudio.currentTime > 3) { radioAudio.currentTime = 0; return; }
+  radioIdx = (radioIdx - 1 + songs.length) % songs.length;
+  radioPlayIdx(radioIdx);
+}
+
+// toggle panel
+radioToggleBtn.addEventListener('click', () => {
+  radioPanel.classList.toggle('open');
+  radioToggleBtn.classList.toggle('active', radioPanel.classList.contains('open'));
 });
-music.addEventListener('ended', () => setPlaying(false));
-music.play().then(() => setPlaying(true)).catch(() => {
-  const unlock = () => {
-    music.play().then(() => setPlaying(true)).catch(() => {});
-    document.removeEventListener('click',      unlock);
-    document.removeEventListener('keydown',    unlock);
-    document.removeEventListener('touchstart', unlock);
-  };
-  document.addEventListener('click',      unlock, { once: true });
-  document.addEventListener('keydown',    unlock, { once: true });
-  document.addEventListener('touchstart', unlock, { once: true });
+
+// play/pause
+radioPlayBtn.addEventListener('click', () => {
+  if (radioAudio.src && !radioAudio.src.endsWith(window.location.href)) {
+    if (radioPlaying) { radioAudio.pause(); radioSetPlaying(false); }
+    else { radioAudio.play().then(() => radioSetPlaying(true)).catch(() => {}); }
+  } else {
+    radioPlayIdx(0);
+  }
 });
+
+radioPrevBtn.addEventListener('click', radioPrev);
+radioNextBtn.addEventListener('click', radioNext);
+radioAudio.addEventListener('ended', radioNext);
+
+radioShuffleBtn.addEventListener('click', () => {
+  radioShuffle = !radioShuffle;
+  radioShuffleBtn.style.color = radioShuffle ? 'var(--cyan)' : '';
+  radioShuffleBtn.style.borderColor = radioShuffle ? 'rgba(0,255,255,0.35)' : '';
+  radioShuffleBtn.style.boxShadow = radioShuffle ? '0 0 12px rgba(0,255,255,0.2)' : '';
+});
+
+radioVolSlider.addEventListener('input', () => {
+  const v = parseInt(radioVolSlider.value);
+  radioAudio.volume = v / 100;
+  radioVolVal.textContent = v;
+});
+
+// start with first track ready
+radioUpdateTrack();
 
 /* ── MAP INIT ───────────────────────────────────── */
 function initMap() {
