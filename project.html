@@ -77,85 +77,6 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── WANTED HUD ───────────────────────────────────── */
-.wanted-hud {
-  position: fixed;
-  top: 18px;
-  left: 18px;
-  z-index: 500;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  background: rgba(0, 0, 0, 0.78);
-  border: 1.5px solid rgba(255, 255, 255, 0.13);
-  border-radius: 9px;
-  padding: 7px 13px 7px 11px;
-  backdrop-filter: blur(14px);
-  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  animation: fadeSlideIn 0.8s cubic-bezier(0.34, 1.4, 0.64, 1) 0.2s both;
-}
-.wanted-hud-label {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 9px;
-  font-weight: 900;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.25);
-  margin-right: 5px;
-  line-height: 1;
-  white-space: nowrap;
-}
-.wanted-stars {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.w-star {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-}
-.w-star svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-/* Off state — dim outline */
-.w-star.off svg path {
-  fill: rgba(255, 255, 255, 0.14);
-}
-/* On state — bright white with golden glow, slow flash */
-.w-star.on svg path {
-  fill: #ffffff;
-  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 1)) drop-shadow(0 0 7px rgba(255, 215, 0, 0.85));
-  animation: starFlash 2.2s ease-in-out infinite;
-}
-/* Stagger each star's flash slightly for a ripple effect */
-.w-star.on:nth-child(1) svg path { animation-delay: 0s; }
-.w-star.on:nth-child(2) svg path { animation-delay: 0.18s; }
-.w-star.on:nth-child(3) svg path { animation-delay: 0.36s; }
-.w-star.on:nth-child(4) svg path { animation-delay: 0.54s; }
-.w-star.on:nth-child(5) svg path { animation-delay: 0.72s; }
-.w-star.on:nth-child(6) svg path { animation-delay: 0.90s; }
-
-@keyframes starFlash {
-  0%, 100% {
-    fill: #ffffff;
-    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 1)) drop-shadow(0 0 7px rgba(255, 215, 0, 0.85));
-    opacity: 1;
-  }
-  45% {
-    fill: rgba(255, 255, 255, 0.2);
-    filter: none;
-    opacity: 0.25;
-  }
-  55% {
-    fill: rgba(255, 255, 255, 0.2);
-    filter: none;
-    opacity: 0.25;
-  }
-}
-
 /* ── HAMBURGER ────────────────────────────────────── */
 .hamburger-btn {
   position: fixed; top: 22px; right: 26px; z-index: 200;
@@ -803,6 +724,22 @@ body {
 .radio-tracklist::-webkit-scrollbar-track { background: transparent; }
 .radio-tracklist::-webkit-scrollbar-thumb { background: rgba(0,255,255,0.15); border-radius: 4px; }
 
+/* loading state for tracklist */
+.radio-tracklist-loading {
+  position: relative; z-index: 1;
+  padding: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.radio-tracklist-loading-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #ffcc00; box-shadow: 0 0 6px #ffcc00;
+  animation: blink 0.8s ease-in-out infinite; flex-shrink: 0;
+}
+.radio-tracklist-loading-text {
+  font-size: 10px; font-weight: 600; font-family: monospace;
+  color: rgba(255,255,255,0.2); letter-spacing: 0.1em;
+}
+
 .radio-track {
   display: flex; align-items: center; gap: 10px;
   padding: 7px 16px; cursor: pointer;
@@ -1153,8 +1090,6 @@ body {
   .nav-panel { padding: 70px 28px; }
   .music-wrap { width: 160px; }
   .music-title { max-width: 100px; }
-  .wanted-hud { top: 12px; left: 12px; padding: 6px 10px 6px 9px; }
-  .w-star { width: 15px; height: 15px; }
 }
 @media (max-width: 600px) {
   .page-main { padding: 80px 20px 60px; }
@@ -1172,20 +1107,6 @@ body {
 <audio id="bgMusic" loop preload="auto">
   <source src="leonida/music/relax.mp3" type="audio/mpeg">
 </audio>
-
-<!-- ── WANTED HUD ── -->
-<div class="wanted-hud" id="wantedHud">
-  <span class="wanted-hud-label">Wanted</span>
-  <div class="wanted-stars" id="wantedStars">
-    <!-- 6 stars, all on by default — togglable via JS -->
-    <div class="w-star on" data-star="1"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
-    <div class="w-star on" data-star="2"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
-    <div class="w-star on" data-star="3"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
-    <div class="w-star on" data-star="4"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
-    <div class="w-star on" data-star="5"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
-    <div class="w-star on" data-star="6"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
-  </div>
-</div>
 
 <!-- HAMBURGER -->
 <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle menu">
@@ -1398,7 +1319,7 @@ body {
   </div>
   <div class="radio-now">
     <div class="radio-now-label">Now Playing</div>
-    <div class="radio-now-title" id="radioNowTitle">Select a track</div>
+    <div class="radio-now-title" id="radioNowTitle">Loading tracks…</div>
     <div class="radio-wave" id="radioWave">
       <span></span><span></span><span></span><span></span><span></span>
       <span></span><span></span><span></span><span></span><span></span>
@@ -1425,7 +1346,13 @@ body {
     <input class="radio-vol-slider" id="radioVolSlider" type="range" min="0" max="100" value="50">
     <div class="radio-vol-val" id="radioVolVal">50</div>
   </div>
-  <div class="radio-tracklist" id="radioTracklist"></div>
+  <!-- tracklist: populated dynamically from GitHub -->
+  <div class="radio-tracklist" id="radioTracklist">
+    <div class="radio-tracklist-loading" id="radioTracklistLoading">
+      <div class="radio-tracklist-loading-dot"></div>
+      <div class="radio-tracklist-loading-text">Scanning leonida/music/ …</div>
+    </div>
+  </div>
 </div>
 
 <!-- AUDIO ELEMENT -->
@@ -1503,24 +1430,6 @@ body {
 <script>
 'use strict';
 
-/* ── WANTED HUD — click to toggle stars ─────────── */
-(function() {
-  const stars = document.querySelectorAll('#wantedStars .w-star');
-  stars.forEach(function(star) {
-    star.style.cursor = 'pointer';
-    star.addEventListener('click', function() {
-      var clickedIdx = parseInt(star.dataset.star, 10) - 1;
-      // If clicking the only lit star, clear all; else set level to clicked+1
-      var currentLevel = Array.from(stars).filter(s => s.classList.contains('on')).length;
-      var newLevel = (currentLevel === clickedIdx + 1) ? 0 : clickedIdx + 1;
-      stars.forEach(function(s, i) {
-        s.classList.toggle('on', i < newLevel);
-        s.classList.toggle('off', i >= newLevel);
-      });
-    });
-  });
-})();
-
 /* ── HAMBURGER ──────────────────────────────────── */
 const hBtn    = document.getElementById('hamburgerBtn');
 const overlay = document.getElementById('navOverlay');
@@ -1595,21 +1504,8 @@ function tick() {
 tick(); setInterval(tick, 1000);
 
 /* ── RADIO PLAYER ───────────────────────────────── */
-const songs = [
-  {n:"Hot Together",s:"leonida/music/together.mp3"},{n:"Love Is A Long Road",s:"leonida/music/long.mp3"},
-  {n:"Night",s:"leonida/music/night.mp3"},{n:"Ocean Breeze",s:"leonida/music/ocean.mp3"},
-  {n:"Self Control",s:"leonida/music/self.mp3"},{n:"Atomic",s:"leonida/music/tomic.mp3"},
-  {n:"Sun Glasses At Night",s:"leonida/music/sun.mp3"},{n:"All Night Long",s:"leonida/music/all.mp3"},
-  {n:"Shame",s:"leonida/music/shame.mp3"},{n:"Vice City",s:"leonida/music/vice.mp3"},
-  {n:"I Walk This Earth All By Myself",s:"leonida/music/earth.mp3"},{n:"Owner Of A Lonely Heart",s:"leonida/music/heart.mp3"},
-  {n:"Tempted",s:"leonida/music/tempt.mp3"},{n:"Poison Arrow",s:"leonida/music/arrow.mp3"},
-  {n:"Is It A Crime",s:"leonida/music/crime.mp3"},{n:"Here We Are",s:"leonida/music/are.mp3"},
-  {n:"Through The Fire",s:"leonida/music/fire.mp3"},{n:"Heart Of Mine",s:"leonida/music/mine.mp3"},
-  {n:"Fly Away",s:"leonida/music/fly.mp3"},{n:"Ain't Nobody",s:"leonida/music/nobody.mp3"},
-  {n:"Thinking Of You",s:"leonida/music/you.mp3"},{n:"Sweet Love",s:"leonida/music/love.mp3"},
-  {n:"I Still Remember You",s:"leonida/music/remember.mp3"},{n:"Gamble With My Love",s:"leonida/music/gamble.mp3"},
-  {n:"Sukiyaki",s:"leonida/music/suki.mp3"}
-];
+// songs is populated dynamically from GitHub — no hardcoded list needed
+let songs = [];
 
 const radioAudio      = document.getElementById('radioAudio');
 const radioPanel      = document.getElementById('radioPanel');
@@ -1629,23 +1525,79 @@ const radioVolVal     = document.getElementById('radioVolVal');
 let radioIdx     = 0;
 let radioPlaying = false;
 let radioShuffle = false;
-let radioOrder   = songs.map((_, i) => i);
 
 radioAudio.volume = 0.5;
 
-// build tracklist
-songs.forEach((song, i) => {
-  const row = document.createElement('div');
-  row.className = 'radio-track';
-  row.dataset.idx = i;
-  row.innerHTML = `
-    <span class="radio-track-num">${String(i+1).padStart(2,'0')}</span>
-    <span class="radio-track-name">${song.n}</span>
-    <span class="radio-track-playing-dot"></span>
-  `;
-  row.addEventListener('click', () => radioPlayIdx(i));
-  radioTracklist.appendChild(row);
-});
+/* ── Load songs from GitHub API, same pattern as loadGithubImages ── */
+async function loadGithubMusic() {
+  const GITHUB_USER   = 'vocql';
+  const GITHUB_REPO   = 'leonida';
+  const GITHUB_BRANCH = 'main';
+  const MUSIC_PATH    = 'leonida/music';
+  const AUDIO_EXTS    = ['.mp3', '.ogg', '.wav', '.flac', '.aac', '.m4a'];
+
+  const loadingEl = document.getElementById('radioTracklistLoading');
+
+  try {
+    const apiURL = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${MUSIC_PATH}?ref=${GITHUB_BRANCH}`;
+    const res = await fetch(apiURL, { headers: { 'Accept': 'application/vnd.github.v3+json' } });
+
+    if (!res.ok) throw new Error('GitHub API returned ' + res.status);
+
+    const files = await res.json();
+    if (!Array.isArray(files)) throw new Error('Unexpected response');
+
+    // Filter to audio files only
+    const audioFiles = files.filter(f =>
+      f.type === 'file' && AUDIO_EXTS.some(ext => f.name.toLowerCase().endsWith(ext))
+    );
+
+    if (!audioFiles.length) {
+      if (loadingEl) loadingEl.innerHTML = '<div class="radio-tracklist-loading-text" style="color:rgba(255,80,80,0.5)">No audio files found in leonida/music/</div>';
+      radioNowTitle.textContent = 'No tracks found';
+      return;
+    }
+
+    // Build songs array from filenames
+    songs = audioFiles.map(f => {
+      const src  = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${MUSIC_PATH}/${f.name}`;
+      // Pretty-print name: strip extension, replace dashes/underscores, title-case
+      const name = f.name
+        .replace(/\.[^.]+$/, '')
+        .replace(/[-_]/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
+      return { n: name, s: src };
+    });
+
+    // Remove loading indicator and build tracklist rows
+    if (loadingEl) loadingEl.remove();
+
+    songs.forEach((song, i) => {
+      const row = document.createElement('div');
+      row.className = 'radio-track';
+      row.dataset.idx = i;
+      row.innerHTML = `
+        <span class="radio-track-num">${String(i + 1).padStart(2, '0')}</span>
+        <span class="radio-track-name">${song.n}</span>
+        <span class="radio-track-playing-dot"></span>
+      `;
+      row.addEventListener('click', () => radioPlayIdx(i));
+      radioTracklist.appendChild(row);
+    });
+
+    // Set first track as ready label
+    radioUpdateTrack();
+
+  } catch (err) {
+    console.error('Radio: failed to load tracklist —', err);
+    if (loadingEl) {
+      loadingEl.querySelector('.radio-tracklist-loading-dot').style.background = '#ff3040';
+      loadingEl.querySelector('.radio-tracklist-loading-dot').style.boxShadow  = '0 0 6px #ff3040';
+      loadingEl.querySelector('.radio-tracklist-loading-text').textContent = 'Could not load tracks';
+    }
+    radioNowTitle.textContent = 'No tracks';
+  }
+}
 
 function radioSetPlaying(state) {
   radioPlaying = state;
@@ -1657,6 +1609,7 @@ function radioSetPlaying(state) {
 }
 
 function radioUpdateTrack() {
+  if (!songs.length) return;
   const song = songs[radioIdx];
   radioNowTitle.textContent = song.n;
   radioNowTitle.classList.remove('marquee-active');
@@ -1670,6 +1623,7 @@ function radioUpdateTrack() {
 }
 
 function radioPlayIdx(idx) {
+  if (!songs.length) return;
   radioIdx = idx;
   const song = songs[radioIdx];
   radioAudio.src = song.s;
@@ -1679,9 +1633,10 @@ function radioPlayIdx(idx) {
 }
 
 function radioNext() {
+  if (!songs.length) return;
   if (radioShuffle) {
-    const remaining = radioOrder.filter(i => i !== radioIdx);
-    radioIdx = remaining[Math.floor(Math.random() * remaining.length)] ?? 0;
+    const remaining = songs.map((_, i) => i).filter(i => i !== radioIdx);
+    radioIdx = remaining.length ? remaining[Math.floor(Math.random() * remaining.length)] : 0;
   } else {
     radioIdx = (radioIdx + 1) % songs.length;
   }
@@ -1689,17 +1644,21 @@ function radioNext() {
 }
 
 function radioPrev() {
+  if (!songs.length) return;
   if (radioAudio.currentTime > 3) { radioAudio.currentTime = 0; return; }
   radioIdx = (radioIdx - 1 + songs.length) % songs.length;
   radioPlayIdx(radioIdx);
 }
 
+// toggle panel
 radioToggleBtn.addEventListener('click', () => {
   radioPanel.classList.toggle('open');
   radioToggleBtn.classList.toggle('active', radioPanel.classList.contains('open'));
 });
 
+// play/pause
 radioPlayBtn.addEventListener('click', () => {
+  if (!songs.length) return;
   if (radioAudio.src && !radioAudio.src.endsWith(window.location.href)) {
     if (radioPlaying) { radioAudio.pause(); radioSetPlaying(false); }
     else { radioAudio.play().then(() => radioSetPlaying(true)).catch(() => {}); }
@@ -1714,9 +1673,9 @@ radioAudio.addEventListener('ended', radioNext);
 
 radioShuffleBtn.addEventListener('click', () => {
   radioShuffle = !radioShuffle;
-  radioShuffleBtn.style.color = radioShuffle ? 'var(--cyan)' : '';
+  radioShuffleBtn.style.color       = radioShuffle ? 'var(--cyan)' : '';
   radioShuffleBtn.style.borderColor = radioShuffle ? 'rgba(0,255,255,0.35)' : '';
-  radioShuffleBtn.style.boxShadow = radioShuffle ? '0 0 12px rgba(0,255,255,0.2)' : '';
+  radioShuffleBtn.style.boxShadow   = radioShuffle ? '0 0 12px rgba(0,255,255,0.2)' : '';
 });
 
 radioVolSlider.addEventListener('input', () => {
@@ -1725,7 +1684,8 @@ radioVolSlider.addEventListener('input', () => {
   radioVolVal.textContent = v;
 });
 
-radioUpdateTrack();
+// Kick off the GitHub fetch immediately
+loadGithubMusic();
 
 /* ── MAP INIT ───────────────────────────────────── */
 function initMap() {
@@ -2028,12 +1988,21 @@ function openTLB(idx) {
   tlbCur.textContent   = idx + 1;
   tlbEl.classList.add('active');
   document.body.style.overflow = 'hidden';
+  if (radioPlaying) {
+    radioAudio.pause();
+    radioSetPlaying(false);
+    tlbMusicWasPlaying = true;
+  }
 }
 
 function closeTLB() {
   tlbEl.classList.remove('active');
   tlbVideo.innerHTML = '';
   document.body.style.overflow = '';
+  if (tlbMusicWasPlaying) {
+    tlbMusicWasPlaying = false;
+    radioAudio.play().then(() => radioSetPlaying(true)).catch(() => {});
+  }
 }
 
 function stepTLB(dir) {
