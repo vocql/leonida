@@ -500,6 +500,7 @@ body {
   border-color: rgba(255,255,255,0.6); color: #ffffff;
   box-shadow: 0 0 14px rgba(255,255,255,0.15);
 }
+
 /* ── RADIO PLAYER ─────────────────────────────────── */
 .radio-toggle-btn {
   position: fixed; bottom: 22px; left: 22px; z-index: 200;
@@ -529,6 +530,7 @@ body {
 }
 .radio-toggle-btn svg { width: 22px; height: 22px; fill: var(--cyan); transition: fill 0.3s; }
 .radio-toggle-btn.active svg { fill: var(--pink); }
+
 .radio-toggle-btn.playing::before {
   content: '';
   position: absolute; inset: -6px;
@@ -540,6 +542,7 @@ body {
   0%   { transform: scale(1);   opacity: 0.7; }
   100% { transform: scale(1.6); opacity: 0; }
 }
+
 .radio-panel {
   position: fixed; bottom: 84px; left: 22px; z-index: 199;
   width: 320px;
@@ -763,7 +766,9 @@ body {
   font-size: 11px; font-weight: 600; letter-spacing: 0.4em;
   text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 4px;
 }
-.map-page-title { font-size: clamp(36px, 5vw, 68px); }
+.map-page-title {
+  font-size: clamp(36px, 5vw, 68px);
+}
 .map-wrap {
   width: min(860px, 92vw);
   height: min(640px, 70vh);
@@ -827,10 +832,16 @@ body {
 .bio-text p:last-child { margin-bottom: 0; }
 .bio-no-info { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.2); letter-spacing: 0.1em; text-transform: uppercase; padding: 30px 0; text-align: center; }
 
-/* ── TRAILERS PAGE ────────────────────────────────── */
+/* ══════════════════════════════════════════════════
+   TRAILERS PAGE
+══════════════════════════════════════════════════ */
 #page-trailers { isolation: isolate; }
 #page-trailers .page-main { overflow-y: auto; height: 100%; }
-.trailers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.trailers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
 #page-trailers .page-header { margin-bottom: 48px; }
 .trailer-card {
   border-radius: 16px; overflow: hidden;
@@ -858,7 +869,8 @@ body {
 .thumb-overlay {
   position: absolute; inset: 0;
   background: linear-gradient(0deg, rgba(4,0,26,0.6) 0%, transparent 60%);
-  display: flex; align-items: center; justify-content: center; transition: background 0.2s;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
 }
 .trailer-card:hover .thumb-overlay { background: linear-gradient(0deg, rgba(4,0,26,0.4) 0%, transparent 60%); }
 .play-circle {
@@ -870,10 +882,21 @@ body {
   transition: transform 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 .trailer-card:hover .play-circle {
-  transform: scale(1.12); background: rgba(255,0,0,0.75); border-color: #fff;
-  box-shadow: 0 0 28px rgba(255,0,0,0.4);
+  transform: scale(1.12); background: rgba(255,0,0,0.75);
+  border-color: #fff; box-shadow: 0 0 28px rgba(255,0,0,0.4);
 }
 .play-circle svg { width: 24px; height: 24px; fill: #fff; margin-left: 4px; }
+.new-badge {
+  position: absolute; top: 14px; right: 14px; z-index: 10;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 900;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: #04001a; background: var(--cyan);
+  padding: 5px 12px; border-radius: 999px;
+  box-shadow: 0 0 16px rgba(0,255,255,0.5);
+  animation: pulseBadge 2s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes pulseBadge { 0%,100%{box-shadow:0 0 16px rgba(0,255,255,0.5)} 50%{box-shadow:0 0 28px rgba(0,255,255,0.9)} }
 .card-label {
   padding: 12px 16px;
   display: flex; align-items: center; justify-content: space-between;
@@ -882,32 +905,41 @@ body {
 }
 .card-label-title {
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 14px; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase;
+  font-size: 14px; font-weight: 900;
+  letter-spacing: 0.14em; text-transform: uppercase;
   color: rgba(255,255,255,0.65);
 }
 .card-label-year { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; color: rgba(255,255,255,0.25); }
 
-/* ── TRAILER LIGHTBOX ─────────────────────────────── */
+/* ══════════════════════════════════════════════════
+   TRAILER LIGHTBOX
+══════════════════════════════════════════════════ */
 #trailerLB {
   position: fixed; inset: 0; z-index: 9000;
   background: rgba(0,0,0,0.92);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: 24px; opacity: 0; pointer-events: none;
-  transition: opacity 0.25s ease; backdrop-filter: blur(20px);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+  backdrop-filter: blur(20px);
 }
 #trailerLB.active { opacity: 1; pointer-events: all; }
 .tlb-close {
   position: fixed; top: 20px; right: 26px; z-index: 9001;
   width: 46px; height: 46px; border-radius: 50%;
-  background: rgba(255,255,255,0.07); border: 1.5px solid rgba(255,255,255,0.2);
-  color: rgba(255,255,255,0.6); font-size: 20px; font-weight: 700;
+  background: rgba(255,255,255,0.07);
+  border: 1.5px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.6);
+  font-size: 20px; font-weight: 700;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
   transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.15s;
 }
 .tlb-close:hover { background: rgba(255,60,60,0.25); border-color: rgba(255,60,60,0.5); color: #fff; transform: scale(1.08); }
 .tlb-inner { width: 100%; max-width: 1060px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
 .tlb-video-wrap {
-  width: 100%; aspect-ratio: 16/9; border-radius: 14px; overflow: hidden;
+  width: 100%; aspect-ratio: 16/9;
+  border-radius: 14px; overflow: hidden;
   border: 1.5px solid rgba(0,255,255,0.2);
   box-shadow: 0 0 60px rgba(0,255,255,0.08), 0 24px 70px rgba(0,0,0,0.85);
   background: #000; position: relative;
@@ -922,7 +954,8 @@ body {
 .tlb-btn {
   font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 900;
   color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 22px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 999px; padding: 8px 22px;
   cursor: pointer; letter-spacing: 0.06em;
   transition: color 0.15s, border-color 0.15s, background 0.15s, transform 0.15s;
 }
@@ -930,68 +963,218 @@ body {
 .tlb-counter { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 900; letter-spacing: 0.2em; color: rgba(255,255,255,0.25); min-width: 60px; text-align: center; }
 .tlb-counter span { color: var(--cyan); }
 
-/* ── SOURCE CODE BUTTON ───────────────────────────── */
+/* ══════════════════════════════════════════════════
+   SOURCE CODE BUTTON + POPUP
+══════════════════════════════════════════════════ */
 .src-btn {
   position: fixed; bottom: 22px; right: 22px; z-index: 200;
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
-  color: rgba(255,255,255,0.45);
+  display: flex; align-items: center; gap: 9px;
+  padding: 0 18px 0 14px; height: 52px; border-radius: 999px;
   background: rgba(4,0,26,0.7);
-  border: 1.5px solid rgba(0,255,255,0.28);
-  border-radius: 10px; padding: 9px 18px;
-  cursor: pointer; backdrop-filter: blur(16px);
-  box-shadow: 0 0 18px rgba(0,255,255,0.1);
-  transition: all 0.25s ease;
-  animation: fadeSlideIn 0.8s cubic-bezier(0.34,1.4,0.64,1) 0.5s both;
+  border: 1.5px solid rgba(119,0,255,0.35);
+  box-shadow: 0 0 20px rgba(119,0,255,0.15), inset 0 1px 0 rgba(255,255,255,0.08);
+  backdrop-filter: blur(16px);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1);
+  animation: fadeSlideInRight 0.8s cubic-bezier(0.34,1.4,0.64,1) 0.2s both;
+}
+@keyframes fadeSlideInRight {
+  from { opacity: 0; transform: translateX(20px) scale(0.8); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
 }
 .src-btn:hover {
-  color: #fff; border-color: rgba(0,255,255,0.7);
-  box-shadow: 0 0 28px rgba(0,255,255,0.25); transform: translateY(-2px);
+  border-color: var(--purple);
+  box-shadow: 0 0 32px rgba(119,0,255,0.3), inset 0 1px 0 rgba(255,255,255,0.12);
+  transform: scale(1.05) translateY(-2px);
+}
+.src-btn svg { width: 18px; height: 18px; fill: rgba(119,0,255,0.85); flex-shrink: 0; transition: fill 0.2s; }
+.src-btn:hover svg { fill: #b060ff; }
+.src-btn-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(180,100,255,0.8); transition: color 0.2s;
+  white-space: nowrap;
+}
+.src-btn:hover .src-btn-label { color: #c080ff; }
+
+/* Source code popup overlay */
+.src-overlay {
+  position: fixed; inset: 0; z-index: 9500;
+  background: rgba(4,0,26,0.85); backdrop-filter: blur(28px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.src-overlay.active { opacity: 1; pointer-events: all; }
+
+.src-modal {
+  width: min(520px, 94vw);
+  background: rgba(4,0,26,0.8);
+  border: 1px solid rgba(119,0,255,0.3);
+  border-radius: 22px;
+  box-shadow: 0 0 60px rgba(119,0,255,0.12), 0 0 100px rgba(255,0,200,0.06), 0 24px 80px rgba(0,0,0,0.8);
+  overflow: hidden;
+  transform: scale(0.88) translateY(16px);
+  transition: transform 0.45s cubic-bezier(0.34,1.4,0.64,1), opacity 0.3s ease;
+  opacity: 0;
+  position: relative;
+}
+.src-overlay.active .src-modal {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+/* scanline overlay */
+.src-modal::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 3px, rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px
+  );
+}
+/* top glow strip */
+.src-modal::after {
+  content: ''; position: absolute; top: 0; left: 15%; right: 15%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(119,0,255,0.6), transparent);
+  z-index: 1; pointer-events: none;
 }
 
-/* ── SOURCE CODE MODAL ────────────────────────────── */
-.src-modal-backdrop {
-  position: fixed; inset: 0; z-index: 9100;
-  background: rgba(4,0,26,0.82); backdrop-filter: blur(18px);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+.src-modal-header {
+  position: relative; z-index: 2;
+  padding: 28px 28px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
 }
-.src-modal-backdrop.open { opacity: 1; pointer-events: all; }
-.src-modal {
-  background: rgba(4,0,26,0.95);
-  border: 1.5px solid rgba(255,0,200,0.35); border-radius: 18px;
-  padding: 36px 40px 32px; max-width: 420px; width: 90%;
-  text-align: center;
-  box-shadow: 0 0 50px rgba(255,0,200,0.15), 0 24px 60px rgba(0,0,0,0.7);
-  transform: scale(0.88) translateY(14px);
-  transition: transform 0.35s cubic-bezier(0.34,1.4,0.64,1);
+.src-modal-title-block {}
+.src-modal-eyebrow {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.4em; text-transform: uppercase;
+  color: rgba(119,0,255,0.6); margin-bottom: 6px;
 }
-.src-modal-backdrop.open .src-modal { transform: scale(1) translateY(0); }
-.src-modal-icon { font-size: 38px; margin-bottom: 14px; display: block; }
 .src-modal-title {
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 26px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em;
-  color: #ff3a3a; text-shadow: 0 0 20px rgba(255,60,60,0.4); margin-bottom: 10px;
-}
-.src-modal-msg {
-  font-size: 13px; font-weight: 500; letter-spacing: 0.03em;
-  color: rgba(255,255,255,0.5); line-height: 1.75; margin-bottom: 10px;
-}
-.src-modal-msg .highlight { color: rgba(0,255,255,0.8); font-weight: 700; }
-.src-modal-countdown {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 18px; font-weight: 900; letter-spacing: 0.12em;
-  color: rgba(255,0,200,0.85); margin-bottom: 24px;
-  text-shadow: 0 0 14px rgba(255,0,200,0.3);
+  font-size: 34px; font-weight: 900; text-transform: uppercase;
+  letter-spacing: 0.04em; color: #fff; line-height: 1;
 }
 .src-modal-close {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 15px; font-weight: 900; letter-spacing: 0.15em; text-transform: uppercase;
-  color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; padding: 9px 28px;
-  cursor: pointer; transition: all 0.2s ease;
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.4); font-size: 16px; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.15s;
 }
-.src-modal-close:hover { color: #fff; border-color: rgba(0,255,255,0.4); background: rgba(0,255,255,0.08); box-shadow: 0 0 14px rgba(0,255,255,0.15); }
+.src-modal-close:hover { background: rgba(255,60,60,0.15); border-color: rgba(255,60,60,0.4); color: #fff; transform: scale(1.1); }
+
+.src-modal-body {
+  position: relative; z-index: 2;
+  padding: 22px 28px 28px;
+}
+
+/* countdown state */
+.src-countdown-block { text-align: center; margin-bottom: 26px; }
+.src-countdown-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase;
+  color: rgba(255,255,255,0.25); margin-bottom: 14px;
+}
+.src-countdown-pills {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.src-cd-pill {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 10px 16px 8px; border-radius: 12px;
+  background: rgba(119,0,255,0.06);
+  border: 1px solid rgba(119,0,255,0.2);
+  min-width: 66px;
+}
+.src-cd-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 32px; font-weight: 900; line-height: 1;
+  color: #b060ff; letter-spacing: -0.02em;
+  text-shadow: 0 0 20px rgba(119,0,255,0.5);
+}
+.src-cd-lbl {
+  font-size: 8px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase;
+  color: rgba(255,255,255,0.25); margin-top: 4px;
+}
+.src-cd-sep {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 26px; font-weight: 900;
+  color: rgba(119,0,255,0.4); margin-bottom: 10px;
+  animation: sepBlink 1s ease-in-out infinite;
+}
+.src-avail-date {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(255,255,255,0.3); margin-top: 14px;
+}
+.src-avail-date span { color: var(--pink); text-shadow: 0 0 12px rgba(255,0,200,0.4); }
+
+/* description */
+.src-desc {
+  font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.4);
+  line-height: 1.75; margin-bottom: 24px;
+}
+.src-desc strong { color: rgba(255,255,255,0.65); font-weight: 600; }
+
+/* download button — locked state */
+.src-dl-btn {
+  width: 100%; height: 52px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase;
+  cursor: pointer; border: none;
+  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1);
+  text-decoration: none;
+  position: relative; overflow: hidden;
+}
+.src-dl-btn.locked {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.25);
+  cursor: not-allowed;
+}
+.src-dl-btn.locked svg { fill: rgba(255,255,255,0.2); }
+.src-dl-btn.unlocked {
+  background: linear-gradient(135deg, rgba(119,0,255,0.25), rgba(255,0,200,0.15));
+  border: 1px solid rgba(119,0,255,0.45);
+  color: #c080ff;
+  box-shadow: 0 0 30px rgba(119,0,255,0.2);
+}
+.src-dl-btn.unlocked:hover {
+  background: linear-gradient(135deg, rgba(119,0,255,0.4), rgba(255,0,200,0.25));
+  border-color: rgba(119,0,255,0.7);
+  color: #fff;
+  box-shadow: 0 0 50px rgba(119,0,255,0.35), 0 8px 30px rgba(0,0,0,0.4);
+  transform: translateY(-2px);
+}
+.src-dl-btn.unlocked::before {
+  content: '';
+  position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  animation: shimmerSlide 3s ease-in-out infinite;
+}
+@keyframes shimmerSlide { 0%{left:-100%} 60%,100%{left:100%} }
+.src-dl-btn svg { width: 18px; height: 18px; flex-shrink: 0; transition: fill 0.2s; }
+.src-dl-btn.unlocked svg { fill: currentColor; }
+
+/* unlocked view */
+.src-unlocked-state { display: none; }
+.src-unlocked-state.show { display: block; }
+.src-locked-state.hide { display: none; }
+
+.src-unlock-badge {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px; border-radius: 10px;
+  background: rgba(0,255,160,0.05); border: 1px solid rgba(0,255,160,0.2);
+  margin-bottom: 20px;
+}
+.src-unlock-dot {
+  width: 7px; height: 7px; border-radius: 50; flex-shrink: 0;
+  background: #00ffa0; box-shadow: 0 0 8px #00ffa0;
+  animation: blink 2s ease-in-out infinite;
+}
+.src-unlock-text {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
+  color: rgba(0,255,160,0.6);
+}
 
 /* ── SHARED KEYFRAMES ─────────────────────────────── */
 @keyframes popIn {
@@ -1018,6 +1201,10 @@ body {
   .nav-panel { padding: 70px 28px; }
 }
 @media (max-width: 600px) { .page-main { padding: 80px 20px 60px; } }
+@media (max-width: 480px) {
+  .src-btn-label { display: none; }
+  .src-btn { padding: 0; width: 52px; justify-content: center; }
+}
 </style>
 </head>
 <body>
@@ -1025,6 +1212,7 @@ body {
 <!-- BG LAYERS -->
 <div class="bg-darken"></div>
 <div class="bg-tint"></div>
+<div class="bg-grid"></div>
 
 <!-- AUDIO -->
 <audio id="bgMusic" loop preload="auto">
@@ -1066,7 +1254,7 @@ body {
   </div>
   <div class="pills">
     <div class="pill" id="pill-d">
-      <div class="pill-tooltip" id="tip-d">days to go!</div>
+      <div class="pill-tooltip" id="tip-d">200 days to go!</div>
       <span class="pill-num" id="n-d">000</span>
       <span class="pill-lbl">Days</span>
     </div>
@@ -1272,27 +1460,87 @@ body {
   </div>
 </div>
 
-<!-- SOURCE CODE BUTTON -->
-<button class="src-btn" id="srcBtn">Source Code</button>
-
-<!-- SOURCE CODE MODAL -->
-<div class="src-modal-backdrop" id="srcModal">
-  <div class="src-modal">
-    <span class="src-modal-icon">⚠️</span>
-    <div class="src-modal-title">Not Available Yet</div>
-    <div class="src-modal-msg">
-      Source code drops on<br>
-      <span class="highlight">June 13, 2025 · 1:00 PM EST</span>
-    </div>
-    <div class="src-modal-countdown" id="srcCountdown">Calculating…</div>
-    <button class="src-modal-close" id="srcModalClose">Dismiss</button>
-  </div>
-</div>
-
 <!-- AUDIO ELEMENT -->
 <audio id="radioAudio" preload="none"></audio>
 
-<!-- LIGHTBOXES -->
+<!-- SOURCE CODE BUTTON (bottom right) -->
+<button class="src-btn" id="srcBtn" aria-label="Source Code">
+  <svg viewBox="0 0 24 24"><path d="M9.4 16.6 4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0 4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+  <span class="src-btn-label">Source Code</span>
+</button>
+
+<!-- SOURCE CODE POPUP -->
+<div class="src-overlay" id="srcOverlay">
+  <div class="src-modal" id="srcModal">
+    <div class="src-modal-header">
+      <div class="src-modal-title-block">
+        <div class="src-modal-eyebrow">Repository</div>
+        <div class="src-modal-title">Source Code</div>
+      </div>
+      <button class="src-modal-close" id="srcModalClose">✕</button>
+    </div>
+    <div class="src-modal-body">
+
+      <!-- LOCKED STATE (shown while countdown is running) -->
+      <div class="src-locked-state" id="srcLockedState">
+        <div class="src-countdown-block">
+          <div class="src-countdown-label">Available in</div>
+          <div class="src-countdown-pills">
+            <div class="src-cd-pill">
+              <span class="src-cd-num" id="src-n-d">00</span>
+              <span class="src-cd-lbl">Days</span>
+            </div>
+            <div class="src-cd-sep">:</div>
+            <div class="src-cd-pill">
+              <span class="src-cd-num" id="src-n-h">00</span>
+              <span class="src-cd-lbl">Hours</span>
+            </div>
+            <div class="src-cd-sep">:</div>
+            <div class="src-cd-pill">
+              <span class="src-cd-num" id="src-n-m">00</span>
+              <span class="src-cd-lbl">Mins</span>
+            </div>
+            <div class="src-cd-sep">:</div>
+            <div class="src-cd-pill">
+              <span class="src-cd-num" id="src-n-s">00</span>
+              <span class="src-cd-lbl">Secs</span>
+            </div>
+          </div>
+          <div class="src-avail-date">Drops <span>June 13, 2026 · 1:00 PM</span></div>
+        </div>
+        <div class="src-desc">
+          The full source code for <strong>Welcome to Leonida</strong> will be released publicly on June 13th at 1 PM. Check back then to download the complete repository.
+        </div>
+        <button class="src-dl-btn locked" disabled>
+          <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+          Locked Until June 13
+        </button>
+      </div>
+
+      <!-- UNLOCKED STATE (shown after countdown reaches zero) -->
+      <div class="src-unlocked-state" id="srcUnlockedState">
+        <div class="src-unlock-badge">
+          <div class="src-unlock-dot"></div>
+          <div class="src-unlock-text">Source code is now available</div>
+        </div>
+        <div class="src-desc">
+          Download the complete <strong>Welcome to Leonida</strong> repository — all HTML, CSS, JavaScript, assets, and configuration files included.
+        </div>
+        <a class="src-dl-btn unlocked" id="srcDownloadLink" href="https://github.com/vocql/leonida/archive/refs/heads/main.zip" download>
+          <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+          Download ZIP
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     LIGHTBOXES
+════════════════════════════════════════════════════════════ -->
+
+<!-- PLACES LIGHTBOX -->
 <div class="lb-viewer" id="placesLB">
   <button class="lb-close" data-lb="places">✕</button>
   <img class="lb-img" id="places-lb-img" src="" alt="">
@@ -1304,6 +1552,7 @@ body {
   </div>
 </div>
 
+<!-- CHARACTERS LIGHTBOX -->
 <div class="lb-viewer" id="charLB">
   <button class="lb-close" data-lb="char">✕</button>
   <div class="viewer-inner">
@@ -1324,6 +1573,7 @@ body {
   </div>
 </div>
 
+<!-- SCREENSHOTS LIGHTBOX -->
 <div class="lb-viewer" id="ssLB">
   <button class="lb-close" data-lb="ss">✕</button>
   <img class="lb-img" id="ss-lb-img" src="" alt="">
@@ -1335,6 +1585,7 @@ body {
   </div>
 </div>
 
+<!-- TRAILER LIGHTBOX -->
 <div id="trailerLB">
   <button class="tlb-close" id="tlbClose">✕</button>
   <div class="tlb-inner">
@@ -1347,7 +1598,7 @@ body {
       </div>
       <div class="tlb-nav">
         <button class="tlb-btn" id="tlbPrev">&#8592;</button>
-        <div class="tlb-counter"><span id="tlbCur">1</span> / <span id="tlbTot">3</span></div>
+        <div class="tlb-counter"><span id="tlbCur">1</span> / <span id="tlbTot">2</span></div>
         <button class="tlb-btn" id="tlbNext">&#8594;</button>
       </div>
     </div>
@@ -1401,12 +1652,12 @@ document.addEventListener('keydown', e => {
     if (document.getElementById('trailerLB').classList.contains('active')) { closeTLB(); return; }
     const openLB = document.querySelector('.lb-viewer.active');
     if (openLB) { openLB.classList.remove('active'); return; }
-    if (document.getElementById('srcModal').classList.contains('open')) { document.getElementById('srcModal').classList.remove('open'); return; }
+    if (document.getElementById('srcOverlay').classList.contains('active')) { closeSrcModal(); return; }
     if (overlay.classList.contains('open')) { toggleMenu(false); return; }
   }
 });
 
-/* ── COUNTDOWN (GTA release) ────────────────────── */
+/* ── COUNTDOWN (main) ───────────────────────────── */
 const prev = { d:'', h:'', m:'', s:'' };
 function bounce(id) {
   const el = document.getElementById('n-' + id);
@@ -1432,81 +1683,68 @@ function tick() {
 tick(); setInterval(tick, 1000);
 
 /* ── SOURCE CODE MODAL ──────────────────────────── */
-// June 13, 2025 at 1:00 PM EST = 18:00 UTC
-const SRC_RELEASE = new Date('2025-06-13T18:00:00Z');
-const GITHUB_URL  = 'https://github.com/vocql/leonida/archive/refs/heads/main.zip';
+const SRC_RELEASE = new Date('2026-06-13T13:00:00'); // June 13, 2026, 1:00 PM local
 
-function formatSrcCountdown() {
-  const now  = new Date();
-  const diff = SRC_RELEASE - now;
-  if (diff <= 0) return null; // already released
-  const d = Math.floor(diff / 86400000);
-  const h = Math.floor((diff % 86400000) / 3600000);
-  const m = Math.floor((diff % 3600000) / 60000);
-  const s = Math.floor((diff % 60000) / 1000);
-  let parts = [];
-  if (d > 0) parts.push(d + 'd');
-  if (h > 0) parts.push(h + 'h');
-  if (m > 0) parts.push(m + 'm');
-  parts.push(String(s).padStart(2,'0') + 's');
-  return parts.join(' ');
+const srcBtn         = document.getElementById('srcBtn');
+const srcOverlay     = document.getElementById('srcOverlay');
+const srcModalClose  = document.getElementById('srcModalClose');
+const srcLockedState = document.getElementById('srcLockedState');
+const srcUnlockedState = document.getElementById('srcUnlockedState');
+
+function isSrcUnlocked() {
+  return new Date() >= SRC_RELEASE;
 }
 
-function openSrcModal() {
-  const now = new Date();
-  const modal = document.getElementById('srcModal');
-  const countdown = document.getElementById('srcCountdown');
-  const closeBtn  = document.getElementById('srcModalClose');
-  const titleEl   = document.querySelector('.src-modal-title');
-  const msgEl     = document.querySelector('.src-modal-msg');
-  const iconEl    = document.querySelector('.src-modal-icon');
-
-  if (now >= SRC_RELEASE) {
-    // Released — show a link button
-    iconEl.textContent   = '✅';
-    titleEl.textContent  = 'Source Code';
-    titleEl.style.color  = '#00ffff';
-    titleEl.style.textShadow = '0 0 20px rgba(0,255,255,0.4)';
-    msgEl.innerHTML      = 'The source code is now live on GitHub.';
-    countdown.innerHTML  = '<a href="' + GITHUB_URL + '" target="_blank" rel="noopener" style="color:rgba(0,255,255,0.9);text-decoration:none;border-bottom:1px solid rgba(0,255,255,0.4);padding-bottom:2px;font-family:\'Barlow Condensed\',sans-serif;font-size:18px;font-weight:900;letter-spacing:0.1em;">VIEW ON GITHUB →</a>';
-    clearInterval(window._srcTimer);
-  } else {
-    // Not yet released — show countdown
-    iconEl.textContent   = '⚠️';
-    titleEl.textContent  = 'Not Available Yet';
-    titleEl.style.color  = '#ff3a3a';
-    titleEl.style.textShadow = '0 0 20px rgba(255,60,60,0.4)';
-    msgEl.innerHTML      = 'Source code drops on<br><span class="highlight">June 13, 2025 · 1:00 PM EST</span>';
-    function updateSrcTimer() {
-      const t = formatSrcCountdown();
-      if (!t) {
-        countdown.textContent = 'Releasing now…';
-        clearInterval(window._srcTimer);
-        return;
-      }
-      countdown.textContent = t + ' remaining';
-    }
-    updateSrcTimer();
-    clearInterval(window._srcTimer);
-    window._srcTimer = setInterval(updateSrcTimer, 1000);
+function updateSrcCountdown() {
+  const diff = SRC_RELEASE - new Date();
+  if (diff <= 0) {
+    // Switch to unlocked state
+    srcLockedState.classList.add('hide');
+    srcUnlockedState.classList.add('show');
+    return;
   }
+  const d = String(Math.floor(diff / 86400000)).padStart(2, '0');
+  const h = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
+  const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+  const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+  document.getElementById('src-n-d').textContent = d;
+  document.getElementById('src-n-h').textContent = h;
+  document.getElementById('src-n-m').textContent = m;
+  document.getElementById('src-n-s').textContent = s;
+}
 
-  modal.classList.add('open');
+let srcCountdownInterval = null;
+
+function openSrcModal() {
+  // Immediately set correct state
+  if (isSrcUnlocked()) {
+    srcLockedState.classList.add('hide');
+    srcUnlockedState.classList.add('show');
+  } else {
+    srcLockedState.classList.remove('hide');
+    srcUnlockedState.classList.remove('show');
+    updateSrcCountdown();
+    if (!srcCountdownInterval) {
+      srcCountdownInterval = setInterval(updateSrcCountdown, 1000);
+    }
+  }
+  srcOverlay.classList.add('active');
 }
 
 function closeSrcModal() {
-  document.getElementById('srcModal').classList.remove('open');
-  clearInterval(window._srcTimer);
+  srcOverlay.classList.remove('active');
 }
 
-document.getElementById('srcBtn').addEventListener('click', openSrcModal);
-document.getElementById('srcModalClose').addEventListener('click', closeSrcModal);
-document.getElementById('srcModal').addEventListener('click', function(e) {
-  if (e.target === this) closeSrcModal();
-});
+srcBtn.addEventListener('click', openSrcModal);
+srcModalClose.addEventListener('click', closeSrcModal);
+srcOverlay.addEventListener('click', e => { if (e.target === srcOverlay) closeSrcModal(); });
+
+// Run countdown tick once immediately so no flicker on open
+updateSrcCountdown();
 
 /* ── RADIO PLAYER ───────────────────────────────── */
 let songs = [];
+
 const radioAudio      = document.getElementById('radioAudio');
 const radioPanel      = document.getElementById('radioPanel');
 const radioToggleBtn  = document.getElementById('radioToggleBtn');
@@ -1581,6 +1819,7 @@ function radioSetPlaying(state) {
   radioWave.classList.toggle('playing', state);
   radioToggleBtn.classList.toggle('playing', state);
 }
+
 function radioUpdateTrack() {
   if (!songs.length) return;
   const song = songs[radioIdx];
@@ -1594,6 +1833,7 @@ function radioUpdateTrack() {
   const active = radioTracklist.querySelector('.radio-track.active');
   if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
+
 function radioPlayIdx(idx) {
   if (!songs.length) return;
   radioIdx = idx;
@@ -1603,6 +1843,7 @@ function radioPlayIdx(idx) {
   radioAudio.play().then(() => radioSetPlaying(true)).catch(() => radioSetPlaying(false));
   radioUpdateTrack();
 }
+
 function radioNext() {
   if (!songs.length) return;
   if (radioShuffle) {
@@ -1613,16 +1854,19 @@ function radioNext() {
   }
   radioPlayIdx(radioIdx);
 }
+
 function radioPrev() {
   if (!songs.length) return;
   if (radioAudio.currentTime > 3) { radioAudio.currentTime = 0; return; }
   radioIdx = (radioIdx - 1 + songs.length) % songs.length;
   radioPlayIdx(radioIdx);
 }
+
 radioToggleBtn.addEventListener('click', () => {
   radioPanel.classList.toggle('open');
   radioToggleBtn.classList.toggle('active', radioPanel.classList.contains('open'));
 });
+
 radioPlayBtn.addEventListener('click', () => {
   if (!songs.length) return;
   if (radioAudio.src && !radioAudio.src.endsWith(window.location.href)) {
@@ -1632,20 +1876,24 @@ radioPlayBtn.addEventListener('click', () => {
     radioPlayIdx(0);
   }
 });
+
 radioPrevBtn.addEventListener('click', radioPrev);
 radioNextBtn.addEventListener('click', radioNext);
 radioAudio.addEventListener('ended', radioNext);
+
 radioShuffleBtn.addEventListener('click', () => {
   radioShuffle = !radioShuffle;
   radioShuffleBtn.style.color       = radioShuffle ? 'var(--cyan)' : '';
   radioShuffleBtn.style.borderColor = radioShuffle ? 'rgba(0,255,255,0.35)' : '';
   radioShuffleBtn.style.boxShadow   = radioShuffle ? '0 0 12px rgba(0,255,255,0.2)' : '';
 });
+
 radioVolSlider.addEventListener('input', () => {
   const v = parseInt(radioVolSlider.value);
   radioAudio.volume = v / 100;
   radioVolVal.textContent = v;
 });
+
 loadGithubMusic();
 
 /* ── MAP INIT ───────────────────────────────────── */
@@ -1655,10 +1903,10 @@ function initMap() {
 
 /* ── GITHUB IMAGE LOADER HELPER ─────────────────── */
 async function loadGithubImages(opts) {
-  const { user, repo, branch, path, dotEl, statusEl, countEl, totEl, gallery, emptyEl, cardClass } = opts;
+  const { user, repo, branch, path, dotEl, statusEl, countEl, totEl, gallery, emptyEl, cardClass, aspectClass, onCardCreated } = opts;
   const IMAGE_EXTS = ['.jpg','.jpeg','.png','.webp','.gif'];
   function setStatus(type, msg) {
-    dotEl.className    = 'status-dot ' + type;
+    dotEl.className   = 'status-dot ' + type;
     statusEl.className = 'status-text ' + (type === 'loading' ? '' : type);
     statusEl.textContent = msg;
   }
@@ -1686,7 +1934,8 @@ async function loadGithubImages(opts) {
     const card  = document.createElement('div');
     card.className = cardClass || 'gallery-item';
     card.style.transitionDelay = (i * 0.04).toFixed(2) + 's';
-    const imgWrap = document.createElement('div'); imgWrap.className = 'card-img-wrap';
+    const imgWrap = document.createElement('div');
+    imgWrap.className = 'card-img-wrap' + (aspectClass ? ' ' + aspectClass : '');
     const numBadge = document.createElement('span'); numBadge.className = 'card-num'; numBadge.textContent = '#' + String(i + 1).padStart(2, '0');
     const img = document.createElement('img'); img.alt = label; img.loading = 'lazy'; img.dataset.idx = String(i); img.src = src;
     imgWrap.appendChild(numBadge); imgWrap.appendChild(img);
@@ -1694,6 +1943,7 @@ async function loadGithubImages(opts) {
     cardBody.innerHTML = `<div class="card-name">${label}</div><div class="card-file">${file.name}</div>`;
     card.appendChild(imgWrap); card.appendChild(cardBody);
     gallery.appendChild(card); obs.observe(card);
+    if (onCardCreated) onCardCreated(card, img, file, i, label);
   });
   return images;
 }
@@ -1746,7 +1996,9 @@ function initPlaces() {
     statusEl: document.getElementById('places-status'),
     countEl: document.getElementById('places-count'),
     totEl: document.getElementById('places-tot'),
-    gallery, emptyEl: document.getElementById('places-empty'), cardClass: 'gallery-item',
+    gallery,
+    emptyEl: document.getElementById('places-empty'),
+    cardClass: 'gallery-item',
   });
   gallery.addEventListener('click', e => {
     const img = e.target.closest('img[data-idx]');
@@ -1843,7 +2095,10 @@ function initCharacters() {
     dotEl: document.getElementById('char-dot'),
     statusEl: document.getElementById('char-status'),
     countEl: document.getElementById('char-count'),
-    totEl, gallery, emptyEl: document.getElementById('char-empty'), cardClass: 'place-card',
+    totEl,
+    gallery,
+    emptyEl: document.getElementById('char-empty'),
+    cardClass: 'place-card',
   }).then(images => { charImages = images; });
   gallery.addEventListener('click', e => {
     const img = e.target.closest('img[data-idx]');
@@ -1924,12 +2179,12 @@ const TRAILERS = [
 let tlbIdx = 0;
 let tlbMusicWasPlaying = false;
 
-const tlbEl    = document.getElementById('trailerLB');
-const tlbVideo = document.getElementById('tlbVideo');
-const tlbTitle = document.getElementById('tlbTitle');
-const tlbYear  = document.getElementById('tlbYear');
-const tlbCur   = document.getElementById('tlbCur');
-const tlbTot   = document.getElementById('tlbTot');
+const tlbEl     = document.getElementById('trailerLB');
+const tlbVideo  = document.getElementById('tlbVideo');
+const tlbTitle  = document.getElementById('tlbTitle');
+const tlbYear   = document.getElementById('tlbYear');
+const tlbCur    = document.getElementById('tlbCur');
+const tlbTot    = document.getElementById('tlbTot');
 
 tlbTot.textContent = TRAILERS.length;
 
@@ -1942,19 +2197,29 @@ function openTLB(idx) {
   tlbCur.textContent   = idx + 1;
   tlbEl.classList.add('active');
   document.body.style.overflow = 'hidden';
-  if (radioPlaying) { radioAudio.pause(); radioSetPlaying(false); tlbMusicWasPlaying = true; }
+  if (radioPlaying) {
+    radioAudio.pause();
+    radioSetPlaying(false);
+    tlbMusicWasPlaying = true;
+  }
 }
+
 function closeTLB() {
   tlbEl.classList.remove('active');
   tlbVideo.innerHTML = '';
   document.body.style.overflow = '';
-  if (tlbMusicWasPlaying) { tlbMusicWasPlaying = false; radioAudio.play().then(() => radioSetPlaying(true)).catch(() => {}); }
+  if (tlbMusicWasPlaying) {
+    tlbMusicWasPlaying = false;
+    radioAudio.play().then(() => radioSetPlaying(true)).catch(() => {});
+  }
 }
+
 function stepTLB(dir) {
   tlbIdx = (tlbIdx + dir + TRAILERS.length) % TRAILERS.length;
   tlbVideo.innerHTML = '';
   setTimeout(() => openTLB(tlbIdx), 80);
 }
+
 document.getElementById('tlbClose').addEventListener('click', closeTLB);
 tlbEl.addEventListener('click', e => { if (e.target === tlbEl) closeTLB(); });
 document.getElementById('tlbPrev').addEventListener('click', () => stepTLB(-1));
