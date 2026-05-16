@@ -79,7 +79,7 @@ body {
 
 /* ── HAMBURGER ────────────────────────────────────── */
 .hamburger-btn {
-  position: fixed; top: 22px; right: 26px; z-index: 200;
+  position: fixed; top: 22px; right: 26px; z-index: 220;
   width: 52px; height: 52px; border-radius: 50%;
   background: rgba(0,255,255,0.05);
   border: 1.5px solid rgba(0,255,255,0.25);
@@ -113,8 +113,9 @@ body {
 .hamburger-btn.open .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background: var(--pink); }
 
 /* ── NAV OVERLAY ──────────────────────────────────── */
+/* FIX: z-index raised to 210 so it covers radio (z:200) and src buttons (z:200) */
 .nav-overlay {
-  position: fixed; inset: 0; z-index: 150;
+  position: fixed; inset: 0; z-index: 210;
   pointer-events: none; opacity: 0; transition: opacity 0.4s ease;
 }
 .nav-overlay.open { pointer-events: all; opacity: 1; }
@@ -511,7 +512,8 @@ body {
   backdrop-filter: blur(16px);
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1);
+  /* FIX: added opacity and visibility to transition list */
+  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1), opacity 0.3s ease, visibility 0.3s ease;
   animation: fadeSlideInLeft 0.8s cubic-bezier(0.34,1.4,0.64,1) both;
 }
 @keyframes fadeSlideInLeft {
@@ -975,7 +977,8 @@ body {
   box-shadow: 0 0 20px rgba(119,0,255,0.15), inset 0 1px 0 rgba(255,255,255,0.08);
   backdrop-filter: blur(16px);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1), opacity 0.25s ease;
+  /* FIX: added opacity and visibility to transition list */
+  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1), opacity 0.3s ease, visibility 0.3s ease;
   animation: fadeSlideInRight 0.8s cubic-bezier(0.34,1.4,0.64,1) 0.2s both;
 }
 @keyframes fadeSlideInRight {
@@ -1603,30 +1606,37 @@ body {
 'use strict';
 
 /* ── HAMBURGER ──────────────────────────────────── */
-const hBtn    = document.getElementById('hamburgerBtn');
-const overlay = document.getElementById('navOverlay');
-const backdrop= document.getElementById('navBackdrop');
+const hBtn     = document.getElementById('hamburgerBtn');
+const overlay  = document.getElementById('navOverlay');
+const backdrop = document.getElementById('navBackdrop');
 
-// These are declared early so toggleMenu can reference them
-const srcBtn        = document.getElementById('srcBtn');
+// Declared early so toggleMenu can reference them
+const srcBtn         = document.getElementById('srcBtn');
 const radioToggleBtn = document.getElementById('radioToggleBtn');
+const radioPanel     = document.getElementById('radioPanel');
 
 function toggleMenu(force) {
   if (typeof force === 'boolean') {
-    if (force) overlay.classList.add('open'); else overlay.classList.remove('open');
+    if (force) overlay.classList.add('open');
+    else overlay.classList.remove('open');
   } else {
     overlay.classList.toggle('open');
   }
   const isOpen = overlay.classList.contains('open');
   hBtn.classList.toggle('open', isOpen);
 
-  // Hide source code button and radio button when nav is open
-  srcBtn.style.opacity       = isOpen ? '0' : '';
-  srcBtn.style.pointerEvents = isOpen ? 'none' : '';
+  // ── FIX: hide radio + source-code buttons when nav is open ──
+  // opacity fades them out; visibility removes them from hit-testing
+  // immediately on close (visibility snaps back so transition feels right)
+  srcBtn.style.opacity        = isOpen ? '0' : '';
+  srcBtn.style.visibility     = isOpen ? 'hidden' : '';
+  srcBtn.style.pointerEvents  = isOpen ? 'none' : '';
+
   radioToggleBtn.style.opacity       = isOpen ? '0' : '';
+  radioToggleBtn.style.visibility    = isOpen ? 'hidden' : '';
   radioToggleBtn.style.pointerEvents = isOpen ? 'none' : '';
 
-  // Also close the radio panel if open
+  // Close the radio panel if nav is opening
   if (isOpen) {
     radioPanel.classList.remove('open');
     radioToggleBtn.classList.remove('active');
@@ -1698,9 +1708,9 @@ tick(); setInterval(tick, 1000);
 /* ── SOURCE CODE MODAL ──────────────────────────── */
 const SRC_RELEASE = new Date('2026-06-13T13:00:00');
 
-const srcOverlay     = document.getElementById('srcOverlay');
-const srcModalClose  = document.getElementById('srcModalClose');
-const srcLockedState = document.getElementById('srcLockedState');
+const srcOverlay       = document.getElementById('srcOverlay');
+const srcModalClose    = document.getElementById('srcModalClose');
+const srcLockedState   = document.getElementById('srcLockedState');
 const srcUnlockedState = document.getElementById('srcUnlockedState');
 
 function isSrcUnlocked() {
@@ -1755,7 +1765,6 @@ updateSrcCountdown();
 let songs = [];
 
 const radioAudio      = document.getElementById('radioAudio');
-const radioPanel      = document.getElementById('radioPanel');
 const radioPlayBtn    = document.getElementById('radioPlayBtn');
 const radioIconPlay   = document.getElementById('radioIconPlay');
 const radioIconPause  = document.getElementById('radioIconPause');
@@ -1914,7 +1923,7 @@ async function loadGithubImages(opts) {
   const { user, repo, branch, path, dotEl, statusEl, countEl, totEl, gallery, emptyEl, cardClass, aspectClass, onCardCreated } = opts;
   const IMAGE_EXTS = ['.jpg','.jpeg','.png','.webp','.gif'];
   function setStatus(type, msg) {
-    dotEl.className   = 'status-dot ' + type;
+    dotEl.className    = 'status-dot ' + type;
     statusEl.className = 'status-text ' + (type === 'loading' ? '' : type);
     statusEl.textContent = msg;
   }
@@ -2187,12 +2196,12 @@ const TRAILERS = [
 let tlbIdx = 0;
 let tlbMusicWasPlaying = false;
 
-const tlbEl     = document.getElementById('trailerLB');
-const tlbVideo  = document.getElementById('tlbVideo');
-const tlbTitle  = document.getElementById('tlbTitle');
-const tlbYear   = document.getElementById('tlbYear');
-const tlbCur    = document.getElementById('tlbCur');
-const tlbTot    = document.getElementById('tlbTot');
+const tlbEl    = document.getElementById('trailerLB');
+const tlbVideo = document.getElementById('tlbVideo');
+const tlbTitle = document.getElementById('tlbTitle');
+const tlbYear  = document.getElementById('tlbYear');
+const tlbCur   = document.getElementById('tlbCur');
+const tlbTot   = document.getElementById('tlbTot');
 
 tlbTot.textContent = TRAILERS.length;
 
