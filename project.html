@@ -79,7 +79,7 @@ body {
 
 /* ── HAMBURGER ────────────────────────────────────── */
 .hamburger-btn {
-  position: fixed; top: 22px; right: 26px; z-index: 200;
+  position: fixed; top: 22px; right: 26px; z-index: 220;
   width: 52px; height: 52px; border-radius: 50%;
   background: rgba(0,255,255,0.05);
   border: 1.5px solid rgba(0,255,255,0.25);
@@ -113,8 +113,9 @@ body {
 .hamburger-btn.open .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background: var(--pink); }
 
 /* ── NAV OVERLAY ──────────────────────────────────── */
+/* FIX: z-index raised to 210 so it covers radio (z:200) and src buttons (z:200) */
 .nav-overlay {
-  position: fixed; inset: 0; z-index: 150;
+  position: fixed; inset: 0; z-index: 210;
   pointer-events: none; opacity: 0; transition: opacity 0.4s ease;
 }
 .nav-overlay.open { pointer-events: all; opacity: 1; }
@@ -511,7 +512,8 @@ body {
   backdrop-filter: blur(16px);
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1);
+  /* FIX: added opacity and visibility to transition list */
+  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1), opacity 0.3s ease, visibility 0.3s ease;
   animation: fadeSlideInLeft 0.8s cubic-bezier(0.34,1.4,0.64,1) both;
 }
 @keyframes fadeSlideInLeft {
@@ -975,7 +977,8 @@ body {
   box-shadow: 0 0 20px rgba(119,0,255,0.15), inset 0 1px 0 rgba(255,255,255,0.08);
   backdrop-filter: blur(16px);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1);
+  /* FIX: added opacity and visibility to transition list */
+  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1), opacity 0.3s ease, visibility 0.3s ease;
   animation: fadeSlideInRight 0.8s cubic-bezier(0.34,1.4,0.64,1) 0.2s both;
 }
 @keyframes fadeSlideInRight {
@@ -1024,7 +1027,6 @@ body {
   transform: scale(1) translateY(0);
   opacity: 1;
 }
-/* scanline overlay */
 .src-modal::before {
   content: '';
   position: absolute; inset: 0; z-index: 0; pointer-events: none;
@@ -1032,7 +1034,6 @@ body {
     0deg, transparent, transparent 3px, rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px
   );
 }
-/* top glow strip */
 .src-modal::after {
   content: ''; position: absolute; top: 0; left: 15%; right: 15%; height: 1px;
   background: linear-gradient(90deg, transparent, rgba(119,0,255,0.6), transparent);
@@ -1070,7 +1071,6 @@ body {
   padding: 22px 28px 28px;
 }
 
-/* countdown state */
 .src-countdown-block { text-align: center; margin-bottom: 26px; }
 .src-countdown-label {
   font-size: 10px; font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase;
@@ -1107,14 +1107,12 @@ body {
 }
 .src-avail-date span { color: var(--pink); text-shadow: 0 0 12px rgba(255,0,200,0.4); }
 
-/* description */
 .src-desc {
   font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.4);
   line-height: 1.75; margin-bottom: 24px;
 }
 .src-desc strong { color: rgba(255,255,255,0.65); font-weight: 600; }
 
-/* download button — locked state */
 .src-dl-btn {
   width: 100%; height: 52px; border-radius: 14px;
   display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -1155,7 +1153,6 @@ body {
 .src-dl-btn svg { width: 18px; height: 18px; flex-shrink: 0; transition: fill 0.2s; }
 .src-dl-btn.unlocked svg { fill: currentColor; }
 
-/* unlocked view */
 .src-unlocked-state { display: none; }
 .src-unlocked-state.show { display: block; }
 .src-locked-state.hide { display: none; }
@@ -1381,7 +1378,6 @@ body {
       <div class="trailer-card" data-vid="QdBZY2fkU-0" data-title="Trailer 1" data-year="Dec 2023" style="transition-delay:0s">
         <div class="thumb-wrap">
           <img src="https://img.youtube.com/vi/QdBZY2fkU-0/maxresdefault.jpg" alt="GTA VI Trailer 1" loading="lazy">
-          <div class="thumb-overlay"><div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
         </div>
         <div class="card-label">
           <span class="card-label-title">Trailer 1</span>
@@ -1391,7 +1387,6 @@ body {
       <div class="trailer-card" data-vid="VQRLujxTm3c" data-title="Trailer 2" data-year="May 2025" style="transition-delay:0.1s">
         <div class="thumb-wrap">
           <img src="https://img.youtube.com/vi/VQRLujxTm3c/maxresdefault.jpg" alt="GTA VI Trailer 2" loading="lazy">
-          <div class="thumb-overlay"><div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
         </div>
         <div class="card-label">
           <span class="card-label-title">Trailer 2</span>
@@ -1401,7 +1396,6 @@ body {
       <div class="trailer-card" data-vid="XJhz0IuSZNo" data-title="Trailer 3" data-year="2026" style="transition-delay:0.2s">
         <div class="thumb-wrap">
           <img src="https://img.youtube.com/vi/XJhz0IuSZNo/hqdefault.jpg" alt="GTA VI Trailer 3" loading="lazy">
-          <div class="thumb-overlay"><div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
         </div>
         <div class="card-label">
           <span class="card-label-title">Trailer 3</span>
@@ -1481,7 +1475,7 @@ body {
     </div>
     <div class="src-modal-body">
 
-      <!-- LOCKED STATE (shown while countdown is running) -->
+      <!-- LOCKED STATE -->
       <div class="src-locked-state" id="srcLockedState">
         <div class="src-countdown-block">
           <div class="src-countdown-label">Available in</div>
@@ -1517,7 +1511,7 @@ body {
         </button>
       </div>
 
-      <!-- UNLOCKED STATE (shown after countdown reaches zero) -->
+      <!-- UNLOCKED STATE -->
       <div class="src-unlocked-state" id="srcUnlockedState">
         <div class="src-unlock-badge">
           <div class="src-unlock-dot"></div>
@@ -1609,17 +1603,43 @@ body {
 'use strict';
 
 /* ── HAMBURGER ──────────────────────────────────── */
-const hBtn    = document.getElementById('hamburgerBtn');
-const overlay = document.getElementById('navOverlay');
-const backdrop= document.getElementById('navBackdrop');
+const hBtn     = document.getElementById('hamburgerBtn');
+const overlay  = document.getElementById('navOverlay');
+const backdrop = document.getElementById('navBackdrop');
+
+// Declared early so toggleMenu can reference them
+const srcBtn         = document.getElementById('srcBtn');
+const radioToggleBtn = document.getElementById('radioToggleBtn');
+const radioPanel     = document.getElementById('radioPanel');
+
 function toggleMenu(force) {
   if (typeof force === 'boolean') {
-    if (force) overlay.classList.add('open'); else overlay.classList.remove('open');
+    if (force) overlay.classList.add('open');
+    else overlay.classList.remove('open');
   } else {
     overlay.classList.toggle('open');
   }
-  hBtn.classList.toggle('open', overlay.classList.contains('open'));
+  const isOpen = overlay.classList.contains('open');
+  hBtn.classList.toggle('open', isOpen);
+
+  // ── FIX: hide radio + source-code buttons when nav is open ──
+  // opacity fades them out; visibility removes them from hit-testing
+  // immediately on close (visibility snaps back so transition feels right)
+  srcBtn.style.opacity        = isOpen ? '0' : '';
+  srcBtn.style.visibility     = isOpen ? 'hidden' : '';
+  srcBtn.style.pointerEvents  = isOpen ? 'none' : '';
+
+  radioToggleBtn.style.opacity       = isOpen ? '0' : '';
+  radioToggleBtn.style.visibility    = isOpen ? 'hidden' : '';
+  radioToggleBtn.style.pointerEvents = isOpen ? 'none' : '';
+
+  // Close the radio panel if nav is opening
+  if (isOpen) {
+    radioPanel.classList.remove('open');
+    radioToggleBtn.classList.remove('active');
+  }
 }
+
 hBtn.addEventListener('click', () => toggleMenu());
 backdrop.addEventListener('click', () => toggleMenu(false));
 
@@ -1683,12 +1703,11 @@ function tick() {
 tick(); setInterval(tick, 1000);
 
 /* ── SOURCE CODE MODAL ──────────────────────────── */
-const SRC_RELEASE = new Date('2026-06-13T13:00:00'); // June 13, 2026, 1:00 PM local
+const SRC_RELEASE = new Date(0);
 
-const srcBtn         = document.getElementById('srcBtn');
-const srcOverlay     = document.getElementById('srcOverlay');
-const srcModalClose  = document.getElementById('srcModalClose');
-const srcLockedState = document.getElementById('srcLockedState');
+const srcOverlay       = document.getElementById('srcOverlay');
+const srcModalClose    = document.getElementById('srcModalClose');
+const srcLockedState   = document.getElementById('srcLockedState');
 const srcUnlockedState = document.getElementById('srcUnlockedState');
 
 function isSrcUnlocked() {
@@ -1698,7 +1717,6 @@ function isSrcUnlocked() {
 function updateSrcCountdown() {
   const diff = SRC_RELEASE - new Date();
   if (diff <= 0) {
-    // Switch to unlocked state
     srcLockedState.classList.add('hide');
     srcUnlockedState.classList.add('show');
     return;
@@ -1716,7 +1734,6 @@ function updateSrcCountdown() {
 let srcCountdownInterval = null;
 
 function openSrcModal() {
-  // Immediately set correct state
   if (isSrcUnlocked()) {
     srcLockedState.classList.add('hide');
     srcUnlockedState.classList.add('show');
@@ -1739,15 +1756,12 @@ srcBtn.addEventListener('click', openSrcModal);
 srcModalClose.addEventListener('click', closeSrcModal);
 srcOverlay.addEventListener('click', e => { if (e.target === srcOverlay) closeSrcModal(); });
 
-// Run countdown tick once immediately so no flicker on open
 updateSrcCountdown();
 
 /* ── RADIO PLAYER ───────────────────────────────── */
 let songs = [];
 
 const radioAudio      = document.getElementById('radioAudio');
-const radioPanel      = document.getElementById('radioPanel');
-const radioToggleBtn  = document.getElementById('radioToggleBtn');
 const radioPlayBtn    = document.getElementById('radioPlayBtn');
 const radioIconPlay   = document.getElementById('radioIconPlay');
 const radioIconPause  = document.getElementById('radioIconPause');
@@ -1906,7 +1920,7 @@ async function loadGithubImages(opts) {
   const { user, repo, branch, path, dotEl, statusEl, countEl, totEl, gallery, emptyEl, cardClass, aspectClass, onCardCreated } = opts;
   const IMAGE_EXTS = ['.jpg','.jpeg','.png','.webp','.gif'];
   function setStatus(type, msg) {
-    dotEl.className   = 'status-dot ' + type;
+    dotEl.className    = 'status-dot ' + type;
     statusEl.className = 'status-text ' + (type === 'loading' ? '' : type);
     statusEl.textContent = msg;
   }
@@ -2179,12 +2193,12 @@ const TRAILERS = [
 let tlbIdx = 0;
 let tlbMusicWasPlaying = false;
 
-const tlbEl     = document.getElementById('trailerLB');
-const tlbVideo  = document.getElementById('tlbVideo');
-const tlbTitle  = document.getElementById('tlbTitle');
-const tlbYear   = document.getElementById('tlbYear');
-const tlbCur    = document.getElementById('tlbCur');
-const tlbTot    = document.getElementById('tlbTot');
+const tlbEl    = document.getElementById('trailerLB');
+const tlbVideo = document.getElementById('tlbVideo');
+const tlbTitle = document.getElementById('tlbTitle');
+const tlbYear  = document.getElementById('tlbYear');
+const tlbCur   = document.getElementById('tlbCur');
+const tlbTot   = document.getElementById('tlbTot');
 
 tlbTot.textContent = TRAILERS.length;
 
