@@ -11,8 +11,6 @@
 <meta name="theme-color" content="#ff4dd2">
 <meta name="robots" content="index, follow">
 <link rel="icon" href="leonida/images/leonida.png" type="image/png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ── VARIABLES & RESET ────────────────────────────── */
@@ -85,11 +83,11 @@ body {
   width: 52px; height: 52px; border-radius: 50%;
   background: rgba(0,255,255,0.05);
   border: 1.5px solid rgba(0,255,255,0.25);
-  /* PERF: removed backdrop-filter from small button — not worth the GPU cost */
-  box-shadow: 0 0 20px rgba(0,255,255,0.1);
+  box-shadow: 0 0 20px rgba(0,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.1);
+  backdrop-filter: blur(16px);
   cursor: pointer;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
-  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+  transition: all 0.3s ease;
   animation: fadeSlideIn 0.8s cubic-bezier(0.34,1.4,0.64,1) both;
 }
 @keyframes fadeSlideIn {
@@ -98,7 +96,8 @@ body {
 }
 .hamburger-btn:hover {
   background: rgba(0,255,255,0.1); border-color: var(--cyan);
-  box-shadow: 0 0 28px rgba(0,255,255,0.25);
+  box-shadow: 0 0 28px rgba(0,255,255,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
+  transform: scale(1.08);
 }
 .hamburger-btn.open {
   background: rgba(255,0,200,0.08); border-color: rgba(255,0,200,0.3);
@@ -121,9 +120,7 @@ body {
 .nav-overlay.open { pointer-events: all; opacity: 1; }
 .nav-backdrop {
   position: absolute; inset: 0;
-  background: rgba(4,0,26,0.88);
-  /* PERF: reduced blur value — 24px blur is very expensive */
-  backdrop-filter: blur(10px);
+  background: rgba(4,0,26,0.88); backdrop-filter: blur(24px);
 }
 .nav-panel {
   position: absolute; top: 0; right: 0;
@@ -135,8 +132,6 @@ body {
   transition: transform 0.5s cubic-bezier(0.34,1.2,0.64,1);
   display: flex; flex-direction: column; justify-content: center;
   padding: 80px 48px; overflow: hidden;
-  /* PERF: use contain to limit repaint area */
-  contain: layout style;
 }
 .nav-panel::before {
   content: ''; position: absolute; top: -80px; right: -80px;
@@ -188,13 +183,11 @@ body {
 .nav-footer-dot {
   width: 6px; height: 6px; border-radius: 50%;
   background: var(--pink); box-shadow: 0 0 8px var(--pink);
-  /* PERF: only animate when nav is open (toggled via JS class) */
   animation: dotPulse 2s ease-in-out infinite;
 }
 @keyframes dotPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(0.55)} }
 
 /* ── SHARED TEXT SHIMMER ──────────────────────────── */
-/* PERF: shimmer is GPU-friendly (background-position), kept as-is */
 @keyframes textShimmer { 0%{background-position:0%} 100%{background-position:300%} }
 
 /* ── PAGE TITLE STYLE ─────────────────────────────── */
@@ -268,8 +261,6 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 16px;
-  /* PERF: contain helps browser scope layout/paint */
-  contain: layout;
 }
 .gallery-item, .place-card {
   border-radius: 14px; overflow: hidden;
@@ -278,15 +269,9 @@ body {
   box-shadow: 0 8px 32px rgba(0,0,0,0.4);
   cursor: pointer;
   opacity: 0; transform: scale(0.92) translateY(14px);
-  /* PERF: tell browser what will animate */
-  will-change: transform, opacity;
   transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.34,1.4,0.64,1), box-shadow 0.2s, border-color 0.2s;
 }
-.gallery-item.visible, .place-card.visible {
-  opacity: 1; transform: scale(1) translateY(0);
-  /* PERF: remove will-change once animation is done to free GPU memory */
-  will-change: auto;
-}
+.gallery-item.visible, .place-card.visible { opacity: 1; transform: scale(1) translateY(0); }
 .gallery-item:hover, .place-card:hover {
   transform: translateY(-4px) scale(1.01) !important;
   border-color: rgba(0,255,255,0.3);
@@ -305,8 +290,6 @@ body {
 .card-img-wrap img {
   width: 100%; height: 100%; object-fit: cover; display: block;
   transition: transform 0.4s ease;
-  /* PERF: hint browser to decode off main thread */
-  decoding: async;
 }
 .gallery-item:hover .card-img-wrap img,
 .place-card:hover .card-img-wrap img { transform: scale(1.06); }
@@ -321,8 +304,7 @@ body {
   font-size: 11px; font-weight: 900; letter-spacing: 0.15em; text-transform: uppercase;
   color: rgba(255,255,255,0.5); background: rgba(4,0,26,0.6);
   padding: 4px 10px; border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.1);
-  /* PERF: no backdrop-filter on small repeated elements */
+  border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(8px);
 }
 .card-body { padding: 12px 14px 14px; }
 .card-name {
@@ -342,9 +324,7 @@ body {
   background: rgba(4,0,26,0.96);
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  padding: 20px;
-  /* PERF: reduced blur — 8px is visually similar to 24px but much cheaper */
-  backdrop-filter: blur(8px);
+  padding: 20px; backdrop-filter: blur(24px);
   opacity: 0; pointer-events: none; transition: opacity 0.2s ease;
 }
 .lb-viewer.active { opacity: 1; pointer-events: all; }
@@ -370,11 +350,11 @@ body {
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 999px; padding: 8px 22px;
   cursor: pointer; letter-spacing: 0.08em;
-  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  transition: color 0.15s, border-color 0.15s, background 0.15s, transform 0.15s;
 }
 .viewer-btn:hover {
   color: #fff; border-color: rgba(0,255,255,0.4);
-  background: rgba(0,255,255,0.08);
+  background: rgba(0,255,255,0.08); transform: scale(1.08);
 }
 .viewer-counter {
   font-family: 'Barlow Condensed', sans-serif;
@@ -431,7 +411,7 @@ body {
   background: rgba(4,0,26,0.55);
   border: 1px solid rgba(0,255,255,0.22);
   box-shadow: 0 0 24px rgba(0,255,255,0.08), inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 32px rgba(0,0,0,0.5);
-  /* PERF: removed backdrop-filter from pills — they're animating constantly */
+  backdrop-filter: blur(20px);
   position: relative; overflow: hidden; min-width: 84px;
   transition: transform 0.25s cubic-bezier(0.34,1.4,0.64,1), box-shadow 0.25s;
 }
@@ -478,15 +458,23 @@ body {
   animation: sepBlink 1s ease-in-out infinite; user-select: none;
 }
 @keyframes sepBlink { 0%,100%{opacity:.45} 50%{opacity:.1} }
-
-/* PERF: bounce uses transform only — compositor-friendly */
 .bounce { animation: numBounce 0.45s cubic-bezier(0.34,1.8,0.64,1); }
 @keyframes numBounce {
   0%  { transform: scale(1.5) translateY(-6px); }
   60% { transform: scale(0.9) translateY(2px); }
   100%{ transform: scale(1) translateY(0); }
 }
-
+.pill-tooltip {
+  position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%);
+  font-size: 9px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
+  color: rgba(255,255,255,0.7); white-space: nowrap;
+  background: rgba(4,0,26,0.9); border: 1px solid rgba(0,255,255,0.25);
+  padding: 4px 10px; border-radius: 6px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  transform: translateX(-50%) translateY(4px);
+}
+.pill:hover .pill-tooltip { opacity: 1; transform: translateX(-50%) translateY(0); }
 .subtitle-wrap { animation: popIn 1s cubic-bezier(0.34,1.56,0.64,1) 0.3s both; }
 .subtitle {
   font-size: 11px; font-weight: 600; letter-spacing: 0.3em;
@@ -505,24 +493,24 @@ body {
   border: 1px solid rgba(255,255,255,0.15);
   color: rgba(255,255,255,0.45);
   background: rgba(4,0,26,0.45);
+  backdrop-filter: blur(8px);
   transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
 .platform-badge:hover {
   border-color: rgba(255,255,255,0.6); color: #ffffff;
   box-shadow: 0 0 14px rgba(255,255,255,0.15);
 }
-
 /* ── RADIO PLAYER ─────────────────────────────────── */
 .radio-toggle-btn {
   position: fixed; bottom: 22px; left: 22px; z-index: 200;
   width: 52px; height: 52px; border-radius: 50%;
   background: rgba(4,0,26,0.7);
   border: 1.5px solid rgba(0,255,255,0.3);
-  box-shadow: 0 0 20px rgba(0,255,255,0.15);
-  /* PERF: no backdrop-filter on small fixed button */
+  box-shadow: 0 0 20px rgba(0,255,255,0.15), inset 0 1px 0 rgba(255,255,255,0.08);
+  backdrop-filter: blur(16px);
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1);
   animation: fadeSlideInLeft 0.8s cubic-bezier(0.34,1.4,0.64,1) both;
 }
 @keyframes fadeSlideInLeft {
@@ -531,7 +519,8 @@ body {
 }
 .radio-toggle-btn:hover {
   border-color: var(--cyan);
-  box-shadow: 0 0 32px rgba(0,255,255,0.3);
+  box-shadow: 0 0 32px rgba(0,255,255,0.3), inset 0 1px 0 rgba(255,255,255,0.12);
+  transform: scale(1.1);
 }
 .radio-toggle-btn.active {
   border-color: var(--pink);
@@ -540,8 +529,6 @@ body {
 }
 .radio-toggle-btn svg { width: 22px; height: 22px; fill: var(--cyan); transition: fill 0.3s; }
 .radio-toggle-btn.active svg { fill: var(--pink); }
-
-/* PERF: pulse ring only when .playing class is present */
 .radio-toggle-btn.playing::before {
   content: '';
   position: absolute; inset: -6px;
@@ -553,29 +540,24 @@ body {
   0%   { transform: scale(1);   opacity: 0.7; }
   100% { transform: scale(1.6); opacity: 0; }
 }
-
-/* panel */
 .radio-panel {
   position: fixed; bottom: 84px; left: 22px; z-index: 199;
   width: 320px;
-  background: rgba(4,0,26,0.85);
+  background: rgba(4,0,26,0.55);
   border: 1px solid rgba(0,255,255,0.18);
   border-radius: 18px;
-  box-shadow: 0 0 40px rgba(0,255,255,0.07), 0 16px 60px rgba(0,0,0,0.7);
-  /* PERF: reduced blur to 10px from 28px — invisible difference at this opacity */
-  backdrop-filter: blur(10px);
+  box-shadow: 0 0 40px rgba(0,255,255,0.07), 0 0 80px rgba(255,0,200,0.05), 0 16px 60px rgba(0,0,0,0.7);
+  backdrop-filter: blur(28px);
   overflow: hidden;
   transform-origin: bottom left;
   transform: scale(0.88) translateY(12px);
   opacity: 0; pointer-events: none;
   transition: transform 0.4s cubic-bezier(0.34,1.4,0.64,1), opacity 0.3s ease;
-  contain: layout style;
 }
 .radio-panel.open {
   transform: scale(1) translateY(0);
   opacity: 1; pointer-events: all;
 }
-
 .radio-panel::before {
   content: '';
   position: absolute; inset: 0; z-index: 0; pointer-events: none;
@@ -583,7 +565,6 @@ body {
     0deg, transparent, transparent 3px, rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px
   );
 }
-
 .radio-header {
   position: relative; z-index: 1;
   display: flex; align-items: center; justify-content: space-between;
@@ -601,7 +582,6 @@ body {
   font-size: 11px; font-weight: 700; letter-spacing: 0.15em;
   color: rgba(255,0,200,0.5);
 }
-
 .radio-now {
   position: relative; z-index: 1;
   padding: 14px 16px 10px;
@@ -629,8 +609,6 @@ body {
   80%  { transform: translateX(-60%); }
   100% { transform: translateX(0); }
 }
-
-/* waveform bars */
 .radio-wave {
   display: flex; align-items: flex-end; gap: 3px; height: 22px; margin-top: 8px;
 }
@@ -640,7 +618,6 @@ body {
   opacity: 0.3; transform-origin: bottom;
   transition: opacity 0.3s;
 }
-/* PERF: waveform animations only run when .playing is active */
 .radio-wave.playing span {
   opacity: 1;
   animation: wvDance var(--ws) ease-in-out infinite alternate;
@@ -658,8 +635,6 @@ body {
 .radio-wave span:nth-child(11) { height: 7px;  --ws: 0.62s; }
 .radio-wave span:nth-child(12) { height: 13px; --ws: 0.37s; }
 @keyframes wvDance { from{transform:scaleY(0.2)} to{transform:scaleY(1)} }
-
-/* controls */
 .radio-controls {
   position: relative; z-index: 1;
   display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -672,12 +647,12 @@ body {
   border: 1px solid rgba(255,255,255,0.1);
   color: rgba(255,255,255,0.45);
   cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  transition: all 0.2s cubic-bezier(0.34,1.4,0.64,1);
 }
 .radio-btn:hover {
   background: rgba(0,255,255,0.08);
   border-color: rgba(0,255,255,0.35);
-  color: var(--cyan);
+  color: var(--cyan); transform: scale(1.12);
   box-shadow: 0 0 14px rgba(0,255,255,0.2);
 }
 .radio-btn svg { width: 14px; height: 14px; fill: currentColor; }
@@ -698,8 +673,6 @@ body {
   color: var(--pink);
   box-shadow: 0 0 18px rgba(255,0,200,0.2);
 }
-
-/* volume */
 .radio-vol-wrap {
   position: relative; z-index: 1;
   display: flex; align-items: center; gap: 10px;
@@ -716,15 +689,14 @@ body {
 .radio-vol-slider::-webkit-slider-thumb {
   -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%;
   background: var(--cyan); box-shadow: 0 0 8px rgba(0,255,255,0.5);
-  cursor: pointer;
+  cursor: pointer; transition: transform 0.15s;
 }
+.radio-vol-slider::-webkit-slider-thumb:hover { transform: scale(1.3); }
 .radio-vol-val {
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 11px; font-weight: 900; letter-spacing: 0.1em;
   color: rgba(255,255,255,0.2); min-width: 28px; text-align: right;
 }
-
-/* tracklist */
 .radio-tracklist {
   position: relative; z-index: 1;
   max-height: 200px; overflow-y: auto;
@@ -734,7 +706,6 @@ body {
 .radio-tracklist::-webkit-scrollbar { width: 3px; }
 .radio-tracklist::-webkit-scrollbar-track { background: transparent; }
 .radio-tracklist::-webkit-scrollbar-thumb { background: rgba(0,255,255,0.15); border-radius: 4px; }
-
 .radio-tracklist-loading {
   position: relative; z-index: 1;
   padding: 16px;
@@ -749,7 +720,6 @@ body {
   font-size: 10px; font-weight: 600; font-family: monospace;
   color: rgba(255,255,255,0.2); letter-spacing: 0.1em;
 }
-
 .radio-track {
   display: flex; align-items: center; gap: 10px;
   padding: 7px 16px; cursor: pointer;
@@ -800,7 +770,7 @@ body {
   border-radius: 18px;
   overflow: hidden;
   border: 1px solid rgba(0,255,255,0.18);
-  box-shadow: 0 0 50px rgba(0,255,255,0.08), 0 12px 50px rgba(0,0,0,0.7);
+  box-shadow: 0 0 50px rgba(0,255,255,0.08), 0 0 100px rgba(255,0,200,0.05), 0 12px 50px rgba(0,0,0,0.7);
   animation: popIn 0.9s cubic-bezier(0.34,1.4,0.64,1) 0.1s both;
 }
 .map-wrap iframe {
@@ -860,85 +830,50 @@ body {
 /* ── TRAILERS PAGE ────────────────────────────────── */
 #page-trailers { isolation: isolate; }
 #page-trailers .page-main { overflow-y: auto; height: 100%; }
-.trailers-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
+.trailers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 #page-trailers .page-header { margin-bottom: 48px; }
-
 .trailer-card {
   border-radius: 16px; overflow: hidden;
   border: 1.5px solid rgba(0,255,255,0.14);
   background: rgba(4, 0, 26, 0.6);
   box-shadow: 0 8px 40px rgba(0,0,0,0.6);
   opacity: 0; transform: scale(0.93) translateY(16px);
-  will-change: transform, opacity;
   transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34,1.4,0.64,1), border-color 0.2s, box-shadow 0.2s;
-  position: relative;
-  isolation: isolate;
-  cursor: pointer;
+  position: relative; isolation: isolate; will-change: transform; cursor: pointer;
 }
-.trailer-card.visible { opacity: 1; transform: scale(1) translateY(0); will-change: auto; }
+.trailer-card.visible { opacity: 1; transform: scale(1) translateY(0); }
 .trailer-card:hover {
   border-color: rgba(0,255,255,0.35);
   box-shadow: 0 16px 56px rgba(0,0,0,0.7), 0 0 30px rgba(0,255,255,0.1);
   transform: translateY(-3px) scale(1.005);
 }
-.trailer-card:nth-child(even) {
-  border-color: rgba(255,0,200,0.18);
-  background: rgba(4, 0, 26, 0.6);
-}
+.trailer-card:nth-child(even) { border-color: rgba(255,0,200,0.18); background: rgba(4, 0, 26, 0.6); }
 .trailer-card:nth-child(even):hover {
   border-color: rgba(255,0,200,0.35);
   box-shadow: 0 16px 56px rgba(0,0,0,0.7), 0 0 30px rgba(255,0,200,0.1);
 }
-
-.thumb-wrap {
-  position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #000;
-}
-.thumb-wrap img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  transition: transform 0.4s ease;
-}
+.thumb-wrap { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #000; }
+.thumb-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
 .trailer-card:hover .thumb-wrap img { transform: scale(1.04); }
 .thumb-overlay {
   position: absolute; inset: 0;
   background: linear-gradient(0deg, rgba(4,0,26,0.6) 0%, transparent 60%);
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.2s;
+  display: flex; align-items: center; justify-content: center; transition: background 0.2s;
 }
-.trailer-card:hover .thumb-overlay {
-  background: linear-gradient(0deg, rgba(4,0,26,0.4) 0%, transparent 60%);
-}
+.trailer-card:hover .thumb-overlay { background: linear-gradient(0deg, rgba(4,0,26,0.4) 0%, transparent 60%); }
 .play-circle {
   width: 62px; height: 62px; border-radius: 50%;
   background: rgba(255,255,255,0.12);
   border: 2px solid rgba(255,255,255,0.45);
   display: flex; align-items: center; justify-content: center;
-  /* PERF: no backdrop-filter on play button */
+  backdrop-filter: blur(6px);
   transition: transform 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 .trailer-card:hover .play-circle {
-  transform: scale(1.12);
-  background: rgba(255,0,0,0.75);
-  border-color: #fff;
+  transform: scale(1.12); background: rgba(255,0,0,0.75); border-color: #fff;
   box-shadow: 0 0 28px rgba(255,0,0,0.4);
 }
 .play-circle svg { width: 24px; height: 24px; fill: #fff; margin-left: 4px; }
-
-.new-badge {
-  position: absolute; top: 14px; right: 14px; z-index: 10;
-  font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 900;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: #04001a; background: var(--cyan);
-  padding: 5px 12px; border-radius: 999px;
-  box-shadow: 0 0 16px rgba(0,255,255,0.5);
-  animation: pulseBadge 2s ease-in-out infinite;
-  pointer-events: none;
-}
-@keyframes pulseBadge { 0%,100%{box-shadow:0 0 16px rgba(0,255,255,0.5)} 50%{box-shadow:0 0 28px rgba(0,255,255,0.9)} }
-
 .card-label {
   padding: 12px 16px;
   display: flex; align-items: center; justify-content: space-between;
@@ -947,8 +882,7 @@ body {
 }
 .card-label-title {
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 14px; font-weight: 900;
-  letter-spacing: 0.14em; text-transform: uppercase;
+  font-size: 14px; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase;
   color: rgba(255,255,255,0.65);
 }
 .card-label-year { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; color: rgba(255,255,255,0.25); }
@@ -957,34 +891,23 @@ body {
 #trailerLB {
   position: fixed; inset: 0; z-index: 9000;
   background: rgba(0,0,0,0.92);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 24px;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.25s ease;
-  /* PERF: reduced blur */
-  backdrop-filter: blur(8px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 24px; opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease; backdrop-filter: blur(20px);
 }
 #trailerLB.active { opacity: 1; pointer-events: all; }
-
 .tlb-close {
   position: fixed; top: 20px; right: 26px; z-index: 9001;
   width: 46px; height: 46px; border-radius: 50%;
-  background: rgba(255,255,255,0.07);
-  border: 1.5px solid rgba(255,255,255,0.2);
-  color: rgba(255,255,255,0.6);
-  font-size: 20px; font-weight: 700;
+  background: rgba(255,255,255,0.07); border: 1.5px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.6); font-size: 20px; font-weight: 700;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.15s;
 }
-.tlb-close:hover {
-  background: rgba(255,60,60,0.25); border-color: rgba(255,60,60,0.5); color: #fff;
-}
-
+.tlb-close:hover { background: rgba(255,60,60,0.25); border-color: rgba(255,60,60,0.5); color: #fff; transform: scale(1.08); }
 .tlb-inner { width: 100%; max-width: 1060px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
 .tlb-video-wrap {
-  width: 100%; aspect-ratio: 16/9;
-  border-radius: 14px; overflow: hidden;
+  width: 100%; aspect-ratio: 16/9; border-radius: 14px; overflow: hidden;
   border: 1.5px solid rgba(0,255,255,0.2);
   box-shadow: 0 0 60px rgba(0,255,255,0.08), 0 24px 70px rgba(0,0,0,0.85);
   background: #000; position: relative;
@@ -992,11 +915,7 @@ body {
 .tlb-video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
 .tlb-footer { display: flex; align-items: center; justify-content: space-between; width: 100%; }
 .tlb-meta { display: flex; align-items: center; gap: 14px; }
-.tlb-title {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 22px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase;
-  color: rgba(255,255,255,0.55);
-}
+.tlb-title { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
 .tlb-year { font-size: 11px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.25); }
 .tlb-sep { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,0,200,0.5); }
 .tlb-nav { display: flex; align-items: center; gap: 12px; }
@@ -1005,14 +924,74 @@ body {
   color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 22px;
   cursor: pointer; letter-spacing: 0.06em;
-  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  transition: color 0.15s, border-color 0.15s, background 0.15s, transform 0.15s;
 }
-.tlb-btn:hover { color: #fff; border-color: rgba(0,255,255,0.4); background: rgba(0,255,255,0.08); }
-.tlb-counter {
-  font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 900;
-  letter-spacing: 0.2em; color: rgba(255,255,255,0.25); min-width: 60px; text-align: center;
-}
+.tlb-btn:hover { color: #fff; border-color: rgba(0,255,255,0.4); background: rgba(0,255,255,0.08); transform: scale(1.06); }
+.tlb-counter { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 900; letter-spacing: 0.2em; color: rgba(255,255,255,0.25); min-width: 60px; text-align: center; }
 .tlb-counter span { color: var(--cyan); }
+
+/* ── SOURCE CODE BUTTON ───────────────────────────── */
+.src-btn {
+  position: fixed; bottom: 22px; right: 22px; z-index: 200;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  background: rgba(4,0,26,0.7);
+  border: 1.5px solid rgba(0,255,255,0.28);
+  border-radius: 10px; padding: 9px 18px;
+  cursor: pointer; backdrop-filter: blur(16px);
+  box-shadow: 0 0 18px rgba(0,255,255,0.1);
+  transition: all 0.25s ease;
+  animation: fadeSlideIn 0.8s cubic-bezier(0.34,1.4,0.64,1) 0.5s both;
+}
+.src-btn:hover {
+  color: #fff; border-color: rgba(0,255,255,0.7);
+  box-shadow: 0 0 28px rgba(0,255,255,0.25); transform: translateY(-2px);
+}
+
+/* ── SOURCE CODE MODAL ────────────────────────────── */
+.src-modal-backdrop {
+  position: fixed; inset: 0; z-index: 9100;
+  background: rgba(4,0,26,0.82); backdrop-filter: blur(18px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+}
+.src-modal-backdrop.open { opacity: 1; pointer-events: all; }
+.src-modal {
+  background: rgba(4,0,26,0.95);
+  border: 1.5px solid rgba(255,0,200,0.35); border-radius: 18px;
+  padding: 36px 40px 32px; max-width: 420px; width: 90%;
+  text-align: center;
+  box-shadow: 0 0 50px rgba(255,0,200,0.15), 0 24px 60px rgba(0,0,0,0.7);
+  transform: scale(0.88) translateY(14px);
+  transition: transform 0.35s cubic-bezier(0.34,1.4,0.64,1);
+}
+.src-modal-backdrop.open .src-modal { transform: scale(1) translateY(0); }
+.src-modal-icon { font-size: 38px; margin-bottom: 14px; display: block; }
+.src-modal-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 26px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em;
+  color: #ff3a3a; text-shadow: 0 0 20px rgba(255,60,60,0.4); margin-bottom: 10px;
+}
+.src-modal-msg {
+  font-size: 13px; font-weight: 500; letter-spacing: 0.03em;
+  color: rgba(255,255,255,0.5); line-height: 1.75; margin-bottom: 10px;
+}
+.src-modal-msg .highlight { color: rgba(0,255,255,0.8); font-weight: 700; }
+.src-modal-countdown {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px; font-weight: 900; letter-spacing: 0.12em;
+  color: rgba(255,0,200,0.85); margin-bottom: 24px;
+  text-shadow: 0 0 14px rgba(255,0,200,0.3);
+}
+.src-modal-close {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px; font-weight: 900; letter-spacing: 0.15em; text-transform: uppercase;
+  color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; padding: 9px 28px;
+  cursor: pointer; transition: all 0.2s ease;
+}
+.src-modal-close:hover { color: #fff; border-color: rgba(0,255,255,0.4); background: rgba(0,255,255,0.08); box-shadow: 0 0 14px rgba(0,255,255,0.15); }
 
 /* ── SHARED KEYFRAMES ─────────────────────────────── */
 @keyframes popIn {
@@ -1020,64 +999,6 @@ body {
   to   { opacity: 1; transform: none; }
 }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
-
-/* ── NAV SETTINGS ─────────────────────────────────── */
-.nav-settings {
-  margin-top: 36px; padding-top: 24px;
-  border-top: 1px solid rgba(255,255,255,0.06);
-  opacity: 0; transition: opacity 0.4s ease 0.35s;
-}
-.nav-overlay.open .nav-settings { opacity: 1; }
-.nav-settings-label {
-  font-size: 10px; font-weight: 600; letter-spacing: 0.4em;
-  text-transform: uppercase; color: rgba(0,255,255,0.35); margin-bottom: 16px;
-}
-.nav-setting-row {
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  padding: 10px 0;
-}
-.nav-setting-name {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 18px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.05em; color: rgba(255,255,255,0.5);
-  transition: color 0.2s;
-}
-.nav-setting-row:hover .nav-setting-name { color: rgba(255,255,255,0.8); }
-.nav-setting-desc {
-  font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-  color: rgba(255,255,255,0.18); margin-top: 2px;
-}
-
-/* toggle switch */
-.nav-toggle {
-  flex-shrink: 0;
-  width: 44px; height: 24px; border-radius: 999px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  cursor: pointer; position: relative;
-  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
-}
-.nav-toggle.on {
-  background: rgba(0,255,255,0.18);
-  border-color: rgba(0,255,255,0.4);
-  box-shadow: 0 0 12px rgba(0,255,255,0.2);
-}
-.nav-toggle-knob {
-  position: absolute; top: 3px; left: 3px;
-  width: 16px; height: 16px; border-radius: 50%;
-  background: rgba(255,255,255,0.3);
-  transition: transform 0.3s cubic-bezier(0.34,1.4,0.64,1), background 0.3s;
-}
-.nav-toggle.on .nav-toggle-knob {
-  transform: translateX(20px);
-  background: var(--cyan);
-  box-shadow: 0 0 8px rgba(0,255,255,0.6);
-}
-
-/* hidden state for radio elements */
-.radio-hidden {
-  display: none !important;
-}
 
 /* ── RESPONSIVE ───────────────────────────────────── */
 @media (max-width: 900px) { .trailers-grid { grid-template-columns: 1fr 1fr; } }
@@ -1097,20 +1018,16 @@ body {
   .nav-panel { padding: 70px 28px; }
 }
 @media (max-width: 600px) { .page-main { padding: 80px 20px 60px; } }
-
-/* ── PERF: reduce motion for users who prefer it ─── */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-}
 </style>
 </head>
 <body>
 
+<!-- BG LAYERS -->
 <div class="bg-darken"></div>
 <div class="bg-tint"></div>
 
 <!-- AUDIO -->
-<audio id="bgMusic" loop preload="none">
+<audio id="bgMusic" loop preload="auto">
   <source src="leonida/music/relax.mp3" type="audio/mpeg">
 </audio>
 
@@ -1134,18 +1051,6 @@ body {
       <li><a data-page="screenshots">Screenshots</a></li>
       <li><a data-page="trailers">Trailers</a></li>
     </ul>
-    <div class="nav-settings">
-      <div class="nav-settings-label">Settings</div>
-      <div class="nav-setting-row" id="radioSettingRow">
-        <div class="nav-setting-info">
-          <div class="nav-setting-name">Wave FM Radio</div>
-          <div class="nav-setting-desc">Disable to reduce lag</div>
-        </div>
-        <button class="nav-toggle" id="radioToggleSetting" aria-label="Toggle radio">
-          <span class="nav-toggle-knob"></span>
-        </button>
-      </div>
-    </div>
     <div class="nav-footer">
       <span class="nav-footer-text">November 19, 2026</span>
       <div class="nav-footer-dot"></div>
@@ -1161,6 +1066,7 @@ body {
   </div>
   <div class="pills">
     <div class="pill" id="pill-d">
+      <div class="pill-tooltip" id="tip-d">days to go!</div>
       <span class="pill-num" id="n-d">000</span>
       <span class="pill-lbl">Days</span>
     </div>
@@ -1267,7 +1173,7 @@ body {
     <div class="empty" id="ss-empty">
       <div class="empty-icon">🖼️</div>
       <div class="empty-title">No Screenshots Found</div>
-      <div class="empty-sub">Add images into <code>leonida/photos/</code> and they'll appear here automatically.</div>
+      <div class="empty-sub">Add <code>1.jpg</code> through <code>70.jpg</code> into <code>leonida/screenshots/</code> and they'll appear here automatically.</div>
     </div>
     <div class="places-grid" id="ss-gallery"></div>
   </div>
@@ -1366,6 +1272,24 @@ body {
   </div>
 </div>
 
+<!-- SOURCE CODE BUTTON -->
+<button class="src-btn" id="srcBtn">Source Code</button>
+
+<!-- SOURCE CODE MODAL -->
+<div class="src-modal-backdrop" id="srcModal">
+  <div class="src-modal">
+    <span class="src-modal-icon">⚠️</span>
+    <div class="src-modal-title">Not Available Yet</div>
+    <div class="src-modal-msg">
+      Source code drops on<br>
+      <span class="highlight">June 13, 2025 · 1:00 PM EST</span>
+    </div>
+    <div class="src-modal-countdown" id="srcCountdown">Calculating…</div>
+    <button class="src-modal-close" id="srcModalClose">Dismiss</button>
+  </div>
+</div>
+
+<!-- AUDIO ELEMENT -->
 <audio id="radioAudio" preload="none"></audio>
 
 <!-- LIGHTBOXES -->
@@ -1423,7 +1347,7 @@ body {
       </div>
       <div class="tlb-nav">
         <button class="tlb-btn" id="tlbPrev">&#8592;</button>
-        <div class="tlb-counter"><span id="tlbCur">1</span> / <span id="tlbTot">2</span></div>
+        <div class="tlb-counter"><span id="tlbCur">1</span> / <span id="tlbTot">3</span></div>
         <button class="tlb-btn" id="tlbNext">&#8594;</button>
       </div>
     </div>
@@ -1433,31 +1357,17 @@ body {
 <script>
 'use strict';
 
-/* ── CACHE HELPER ───────────────────────────────────
-   Wraps sessionStorage so GitHub API responses are
-   reused within the same tab session, eliminating
-   redundant network fetches on page revisits.
-─────────────────────────────────────────────────── */
-const Cache = {
-  get(key) {
-    try {
-      const raw = sessionStorage.getItem('lnda_' + key);
-      return raw ? JSON.parse(raw) : null;
-    } catch { return null; }
-  },
-  set(key, data) {
-    try { sessionStorage.setItem('lnda_' + key, JSON.stringify(data)); } catch {}
-  }
-};
-
 /* ── HAMBURGER ──────────────────────────────────── */
 const hBtn    = document.getElementById('hamburgerBtn');
 const overlay = document.getElementById('navOverlay');
 const backdrop= document.getElementById('navBackdrop');
 function toggleMenu(force) {
-  const open = typeof force === 'boolean' ? force : !overlay.classList.contains('open');
-  overlay.classList.toggle('open', open);
-  hBtn.classList.toggle('open', open);
+  if (typeof force === 'boolean') {
+    if (force) overlay.classList.add('open'); else overlay.classList.remove('open');
+  } else {
+    overlay.classList.toggle('open');
+  }
+  hBtn.classList.toggle('open', overlay.classList.contains('open'));
 }
 hBtn.addEventListener('click', () => toggleMenu());
 backdrop.addEventListener('click', () => toggleMenu(false));
@@ -1467,11 +1377,11 @@ const pages      = document.querySelectorAll('.page');
 const navAnchors = document.querySelectorAll('[data-page]');
 const initialized = {};
 function showPage(id) {
-  pages.forEach(p => p.classList.remove('active'));
+  pages.forEach(p => { p.classList.remove('active'); });
   const page = document.getElementById('page-' + id);
   if (!page) return;
   page.classList.add('active');
-  navAnchors.forEach(a => a.classList.toggle('active', a.dataset.page === id));
+  navAnchors.forEach(a => { a.classList.toggle('active', a.dataset.page === id); });
   toggleMenu(false);
   if (!initialized[id]) {
     initialized[id] = true;
@@ -1487,14 +1397,16 @@ navAnchors.forEach(a => {
   a.addEventListener('click', e => { e.preventDefault(); showPage(a.dataset.page); });
 });
 document.addEventListener('keydown', e => {
-  if (e.key !== 'Escape') return;
-  if (document.getElementById('trailerLB').classList.contains('active')) { closeTLB(); return; }
-  const openLB = document.querySelector('.lb-viewer.active');
-  if (openLB) { openLB.classList.remove('active'); return; }
-  if (overlay.classList.contains('open')) { toggleMenu(false); }
+  if (e.key === 'Escape') {
+    if (document.getElementById('trailerLB').classList.contains('active')) { closeTLB(); return; }
+    const openLB = document.querySelector('.lb-viewer.active');
+    if (openLB) { openLB.classList.remove('active'); return; }
+    if (document.getElementById('srcModal').classList.contains('open')) { document.getElementById('srcModal').classList.remove('open'); return; }
+    if (overlay.classList.contains('open')) { toggleMenu(false); return; }
+  }
 });
 
-/* ── COUNTDOWN ──────────────────────────────────── */
+/* ── COUNTDOWN (GTA release) ────────────────────── */
 const prev = { d:'', h:'', m:'', s:'' };
 function bounce(id) {
   const el = document.getElementById('n-' + id);
@@ -1502,18 +1414,96 @@ function bounce(id) {
   setTimeout(() => el.classList.remove('bounce'), 500);
 }
 function tick() {
-  const diff = new Date('2026-11-19T00:00:00') - new Date();
-  if (diff <= 0) { ['d','h','m','s'].forEach(k => document.getElementById('n-' + k).textContent = '00'); return; }
+  const target = new Date('2026-11-19T00:00:00');
+  const diff   = target - new Date();
+  if (diff <= 0) {
+    ['d','h','m','s'].forEach(k => document.getElementById('n-' + k).textContent = '00');
+    return;
+  }
   const d = String(Math.floor(diff / 86400000)).padStart(3, '0');
   const h = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
   const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
   const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
-  if (d !== prev.d) { document.getElementById('n-d').textContent = d; bounce('d'); prev.d = d; }
+  if (d !== prev.d) { document.getElementById('n-d').textContent = d; bounce('d'); prev.d = d; const tip = document.getElementById('tip-d'); if (tip) tip.textContent = d + ' days to go!'; }
   if (h !== prev.h) { document.getElementById('n-h').textContent = h; bounce('h'); prev.h = h; }
   if (m !== prev.m) { document.getElementById('n-m').textContent = m; bounce('m'); prev.m = m; }
   if (s !== prev.s) { document.getElementById('n-s').textContent = s; bounce('s'); prev.s = s; }
 }
 tick(); setInterval(tick, 1000);
+
+/* ── SOURCE CODE MODAL ──────────────────────────── */
+// June 13, 2025 at 1:00 PM EST = 18:00 UTC
+const SRC_RELEASE = new Date('2025-06-13T18:00:00Z');
+const GITHUB_URL  = 'https://github.com/vocql/leonida/archive/refs/heads/main.zip';
+
+function formatSrcCountdown() {
+  const now  = new Date();
+  const diff = SRC_RELEASE - now;
+  if (diff <= 0) return null; // already released
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  let parts = [];
+  if (d > 0) parts.push(d + 'd');
+  if (h > 0) parts.push(h + 'h');
+  if (m > 0) parts.push(m + 'm');
+  parts.push(String(s).padStart(2,'0') + 's');
+  return parts.join(' ');
+}
+
+function openSrcModal() {
+  const now = new Date();
+  const modal = document.getElementById('srcModal');
+  const countdown = document.getElementById('srcCountdown');
+  const closeBtn  = document.getElementById('srcModalClose');
+  const titleEl   = document.querySelector('.src-modal-title');
+  const msgEl     = document.querySelector('.src-modal-msg');
+  const iconEl    = document.querySelector('.src-modal-icon');
+
+  if (now >= SRC_RELEASE) {
+    // Released — show a link button
+    iconEl.textContent   = '✅';
+    titleEl.textContent  = 'Source Code';
+    titleEl.style.color  = '#00ffff';
+    titleEl.style.textShadow = '0 0 20px rgba(0,255,255,0.4)';
+    msgEl.innerHTML      = 'The source code is now live on GitHub.';
+    countdown.innerHTML  = '<a href="' + GITHUB_URL + '" target="_blank" rel="noopener" style="color:rgba(0,255,255,0.9);text-decoration:none;border-bottom:1px solid rgba(0,255,255,0.4);padding-bottom:2px;font-family:\'Barlow Condensed\',sans-serif;font-size:18px;font-weight:900;letter-spacing:0.1em;">VIEW ON GITHUB →</a>';
+    clearInterval(window._srcTimer);
+  } else {
+    // Not yet released — show countdown
+    iconEl.textContent   = '⚠️';
+    titleEl.textContent  = 'Not Available Yet';
+    titleEl.style.color  = '#ff3a3a';
+    titleEl.style.textShadow = '0 0 20px rgba(255,60,60,0.4)';
+    msgEl.innerHTML      = 'Source code drops on<br><span class="highlight">June 13, 2025 · 1:00 PM EST</span>';
+    function updateSrcTimer() {
+      const t = formatSrcCountdown();
+      if (!t) {
+        countdown.textContent = 'Releasing now…';
+        clearInterval(window._srcTimer);
+        return;
+      }
+      countdown.textContent = t + ' remaining';
+    }
+    updateSrcTimer();
+    clearInterval(window._srcTimer);
+    window._srcTimer = setInterval(updateSrcTimer, 1000);
+  }
+
+  modal.classList.add('open');
+}
+
+function closeSrcModal() {
+  document.getElementById('srcModal').classList.remove('open');
+  clearInterval(window._srcTimer);
+}
+
+document.getElementById('srcBtn').addEventListener('click', openSrcModal);
+document.getElementById('srcModalClose').addEventListener('click', closeSrcModal);
+document.getElementById('srcModal').addEventListener('click', function(e) {
+  if (e.target === this) closeSrcModal();
+});
 
 /* ── RADIO PLAYER ───────────────────────────────── */
 let songs = [];
@@ -1532,69 +1522,55 @@ const radioTracklist  = document.getElementById('radioTracklist');
 const radioVolSlider  = document.getElementById('radioVolSlider');
 const radioVolVal     = document.getElementById('radioVolVal');
 
-let radioIdx = 0, radioPlaying = false, radioShuffle = false;
+let radioIdx     = 0;
+let radioPlaying = false;
+let radioShuffle = false;
+
 radioAudio.volume = 0.5;
 
 async function loadGithubMusic() {
-  const GITHUB_USER = 'vocql', GITHUB_REPO = 'leonida', GITHUB_BRANCH = 'main', MUSIC_PATH = 'leonida/music';
-  const AUDIO_EXTS  = ['.mp3', '.ogg', '.wav', '.flac', '.aac', '.m4a'];
-  const loadingEl   = document.getElementById('radioTracklistLoading');
-  const cacheKey    = 'music_' + MUSIC_PATH;
-
-  function fail(msg) {
+  const GITHUB_USER   = 'vocql';
+  const GITHUB_REPO   = 'leonida';
+  const GITHUB_BRANCH = 'main';
+  const MUSIC_PATH    = 'leonida/music';
+  const AUDIO_EXTS    = ['.mp3', '.ogg', '.wav', '.flac', '.aac', '.m4a'];
+  const loadingEl = document.getElementById('radioTracklistLoading');
+  try {
+    const apiURL = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${MUSIC_PATH}?ref=${GITHUB_BRANCH}`;
+    const res = await fetch(apiURL, { headers: { 'Accept': 'application/vnd.github.v3+json' } });
+    if (!res.ok) throw new Error('GitHub API returned ' + res.status);
+    const files = await res.json();
+    if (!Array.isArray(files)) throw new Error('Unexpected response');
+    const audioFiles = files.filter(f => f.type === 'file' && AUDIO_EXTS.some(ext => f.name.toLowerCase().endsWith(ext)));
+    if (!audioFiles.length) {
+      if (loadingEl) loadingEl.innerHTML = '<div class="radio-tracklist-loading-text" style="color:rgba(255,80,80,0.5)">No audio files found in leonida/music/</div>';
+      radioNowTitle.textContent = 'No tracks found';
+      return;
+    }
+    songs = audioFiles.map(f => {
+      const src  = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${MUSIC_PATH}/${f.name}`;
+      const name = f.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+      return { n: name, s: src };
+    });
+    if (loadingEl) loadingEl.remove();
+    songs.forEach((song, i) => {
+      const row = document.createElement('div');
+      row.className = 'radio-track';
+      row.dataset.idx = i;
+      row.innerHTML = `<span class="radio-track-num">${String(i + 1).padStart(2, '0')}</span><span class="radio-track-name">${song.n}</span><span class="radio-track-playing-dot"></span>`;
+      row.addEventListener('click', () => radioPlayIdx(i));
+      radioTracklist.appendChild(row);
+    });
+    radioUpdateTrack();
+  } catch (err) {
+    console.error('Radio: failed to load tracklist —', err);
     if (loadingEl) {
-      loadingEl.querySelector('.radio-tracklist-loading-dot').style.cssText = 'background:#ff3040;box-shadow:0 0 6px #ff3040';
-      loadingEl.querySelector('.radio-tracklist-loading-text').textContent = msg;
+      loadingEl.querySelector('.radio-tracklist-loading-dot').style.background = '#ff3040';
+      loadingEl.querySelector('.radio-tracklist-loading-dot').style.boxShadow  = '0 0 6px #ff3040';
+      loadingEl.querySelector('.radio-tracklist-loading-text').textContent = 'Could not load tracks';
     }
     radioNowTitle.textContent = 'No tracks';
   }
-
-  // Check cache first
-  const cached = Cache.get(cacheKey);
-  if (cached) {
-    songs = cached;
-    buildTracklist();
-    return;
-  }
-
-  try {
-    const res = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${MUSIC_PATH}?ref=${GITHUB_BRANCH}`,
-      { headers: { 'Accept': 'application/vnd.github.v3+json' } });
-    if (!res.ok) throw new Error('Status ' + res.status);
-    const files = await res.json();
-    if (!Array.isArray(files)) throw new Error('Bad response');
-
-    const audioFiles = files.filter(f => f.type === 'file' && AUDIO_EXTS.some(ext => f.name.toLowerCase().endsWith(ext)));
-    if (!audioFiles.length) { fail('No audio files found'); return; }
-
-    songs = audioFiles.map(f => ({
-      n: f.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
-      s: `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${MUSIC_PATH}/${f.name}`
-    }));
-
-    Cache.set(cacheKey, songs);
-    buildTracklist();
-  } catch (err) {
-    console.error('Radio load error:', err);
-    fail('Could not load tracks');
-  }
-}
-
-function buildTracklist() {
-  const loadingEl = document.getElementById('radioTracklistLoading');
-  if (loadingEl) loadingEl.remove();
-  // PERF: build DOM in a fragment, single append
-  const frag = document.createDocumentFragment();
-  songs.forEach((song, i) => {
-    const row = document.createElement('div');
-    row.className = 'radio-track';
-    row.dataset.idx = i;
-    row.innerHTML = `<span class="radio-track-num">${String(i+1).padStart(2,'0')}</span><span class="radio-track-name">${song.n}</span><span class="radio-track-playing-dot"></span>`;
-    row.addEventListener('click', () => radioPlayIdx(i));
-    frag.appendChild(row);
-  });
-  radioTracklist.appendChild(frag);
-  radioUpdateTrack();
 }
 
 function radioSetPlaying(state) {
@@ -1609,24 +1585,32 @@ function radioUpdateTrack() {
   if (!songs.length) return;
   const song = songs[radioIdx];
   radioNowTitle.textContent = song.n;
-  radioNowTitle.classList.toggle('marquee-active', song.n.length > 18);
-  document.querySelectorAll('.radio-track').forEach(r => r.classList.toggle('active', +r.dataset.idx === radioIdx));
+  radioNowTitle.classList.remove('marquee-active');
+  void radioNowTitle.offsetWidth;
+  if (song.n.length > 18) radioNowTitle.classList.add('marquee-active');
+  document.querySelectorAll('.radio-track').forEach(r => {
+    r.classList.toggle('active', parseInt(r.dataset.idx) === radioIdx);
+  });
   const active = radioTracklist.querySelector('.radio-track.active');
   if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
 function radioPlayIdx(idx) {
   if (!songs.length) return;
   radioIdx = idx;
-  radioAudio.src = songs[idx].s;
+  const song = songs[radioIdx];
+  radioAudio.src = song.s;
   radioAudio.load();
   radioAudio.play().then(() => radioSetPlaying(true)).catch(() => radioSetPlaying(false));
   radioUpdateTrack();
 }
 function radioNext() {
   if (!songs.length) return;
-  radioIdx = radioShuffle
-    ? (songs.map((_,i)=>i).filter(i=>i!==radioIdx))[Math.floor(Math.random()*(songs.length-1))] ?? 0
-    : (radioIdx + 1) % songs.length;
+  if (radioShuffle) {
+    const remaining = songs.map((_, i) => i).filter(i => i !== radioIdx);
+    radioIdx = remaining.length ? remaining[Math.floor(Math.random() * remaining.length)] : 0;
+  } else {
+    radioIdx = (radioIdx + 1) % songs.length;
+  }
   radioPlayIdx(radioIdx);
 }
 function radioPrev() {
@@ -1635,17 +1619,18 @@ function radioPrev() {
   radioIdx = (radioIdx - 1 + songs.length) % songs.length;
   radioPlayIdx(radioIdx);
 }
-
 radioToggleBtn.addEventListener('click', () => {
   radioPanel.classList.toggle('open');
   radioToggleBtn.classList.toggle('active', radioPanel.classList.contains('open'));
 });
 radioPlayBtn.addEventListener('click', () => {
   if (!songs.length) return;
-  if (radioAudio.src && radioAudio.src !== window.location.href) {
+  if (radioAudio.src && !radioAudio.src.endsWith(window.location.href)) {
     if (radioPlaying) { radioAudio.pause(); radioSetPlaying(false); }
-    else radioAudio.play().then(() => radioSetPlaying(true)).catch(() => {});
-  } else { radioPlayIdx(0); }
+    else { radioAudio.play().then(() => radioSetPlaying(true)).catch(() => {}); }
+  } else {
+    radioPlayIdx(0);
+  }
 });
 radioPrevBtn.addEventListener('click', radioPrev);
 radioNextBtn.addEventListener('click', radioNext);
@@ -1656,19 +1641,11 @@ radioShuffleBtn.addEventListener('click', () => {
   radioShuffleBtn.style.borderColor = radioShuffle ? 'rgba(0,255,255,0.35)' : '';
   radioShuffleBtn.style.boxShadow   = radioShuffle ? '0 0 12px rgba(0,255,255,0.2)' : '';
 });
-// PERF: throttle volume slider updates
-let volRafPending = false;
 radioVolSlider.addEventListener('input', () => {
-  if (volRafPending) return;
-  volRafPending = true;
-  requestAnimationFrame(() => {
-    const v = +radioVolSlider.value;
-    radioAudio.volume = v / 100;
-    radioVolVal.textContent = v;
-    volRafPending = false;
-  });
+  const v = parseInt(radioVolSlider.value);
+  radioAudio.volume = v / 100;
+  radioVolVal.textContent = v;
 });
-
 loadGithubMusic();
 
 /* ── MAP INIT ───────────────────────────────────── */
@@ -1676,74 +1653,48 @@ function initMap() {
   document.getElementById('mapIframe').src = 'https://map.stateofleonida.net/';
 }
 
-/* ── GITHUB IMAGE LOADER ────────────────────────── */
+/* ── GITHUB IMAGE LOADER HELPER ─────────────────── */
 async function loadGithubImages(opts) {
   const { user, repo, branch, path, dotEl, statusEl, countEl, totEl, gallery, emptyEl, cardClass } = opts;
   const IMAGE_EXTS = ['.jpg','.jpeg','.png','.webp','.gif'];
-
   function setStatus(type, msg) {
     dotEl.className    = 'status-dot ' + type;
     statusEl.className = 'status-text ' + (type === 'loading' ? '' : type);
     statusEl.textContent = msg;
   }
-
   setStatus('loading', `Fetching ${user}/${repo}/${path} …`);
-
-  // Check cache first — avoids re-fetching on page revisit
-  const cacheKey = `imgs_${path}`;
-  let images = Cache.get(cacheKey);
-
-  if (!images) {
-    try {
-      const res = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/${path}?ref=${branch}`,
-        { headers: { 'Accept': 'application/vnd.github.v3+json' } });
-      if (res.status === 404) { setStatus('err', 'Folder not found: ' + path); emptyEl.classList.add('show'); return []; }
-      if (!res.ok) throw new Error('Status ' + res.status);
-      const files = await res.json();
-      if (!Array.isArray(files)) throw new Error('Bad response');
-      images = files.filter(f => f.type === 'file' && IMAGE_EXTS.some(ext => f.name.toLowerCase().endsWith(ext)));
-      Cache.set(cacheKey, images);
-    } catch (err) { setStatus('err', 'GitHub API error — ' + err.message); emptyEl.classList.add('show'); return []; }
-  }
-
+  const apiURL = `https://api.github.com/repos/${user}/${repo}/contents/${path}?ref=${branch}`;
+  let files;
+  try {
+    const res = await fetch(apiURL, { headers: { 'Accept': 'application/vnd.github.v3+json' } });
+    if (res.status === 404) { setStatus('err', 'Folder not found: ' + path); emptyEl.classList.add('show'); return []; }
+    if (!res.ok) throw new Error('GitHub API returned ' + res.status);
+    files = await res.json();
+  } catch (err) { setStatus('err', 'GitHub API error — ' + err.message); emptyEl.classList.add('show'); return []; }
+  if (!Array.isArray(files)) { setStatus('err', 'Unexpected response'); emptyEl.classList.add('show'); return []; }
+  const images = files.filter(f => f.type === 'file' && IMAGE_EXTS.some(ext => f.name.toLowerCase().endsWith(ext)));
   if (!images.length) { setStatus('ok', path + '  ·  no images found yet'); emptyEl.classList.add('show'); return []; }
-
   setStatus('ok', `${path}  ·  ${images.length} image${images.length !== 1 ? 's' : ''} detected`);
-  if (countEl) countEl.textContent = images.length;
-  if (totEl)   totEl.textContent   = images.length;
-
-  // PERF: build all cards in a DocumentFragment — single DOM insertion
-  const frag = document.createDocumentFragment();
-  const obs  = new IntersectionObserver(entries => {
+  countEl.textContent = images.length;
+  if (totEl) totEl.textContent = images.length;
+  const obs = new IntersectionObserver(entries => {
     entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); obs.unobserve(en.target); } });
   }, { threshold: 0.05 });
-
   images.forEach((file, i) => {
     const src   = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${path}/${file.name}`;
     const label = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
     const card  = document.createElement('div');
     card.className = cardClass || 'gallery-item';
     card.style.transitionDelay = (i * 0.04).toFixed(2) + 's';
-
-    const imgWrap  = document.createElement('div'); imgWrap.className = 'card-img-wrap';
-    const numBadge = document.createElement('span'); numBadge.className = 'card-num'; numBadge.textContent = '#' + String(i+1).padStart(2,'0');
-    const img      = document.createElement('img');  img.alt = label; img.loading = 'lazy'; img.decoding = 'async'; img.dataset.idx = i; img.src = src;
-
-    imgWrap.appendChild(numBadge);
-    imgWrap.appendChild(img);
-
+    const imgWrap = document.createElement('div'); imgWrap.className = 'card-img-wrap';
+    const numBadge = document.createElement('span'); numBadge.className = 'card-num'; numBadge.textContent = '#' + String(i + 1).padStart(2, '0');
+    const img = document.createElement('img'); img.alt = label; img.loading = 'lazy'; img.dataset.idx = String(i); img.src = src;
+    imgWrap.appendChild(numBadge); imgWrap.appendChild(img);
     const cardBody = document.createElement('div'); cardBody.className = 'card-body';
     cardBody.innerHTML = `<div class="card-name">${label}</div><div class="card-file">${file.name}</div>`;
-
-    card.appendChild(imgWrap);
-    card.appendChild(cardBody);
-    frag.appendChild(card);
-    obs.observe(card);
-
-    if (opts.onCardCreated) opts.onCardCreated(card, img, file, i, label);
+    card.appendChild(imgWrap); card.appendChild(cardBody);
+    gallery.appendChild(card); obs.observe(card);
   });
-
-  gallery.appendChild(frag); // single reflow
   return images;
 }
 
@@ -1773,31 +1724,37 @@ function makeLightbox(lbEl, imgEl, labelEl, curEl, totEl, prevBtn, nextBtn, getI
     if (e.key === 'ArrowLeft')  step(-1);
     if (e.key === 'ArrowRight') step(1);
   });
-  return { open, close };
+  return { open, close, step };
 }
 
 /* ── PLACES INIT ────────────────────────────────── */
 function initPlaces() {
   const gallery = document.getElementById('places-gallery');
   const lb = makeLightbox(
-    document.getElementById('placesLB'), document.getElementById('places-lb-img'),
-    document.getElementById('places-lb-label'), document.getElementById('places-cur'),
-    document.getElementById('places-tot'), document.getElementById('places-prev'),
-    document.getElementById('places-next'), () => [...gallery.querySelectorAll('img[data-idx]')]
+    document.getElementById('placesLB'),
+    document.getElementById('places-lb-img'),
+    document.getElementById('places-lb-label'),
+    document.getElementById('places-cur'),
+    document.getElementById('places-tot'),
+    document.getElementById('places-prev'),
+    document.getElementById('places-next'),
+    () => [...gallery.querySelectorAll('img[data-idx]')]
   );
   loadGithubImages({
-    user:'vocql', repo:'leonidagta', branch:'main', path:'leonida/places',
-    dotEl:document.getElementById('places-dot'), statusEl:document.getElementById('places-status'),
-    countEl:document.getElementById('places-count'), totEl:document.getElementById('places-tot'),
-    gallery, emptyEl:document.getElementById('places-empty'), cardClass:'gallery-item'
+    user: 'vocql', repo: 'leonidagta', branch: 'main', path: 'leonida/places',
+    dotEl: document.getElementById('places-dot'),
+    statusEl: document.getElementById('places-status'),
+    countEl: document.getElementById('places-count'),
+    totEl: document.getElementById('places-tot'),
+    gallery, emptyEl: document.getElementById('places-empty'), cardClass: 'gallery-item',
   });
   gallery.addEventListener('click', e => {
     const img = e.target.closest('img[data-idx]');
-    if (img) lb.open(+img.dataset.idx);
+    if (img) lb.open(parseInt(img.dataset.idx, 10));
   });
 }
 
-/* ── CHARACTER BIOS ─────────────────────────────── */
+/* ── CHARACTERS DATA ────────────────────────────── */
 const CHARACTER_BIOS = {
   'lucia':      { fullName:'Lucia Caminos', role:'Protagonist', quote:"The only thing that matters is who you know and what you got.", bio:["Lucia's father taught her to fight as soon as she could walk. Life has been coming at her swinging ever since. Fighting for her family landed her in the Leonida Penitentiary. Sheer luck got her out. Lucia's learned her lesson — only smart moves from here.","More than anything, Lucia wants the good life her mom has dreamed of since their days in Liberty City — but instead of half-baked fantasies, Lucia is prepared to take matters into her own hands. A life with Jason could be her way out. Fresh out of prison and ready to change the odds in her favor, Lucia's committed to her plan — no matter what it takes."] },
   'jason':      { fullName:'Jason Duval', role:'Protagonist', quote:"If anything happens, I'm right behind you. Another day in paradise, right?", bio:["Jason wants an easy life, but things just keep getting harder. Jason grew up around grifters and crooks. After a stint in the Army trying to shake off his troubled teens, he found himself in the Keys doing what he knows best, working for local drug runners. It might be time to try something new.","Meeting Lucia could be the best or worst thing to ever happen to him. Jason knows how he'd like it to turn out but right now, it's hard to tell."] },
@@ -1823,7 +1780,7 @@ function getBio(filename) {
 }
 function renderBio(filename, label) {
   const bioWrap = document.getElementById('bioWrap');
-  const data    = getBio(filename);
+  const data = getBio(filename);
   if (!data) {
     bioWrap.innerHTML = `<div class="bio-eyebrow">Character File</div><div class="bio-name">${label}</div><div class="bio-no-info">No official bio available yet.</div>`;
     return;
@@ -1834,18 +1791,19 @@ function renderBio(filename, label) {
     <div class="bio-tag">${data.role}</div>
     <div class="bio-divider"></div>
     ${data.quote ? `<div class="bio-quote">"${data.quote}"</div>` : ''}
-    <div class="bio-text">${data.bio.map(p=>`<p>${p}</p>`).join('')}</div>`;
+    <div class="bio-text">${data.bio.map(p => `<p>${p}</p>`).join('')}</div>
+  `;
 }
 
 /* ── CHARACTERS INIT ────────────────────────────── */
 function initCharacters() {
-  const gallery = document.getElementById('char-gallery');
-  const lbEl    = document.getElementById('charLB');
-  const imgEl   = document.getElementById('char-lb-img');
-  const labelEl = document.getElementById('char-lb-label');
-  const curEl   = document.getElementById('char-cur');
-  const totEl   = document.getElementById('char-tot');
-  const bioWrap = document.getElementById('bioWrap');
+  const gallery  = document.getElementById('char-gallery');
+  const lbEl     = document.getElementById('charLB');
+  const imgEl    = document.getElementById('char-lb-img');
+  const labelEl  = document.getElementById('char-lb-label');
+  const curEl    = document.getElementById('char-cur');
+  const totEl    = document.getElementById('char-tot');
+  const bioWrap  = document.getElementById('bioWrap');
   let charImages = [];
   let idx = 0;
   function labelFromFile(f) { return f.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()); }
@@ -1856,7 +1814,8 @@ function initCharacters() {
     const file = charImages[idx]; const label = labelFromFile(file);
     imgEl.src = imgs[idx].src; labelEl.textContent = label;
     curEl.textContent = idx + 1; totEl.textContent = imgs.length;
-    renderBio(file.name, label); lbEl.classList.add('active');
+    renderBio(file.name, label);
+    lbEl.classList.add('active');
   }
   function close() { lbEl.classList.remove('active'); }
   function step(dir) {
@@ -1880,129 +1839,122 @@ function initCharacters() {
     if (e.key === 'ArrowRight') step(1);
   });
   loadGithubImages({
-    user:'vocql', repo:'leonidagta', branch:'main', path:'leonida/people',
-    dotEl:document.getElementById('char-dot'), statusEl:document.getElementById('char-status'),
-    countEl:document.getElementById('char-count'), totEl,
-    gallery, emptyEl:document.getElementById('char-empty'), cardClass:'place-card'
+    user: 'vocql', repo: 'leonidagta', branch: 'main', path: 'leonida/people',
+    dotEl: document.getElementById('char-dot'),
+    statusEl: document.getElementById('char-status'),
+    countEl: document.getElementById('char-count'),
+    totEl, gallery, emptyEl: document.getElementById('char-empty'), cardClass: 'place-card',
   }).then(images => { charImages = images; });
   gallery.addEventListener('click', e => {
     const img = e.target.closest('img[data-idx]');
-    if (img) open(+img.dataset.idx);
+    if (img) open(parseInt(img.dataset.idx, 10));
   });
 }
 
-/* ── SCREENSHOTS INIT ───────────────────────────── 
-   PERF: replaced 70-concurrent-Image() probe with a
-   single GitHub API call — same pattern as places/chars.
-   Results are cached in sessionStorage.
-─────────────────────────────────────────────────── */
+/* ── SCREENSHOTS INIT ───────────────────────────── */
 function initScreenshots() {
-  const GITHUB_USER = 'vocql', GITHUB_REPO = 'leonidagta', GITHUB_BRANCH = 'main';
-  const SS_PATH     = 'leonida/photos';
-  const IMAGE_EXTS  = ['.jpg','.jpeg','.png','.webp','.gif'];
+  const IMAGES_PATH = 'leonida/photos/';
+  const TOTAL       = 70;
   const gallery     = document.getElementById('ss-gallery');
-  const dotEl       = document.getElementById('ss-dot');
-  const statusEl    = document.getElementById('ss-status');
-  const countEl     = document.getElementById('ss-count');
-  const emptyEl     = document.getElementById('ss-empty');
-
   const lb = makeLightbox(
-    document.getElementById('ssLB'), document.getElementById('ss-lb-img'),
-    document.getElementById('ss-lb-label'), document.getElementById('ss-cur'),
-    document.getElementById('ss-tot'), document.getElementById('ss-prev'),
-    document.getElementById('ss-next'), () => [...gallery.querySelectorAll('img[data-idx]')]
+    document.getElementById('ssLB'),
+    document.getElementById('ss-lb-img'),
+    document.getElementById('ss-lb-label'),
+    document.getElementById('ss-cur'),
+    document.getElementById('ss-tot'),
+    document.getElementById('ss-prev'),
+    document.getElementById('ss-next'),
+    () => [...gallery.querySelectorAll('img[data-idx]')]
   );
-
+  const dotEl    = document.getElementById('ss-dot');
+  const statusEl = document.getElementById('ss-status');
+  const countEl  = document.getElementById('ss-count');
+  const emptyEl  = document.getElementById('ss-empty');
   function setStatus(type, msg) {
     dotEl.className    = 'status-dot ' + type;
     statusEl.className = 'status-text ' + (type === 'loading' ? '' : type);
     statusEl.textContent = msg;
   }
-
-  async function load() {
-    setStatus('loading', 'Loading screenshots…');
-
-    const cacheKey = 'imgs_' + SS_PATH;
-    let images = Cache.get(cacheKey);
-
-    if (!images) {
-      try {
-        const res = await fetch(
-          `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${SS_PATH}?ref=${GITHUB_BRANCH}`,
-          { headers: { 'Accept': 'application/vnd.github.v3+json' } });
-        if (res.status === 404) { setStatus('err', 'Folder not found: ' + SS_PATH); emptyEl.classList.add('show'); return; }
-        if (!res.ok) throw new Error('Status ' + res.status);
-        const files = await res.json();
-        if (!Array.isArray(files)) throw new Error('Bad response');
-        images = files.filter(f => f.type === 'file' && IMAGE_EXTS.some(ext => f.name.toLowerCase().endsWith(ext)));
-        Cache.set(cacheKey, images);
-      } catch(err) { setStatus('err', 'GitHub API error — ' + err.message); emptyEl.classList.add('show'); return; }
-    }
-
-    if (!images.length) { setStatus('ok', SS_PATH + '  ·  no screenshots yet'); emptyEl.classList.add('show'); return; }
-
-    setStatus('ok', `${SS_PATH}  ·  ${images.length} screenshot${images.length !== 1 ? 's' : ''} loaded`);
-    countEl.textContent = images.length;
-
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); obs.unobserve(en.target); } });
-    }, { threshold: 0.05 });
-
-    // PERF: single DocumentFragment insert
-    const frag = document.createDocumentFragment();
-    images.forEach((file, i) => {
-      const src   = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${SS_PATH}/${file.name}`;
-      const label = 'Screenshot ' + (i + 1);
-      const card  = document.createElement('div'); card.className = 'place-card';
-      card.style.transitionDelay = (i * 0.03).toFixed(2) + 's';
-      const imgWrap  = document.createElement('div'); imgWrap.className = 'card-img-wrap';
-      const numBadge = document.createElement('span'); numBadge.className = 'card-num'; numBadge.textContent = '#' + String(i+1).padStart(2,'0');
-      const img      = document.createElement('img'); img.alt = label; img.loading = 'lazy'; img.decoding = 'async'; img.dataset.idx = i; img.src = src;
-      imgWrap.appendChild(numBadge); imgWrap.appendChild(img);
-      const cardBody = document.createElement('div'); cardBody.className = 'card-body';
-      cardBody.innerHTML = `<div class="card-name">${label}</div><div class="card-file">${file.name}</div>`;
-      card.appendChild(imgWrap); card.appendChild(cardBody);
-      frag.appendChild(card); obs.observe(card);
-    });
-    gallery.appendChild(frag);
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); obs.unobserve(en.target); } });
+  }, { threshold: 0.05 });
+  function addCard(num, seqIdx) {
+    const src  = IMAGES_PATH + num + '.jpg';
+    const label = 'Screenshot ' + num;
+    const card  = document.createElement('div'); card.className = 'place-card';
+    card.style.transitionDelay = ((seqIdx - 1) * 0.03).toFixed(2) + 's';
+    const imgWrap = document.createElement('div'); imgWrap.className = 'card-img-wrap';
+    const numBadge = document.createElement('span'); numBadge.className = 'card-num'; numBadge.textContent = '#' + String(num).padStart(2,'0');
+    const img = document.createElement('img'); img.alt = label; img.loading = 'lazy'; img.dataset.idx = String(seqIdx - 1); img.src = src;
+    imgWrap.appendChild(numBadge); imgWrap.appendChild(img);
+    const cardBody = document.createElement('div'); cardBody.className = 'card-body';
+    cardBody.innerHTML = `<div class="card-name">${label}</div><div class="card-file">${num}.jpg</div>`;
+    card.appendChild(imgWrap); card.appendChild(cardBody);
+    gallery.appendChild(card); obs.observe(card);
   }
-
-  load();
+  setStatus('loading', 'Loading ' + IMAGES_PATH + ' 1–' + TOTAL + '.jpg …');
+  const promises = Array.from({ length: TOTAL }, (_, i) => {
+    const num = i + 1;
+    return new Promise(resolve => {
+      const t = new Image();
+      t.onload  = () => resolve(num);
+      t.onerror = () => resolve(null);
+      t.src = IMAGES_PATH + num + '.jpg';
+    });
+  });
+  Promise.all(promises).then(results => {
+    const loaded = results.filter(Boolean).sort((a, b) => a - b);
+    if (!loaded.length) { setStatus('err', 'No screenshots found in ' + IMAGES_PATH); emptyEl.classList.add('show'); return; }
+    let seq = 0;
+    loaded.forEach(num => { seq++; addCard(num, seq); countEl.textContent = seq; });
+    setStatus('ok', IMAGES_PATH + '  ·  ' + seq + ' screenshot' + (seq !== 1 ? 's' : '') + ' loaded');
+  });
   gallery.addEventListener('click', e => {
     const img = e.target.closest('img[data-idx]');
-    if (img) lb.open(+img.dataset.idx);
+    if (img) lb.open(parseInt(img.dataset.idx, 10));
   });
 }
 
 /* ── TRAILERS INIT ──────────────────────────────── */
 const TRAILERS = [
-  { vid:'QdBZY2fkU-0', title:'Trailer 1', year:'Dec 2023' },
-  { vid:'VQRLujxTm3c', title:'Trailer 2', year:'May 2025' },
-  { vid:'XJhz0IuSZNo', title:'Trailer 3', year:'May 2026' }
+  { vid: 'QdBZY2fkU-0', title: 'Trailer 1', year: 'Dec 2023' },
+  { vid: 'VQRLujxTm3c', title: 'Trailer 2', year: 'May 2025' },
+  { vid: 'XJhz0IuSZNo', title: 'Trailer 3', year: 'May 2026' }
 ];
-let tlbIdx = 0, tlbMusicWasPlaying = false;
+let tlbIdx = 0;
+let tlbMusicWasPlaying = false;
+
 const tlbEl    = document.getElementById('trailerLB');
 const tlbVideo = document.getElementById('tlbVideo');
 const tlbTitle = document.getElementById('tlbTitle');
 const tlbYear  = document.getElementById('tlbYear');
 const tlbCur   = document.getElementById('tlbCur');
 const tlbTot   = document.getElementById('tlbTot');
+
 tlbTot.textContent = TRAILERS.length;
 
 function openTLB(idx) {
   tlbIdx = idx;
   const t = TRAILERS[idx];
   tlbVideo.innerHTML = `<iframe src="https://www.youtube.com/embed/${t.vid}?autoplay=1&rel=0&modestbranding=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-  tlbTitle.textContent = t.title; tlbYear.textContent = t.year; tlbCur.textContent = idx + 1;
-  tlbEl.classList.add('active'); document.body.style.overflow = 'hidden';
+  tlbTitle.textContent = t.title;
+  tlbYear.textContent  = t.year;
+  tlbCur.textContent   = idx + 1;
+  tlbEl.classList.add('active');
+  document.body.style.overflow = 'hidden';
   if (radioPlaying) { radioAudio.pause(); radioSetPlaying(false); tlbMusicWasPlaying = true; }
 }
 function closeTLB() {
-  tlbEl.classList.remove('active'); tlbVideo.innerHTML = ''; document.body.style.overflow = '';
+  tlbEl.classList.remove('active');
+  tlbVideo.innerHTML = '';
+  document.body.style.overflow = '';
   if (tlbMusicWasPlaying) { tlbMusicWasPlaying = false; radioAudio.play().then(() => radioSetPlaying(true)).catch(() => {}); }
 }
-function stepTLB(dir) { tlbVideo.innerHTML = ''; setTimeout(() => openTLB((tlbIdx + dir + TRAILERS.length) % TRAILERS.length), 80); }
-
+function stepTLB(dir) {
+  tlbIdx = (tlbIdx + dir + TRAILERS.length) % TRAILERS.length;
+  tlbVideo.innerHTML = '';
+  setTimeout(() => openTLB(tlbIdx), 80);
+}
 document.getElementById('tlbClose').addEventListener('click', closeTLB);
 tlbEl.addEventListener('click', e => { if (e.target === tlbEl) closeTLB(); });
 document.getElementById('tlbPrev').addEventListener('click', () => stepTLB(-1));
@@ -2016,7 +1968,8 @@ function initTrailers() {
     obs.observe(el);
     if (el.classList.contains('tba')) return;
     el.addEventListener('click', () => {
-      const idx = TRAILERS.findIndex(t => t.vid === el.dataset.vid);
+      const vid = el.dataset.vid;
+      const idx = TRAILERS.findIndex(t => t.vid === vid);
       if (idx >= 0) openTLB(idx);
     });
   });
