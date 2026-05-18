@@ -79,7 +79,7 @@ body {
 
 /* ── HAMBURGER ────────────────────────────────────── */
 .hamburger-btn {
-  position: fixed; top: 22px; right: 26px; z-index: 200;
+  position: fixed; top: 22px; right: 26px; z-index: 220;
   width: 52px; height: 52px; border-radius: 50%;
   background: rgba(0,255,255,0.05);
   border: 1.5px solid rgba(0,255,255,0.25);
@@ -113,8 +113,9 @@ body {
 .hamburger-btn.open .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background: var(--pink); }
 
 /* ── NAV OVERLAY ──────────────────────────────────── */
+/* z-index 210 ensures it covers radio (z:200) and other fixed buttons */
 .nav-overlay {
-  position: fixed; inset: 0; z-index: 150;
+  position: fixed; inset: 0; z-index: 210;
   pointer-events: none; opacity: 0; transition: opacity 0.4s ease;
 }
 .nav-overlay.open { pointer-events: all; opacity: 1; }
@@ -500,6 +501,7 @@ body {
   border-color: rgba(255,255,255,0.6); color: #ffffff;
   box-shadow: 0 0 14px rgba(255,255,255,0.15);
 }
+
 /* ── RADIO PLAYER ─────────────────────────────────── */
 .radio-toggle-btn {
   position: fixed; bottom: 22px; left: 22px; z-index: 200;
@@ -510,7 +512,8 @@ body {
   backdrop-filter: blur(16px);
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1);
+  /* FIX: include opacity + visibility in transition so nav-open hide is smooth */
+  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1), opacity 0.3s ease, visibility 0.3s ease;
   animation: fadeSlideInLeft 0.8s cubic-bezier(0.34,1.4,0.64,1) both;
 }
 @keyframes fadeSlideInLeft {
@@ -530,7 +533,6 @@ body {
 .radio-toggle-btn svg { width: 22px; height: 22px; fill: var(--cyan); transition: fill 0.3s; }
 .radio-toggle-btn.active svg { fill: var(--pink); }
 
-/* pulse ring when playing */
 .radio-toggle-btn.playing::before {
   content: '';
   position: absolute; inset: -6px;
@@ -543,7 +545,7 @@ body {
   100% { transform: scale(1.6); opacity: 0; }
 }
 
-/* panel */
+/* FIX: added visibility to transition so panel fades cleanly when nav opens */
 .radio-panel {
   position: fixed; bottom: 84px; left: 22px; z-index: 199;
   width: 320px;
@@ -556,14 +558,13 @@ body {
   transform-origin: bottom left;
   transform: scale(0.88) translateY(12px);
   opacity: 0; pointer-events: none;
-  transition: transform 0.4s cubic-bezier(0.34,1.4,0.64,1), opacity 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.34,1.4,0.64,1), opacity 0.3s ease, visibility 0.3s ease;
 }
 .radio-panel.open {
   transform: scale(1) translateY(0);
   opacity: 1; pointer-events: all;
 }
 
-/* scanline overlay */
 .radio-panel::before {
   content: '';
   position: absolute; inset: 0; z-index: 0; pointer-events: none;
@@ -571,7 +572,6 @@ body {
     0deg, transparent, transparent 3px, rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px
   );
 }
-
 .radio-header {
   position: relative; z-index: 1;
   display: flex; align-items: center; justify-content: space-between;
@@ -589,8 +589,6 @@ body {
   font-size: 11px; font-weight: 700; letter-spacing: 0.15em;
   color: rgba(255,0,200,0.5);
 }
-
-/* now playing */
 .radio-now {
   position: relative; z-index: 1;
   padding: 14px 16px 10px;
@@ -618,8 +616,6 @@ body {
   80%  { transform: translateX(-60%); }
   100% { transform: translateX(0); }
 }
-
-/* waveform bars */
 .radio-wave {
   display: flex; align-items: flex-end; gap: 3px; height: 22px; margin-top: 8px;
 }
@@ -646,8 +642,6 @@ body {
 .radio-wave span:nth-child(11) { height: 7px;  --ws: 0.62s; }
 .radio-wave span:nth-child(12) { height: 13px; --ws: 0.37s; }
 @keyframes wvDance { from{transform:scaleY(0.2)} to{transform:scaleY(1)} }
-
-/* controls */
 .radio-controls {
   position: relative; z-index: 1;
   display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -686,8 +680,6 @@ body {
   color: var(--pink);
   box-shadow: 0 0 18px rgba(255,0,200,0.2);
 }
-
-/* volume */
 .radio-vol-wrap {
   position: relative; z-index: 1;
   display: flex; align-items: center; gap: 10px;
@@ -712,8 +704,6 @@ body {
   font-size: 11px; font-weight: 900; letter-spacing: 0.1em;
   color: rgba(255,255,255,0.2); min-width: 28px; text-align: right;
 }
-
-/* tracklist */
 .radio-tracklist {
   position: relative; z-index: 1;
   max-height: 200px; overflow-y: auto;
@@ -723,8 +713,6 @@ body {
 .radio-tracklist::-webkit-scrollbar { width: 3px; }
 .radio-tracklist::-webkit-scrollbar-track { background: transparent; }
 .radio-tracklist::-webkit-scrollbar-thumb { background: rgba(0,255,255,0.15); border-radius: 4px; }
-
-/* loading state for tracklist */
 .radio-tracklist-loading {
   position: relative; z-index: 1;
   padding: 16px;
@@ -739,7 +727,6 @@ body {
   font-size: 10px; font-weight: 600; font-family: monospace;
   color: rgba(255,255,255,0.2); letter-spacing: 0.1em;
 }
-
 .radio-track {
   display: flex; align-items: center; gap: 10px;
   padding: 7px 16px; cursor: pointer;
@@ -783,9 +770,7 @@ body {
   font-size: 11px; font-weight: 600; letter-spacing: 0.4em;
   text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 4px;
 }
-.map-page-title {
-  font-size: clamp(36px, 5vw, 68px);
-}
+.map-page-title { font-size: clamp(36px, 5vw, 68px); }
 .map-wrap {
   width: min(860px, 92vw);
   height: min(640px, 70vh);
@@ -837,8 +822,7 @@ body {
 .bio-tag {
   display: inline-block;
   font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
-  color: rgba(255,200,0,0.75);
-  background: rgba(255,200,0,0.06);
+  color: rgba(255,200,0,0.75); background: rgba(255,200,0,0.06);
   border: 1px solid rgba(255,200,0,0.18);
   border-radius: 999px; padding: 5px 14px; margin-bottom: 18px;
 }
@@ -852,20 +836,14 @@ body {
 /* ══════════════════════════════════════════════════
    TRAILERS PAGE
 ══════════════════════════════════════════════════ */
-#page-trailers {
-  isolation: isolate;
-}
-#page-trailers .page-main {
-  overflow-y: auto;
-  height: 100%;
-}
+#page-trailers { isolation: isolate; }
+#page-trailers .page-main { overflow-y: auto; height: 100%; }
 .trailers-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
 }
 #page-trailers .page-header { margin-bottom: 48px; }
-
 .trailer-card {
   border-radius: 16px; overflow: hidden;
   border: 1.5px solid rgba(0,255,255,0.14);
@@ -873,10 +851,7 @@ body {
   box-shadow: 0 8px 40px rgba(0,0,0,0.6);
   opacity: 0; transform: scale(0.93) translateY(16px);
   transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34,1.4,0.64,1), border-color 0.2s, box-shadow 0.2s;
-  position: relative;
-  isolation: isolate;
-  will-change: transform;
-  cursor: pointer;
+  position: relative; isolation: isolate; will-change: transform; cursor: pointer;
 }
 .trailer-card.visible { opacity: 1; transform: scale(1) translateY(0); }
 .trailer-card:hover {
@@ -884,26 +859,13 @@ body {
   box-shadow: 0 16px 56px rgba(0,0,0,0.7), 0 0 30px rgba(0,255,255,0.1);
   transform: translateY(-3px) scale(1.005);
 }
-.trailer-card:nth-child(even) {
-  border-color: rgba(255,0,200,0.18);
-  background: rgba(4, 0, 26, 0.6);
-}
+.trailer-card:nth-child(even) { border-color: rgba(255,0,200,0.18); background: rgba(4, 0, 26, 0.6); }
 .trailer-card:nth-child(even):hover {
   border-color: rgba(255,0,200,0.35);
   box-shadow: 0 16px 56px rgba(0,0,0,0.7), 0 0 30px rgba(255,0,200,0.1);
 }
-
-.thumb-wrap {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16/9;
-  overflow: hidden;
-  background: #000;
-}
-.thumb-wrap img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  transition: transform 0.4s ease;
-}
+.thumb-wrap { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #000; }
+.thumb-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
 .trailer-card:hover .thumb-wrap img { transform: scale(1.04); }
 .thumb-overlay {
   position: absolute; inset: 0;
@@ -911,9 +873,7 @@ body {
   display: flex; align-items: center; justify-content: center;
   transition: background 0.2s;
 }
-.trailer-card:hover .thumb-overlay {
-  background: linear-gradient(0deg, rgba(4,0,26,0.4) 0%, transparent 60%);
-}
+.trailer-card:hover .thumb-overlay { background: linear-gradient(0deg, rgba(4,0,26,0.4) 0%, transparent 60%); }
 .play-circle {
   width: 62px; height: 62px; border-radius: 50%;
   background: rgba(255,255,255,0.12);
@@ -923,13 +883,10 @@ body {
   transition: transform 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 .trailer-card:hover .play-circle {
-  transform: scale(1.12);
-  background: rgba(255,0,0,0.75);
-  border-color: #fff;
-  box-shadow: 0 0 28px rgba(255,0,0,0.4);
+  transform: scale(1.12); background: rgba(255,0,0,0.75);
+  border-color: #fff; box-shadow: 0 0 28px rgba(255,0,0,0.4);
 }
 .play-circle svg { width: 24px; height: 24px; fill: #fff; margin-left: 4px; }
-
 .new-badge {
   position: absolute; top: 14px; right: 14px; z-index: 10;
   font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 900;
@@ -941,7 +898,6 @@ body {
   pointer-events: none;
 }
 @keyframes pulseBadge { 0%,100%{box-shadow:0 0 16px rgba(0,255,255,0.5)} 50%{box-shadow:0 0 28px rgba(0,255,255,0.9)} }
-
 .card-label {
   padding: 12px 16px;
   display: flex; align-items: center; justify-content: space-between;
@@ -954,11 +910,7 @@ body {
   letter-spacing: 0.14em; text-transform: uppercase;
   color: rgba(255,255,255,0.65);
 }
-.card-label-year {
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 0.2em;
-  color: rgba(255,255,255,0.25);
-}
+.card-label-year { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; color: rgba(255,255,255,0.25); }
 .trailer-card.tba .thumb-wrap {
   display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px;
 }
@@ -984,7 +936,6 @@ body {
   backdrop-filter: blur(20px);
 }
 #trailerLB.active { opacity: 1; pointer-events: all; }
-
 .tlb-close {
   position: fixed; top: 20px; right: 26px; z-index: 9001;
   width: 46px; height: 46px; border-radius: 50%;
@@ -995,16 +946,8 @@ body {
   cursor: pointer; display: flex; align-items: center; justify-content: center;
   transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.15s;
 }
-.tlb-close:hover {
-  background: rgba(255,60,60,0.25); border-color: rgba(255,60,60,0.5);
-  color: #fff; transform: scale(1.08);
-}
-
-.tlb-inner {
-  width: 100%; max-width: 1060px;
-  display: flex; flex-direction: column; align-items: center; gap: 16px;
-}
-
+.tlb-close:hover { background: rgba(255,60,60,0.25); border-color: rgba(255,60,60,0.5); color: #fff; transform: scale(1.08); }
+.tlb-inner { width: 100%; max-width: 1060px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
 .tlb-video-wrap {
   width: 100%; aspect-ratio: 16/9;
   border-radius: 14px; overflow: hidden;
@@ -1012,55 +955,23 @@ body {
   box-shadow: 0 0 60px rgba(0,255,255,0.08), 0 24px 70px rgba(0,0,0,0.85);
   background: #000; position: relative;
 }
-.tlb-video-wrap iframe {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%; border: none;
-}
-
-.tlb-footer {
-  display: flex; align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-
+.tlb-video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+.tlb-footer { display: flex; align-items: center; justify-content: space-between; width: 100%; }
 .tlb-meta { display: flex; align-items: center; gap: 14px; }
-.tlb-title {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 22px; font-weight: 900;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color: rgba(255,255,255,0.55);
-}
-.tlb-year {
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 0.25em; text-transform: uppercase;
-  color: rgba(255,255,255,0.25);
-}
-.tlb-sep {
-  width: 4px; height: 4px; border-radius: 50%;
-  background: rgba(255,0,200,0.5);
-}
-
+.tlb-title { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+.tlb-year { font-size: 11px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.25); }
+.tlb-sep { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,0,200,0.5); }
 .tlb-nav { display: flex; align-items: center; gap: 12px; }
 .tlb-btn {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 20px; font-weight: 900;
-  color: rgba(255,255,255,0.4);
-  background: rgba(255,255,255,0.05);
+  font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 900;
+  color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 999px; padding: 8px 22px;
   cursor: pointer; letter-spacing: 0.06em;
   transition: color 0.15s, border-color 0.15s, background 0.15s, transform 0.15s;
 }
-.tlb-btn:hover {
-  color: #fff; border-color: rgba(0,255,255,0.4);
-  background: rgba(0,255,255,0.08); transform: scale(1.06);
-}
-.tlb-counter {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 13px; font-weight: 900;
-  letter-spacing: 0.2em; color: rgba(255,255,255,0.25);
-  min-width: 60px; text-align: center;
-}
+.tlb-btn:hover { color: #fff; border-color: rgba(0,255,255,0.4); background: rgba(0,255,255,0.08); transform: scale(1.06); }
+.tlb-counter { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 900; letter-spacing: 0.2em; color: rgba(255,255,255,0.25); min-width: 60px; text-align: center; }
 .tlb-counter span { color: var(--cyan); }
 
 /* ── SHARED KEYFRAMES ─────────────────────────────── */
@@ -1071,9 +982,7 @@ body {
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
 /* ── RESPONSIVE ───────────────────────────────────── */
-@media (max-width: 900px) {
-  .trailers-grid { grid-template-columns: 1fr 1fr; }
-}
+@media (max-width: 900px) { .trailers-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 680px) {
   .trailers-grid { grid-template-columns: 1fr; }
   .viewer-inner  { flex-direction: column; align-items: center; gap: 20px; max-height: none; overflow-y: auto; }
@@ -1091,9 +1000,7 @@ body {
   .music-wrap { width: 160px; }
   .music-title { max-width: 100px; }
 }
-@media (max-width: 600px) {
-  .page-main { padding: 80px 20px 60px; }
-}
+@media (max-width: 600px) { .page-main { padding: 80px 20px 60px; } }
 </style>
 </head>
 <body>
@@ -1266,10 +1173,7 @@ body {
       </div>
       <div class="count-badge"><span>3</span> trailers</div>
     </div>
-
     <div class="trailers-grid">
-
-      <!-- Trailer 1 -->
       <div class="trailer-card" data-vid="QdBZY2fkU-0" data-title="Trailer 1" data-year="Dec 2023" style="transition-delay:0s">
         <div class="thumb-wrap">
           <img src="https://img.youtube.com/vi/QdBZY2fkU-0/maxresdefault.jpg" alt="GTA VI Trailer 1" loading="lazy">
@@ -1279,8 +1183,6 @@ body {
           <span class="card-label-year">Dec 2023</span>
         </div>
       </div>
-
-      <!-- Trailer 2 -->
       <div class="trailer-card" data-vid="VQRLujxTm3c" data-title="Trailer 2" data-year="May 2025" style="transition-delay:0.1s">
         <div class="thumb-wrap">
           <img src="https://img.youtube.com/vi/VQRLujxTm3c/maxresdefault.jpg" alt="GTA VI Trailer 2" loading="lazy">
@@ -1290,8 +1192,6 @@ body {
           <span class="card-label-year">May 2025</span>
         </div>
       </div>
-
-      <!-- Trailer 3 -->
       <div class="trailer-card" data-vid="XJhz0IuSZNo" data-title="Trailer 3" data-year="2026" style="transition-delay:0.2s">
         <div class="thumb-wrap">
           <img src="https://img.youtube.com/vi/XJhz0IuSZNo/hqdefault.jpg" alt="GTA VI Trailer 3" loading="lazy">
@@ -1301,7 +1201,6 @@ body {
           <span class="card-label-year">2026</span>
         </div>
       </div>
-
     </div>
   </div>
 </div>
@@ -1346,7 +1245,6 @@ body {
     <input class="radio-vol-slider" id="radioVolSlider" type="range" min="0" max="100" value="50">
     <div class="radio-vol-val" id="radioVolVal">50</div>
   </div>
-  <!-- tracklist: populated dynamically from GitHub -->
   <div class="radio-tracklist" id="radioTracklist">
     <div class="radio-tracklist-loading" id="radioTracklistLoading">
       <div class="radio-tracklist-loading-dot"></div>
@@ -1431,17 +1329,38 @@ body {
 'use strict';
 
 /* ── HAMBURGER ──────────────────────────────────── */
-const hBtn    = document.getElementById('hamburgerBtn');
-const overlay = document.getElementById('navOverlay');
-const backdrop= document.getElementById('navBackdrop');
+const hBtn        = document.getElementById('hamburgerBtn');
+const overlay     = document.getElementById('navOverlay');
+const backdrop    = document.getElementById('navBackdrop');
+const radioPanel      = document.getElementById('radioPanel');
+const radioToggleBtn  = document.getElementById('radioToggleBtn');
+
 function toggleMenu(force) {
   if (typeof force === 'boolean') {
     if (force) overlay.classList.add('open'); else overlay.classList.remove('open');
   } else {
     overlay.classList.toggle('open');
   }
-  hBtn.classList.toggle('open', overlay.classList.contains('open'));
+  const isOpen = overlay.classList.contains('open');
+  hBtn.classList.toggle('open', isOpen);
+
+  // ── FIX: hide radio button AND panel when nav opens ──────────────────
+  // The toggle button
+  radioToggleBtn.style.opacity       = isOpen ? '0' : '';
+  radioToggleBtn.style.visibility    = isOpen ? 'hidden' : '';
+  radioToggleBtn.style.pointerEvents = isOpen ? 'none' : '';
+
+  // The panel itself — close it and also make it invisible
+  if (isOpen) {
+    radioPanel.classList.remove('open');
+    radioToggleBtn.classList.remove('active');
+  }
+  radioPanel.style.opacity       = isOpen ? '0' : '';
+  radioPanel.style.visibility    = isOpen ? 'hidden' : '';
+  radioPanel.style.pointerEvents = isOpen ? 'none' : '';
+  // ────────────────────────────────────────────────────────────────────
 }
+
 hBtn.addEventListener('click', () => toggleMenu());
 backdrop.addEventListener('click', () => toggleMenu(false));
 
@@ -1504,12 +1423,9 @@ function tick() {
 tick(); setInterval(tick, 1000);
 
 /* ── RADIO PLAYER ───────────────────────────────── */
-// songs is populated dynamically from GitHub — no hardcoded list needed
 let songs = [];
 
 const radioAudio      = document.getElementById('radioAudio');
-const radioPanel      = document.getElementById('radioPanel');
-const radioToggleBtn  = document.getElementById('radioToggleBtn');
 const radioPlayBtn    = document.getElementById('radioPlayBtn');
 const radioIconPlay   = document.getElementById('radioIconPlay');
 const radioIconPause  = document.getElementById('radioIconPause');
@@ -1528,66 +1444,40 @@ let radioShuffle = false;
 
 radioAudio.volume = 0.5;
 
-/* ── Load songs from GitHub API, same pattern as loadGithubImages ── */
 async function loadGithubMusic() {
   const GITHUB_USER   = 'vocql';
   const GITHUB_REPO   = 'leonida';
   const GITHUB_BRANCH = 'main';
   const MUSIC_PATH    = 'leonida/music';
   const AUDIO_EXTS    = ['.mp3', '.ogg', '.wav', '.flac', '.aac', '.m4a'];
-
   const loadingEl = document.getElementById('radioTracklistLoading');
-
   try {
     const apiURL = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${MUSIC_PATH}?ref=${GITHUB_BRANCH}`;
     const res = await fetch(apiURL, { headers: { 'Accept': 'application/vnd.github.v3+json' } });
-
     if (!res.ok) throw new Error('GitHub API returned ' + res.status);
-
     const files = await res.json();
     if (!Array.isArray(files)) throw new Error('Unexpected response');
-
-    // Filter to audio files only
-    const audioFiles = files.filter(f =>
-      f.type === 'file' && AUDIO_EXTS.some(ext => f.name.toLowerCase().endsWith(ext))
-    );
-
+    const audioFiles = files.filter(f => f.type === 'file' && AUDIO_EXTS.some(ext => f.name.toLowerCase().endsWith(ext)));
     if (!audioFiles.length) {
       if (loadingEl) loadingEl.innerHTML = '<div class="radio-tracklist-loading-text" style="color:rgba(255,80,80,0.5)">No audio files found in leonida/music/</div>';
       radioNowTitle.textContent = 'No tracks found';
       return;
     }
-
-    // Build songs array from filenames
     songs = audioFiles.map(f => {
       const src  = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${MUSIC_PATH}/${f.name}`;
-      // Pretty-print name: strip extension, replace dashes/underscores, title-case
-      const name = f.name
-        .replace(/\.[^.]+$/, '')
-        .replace(/[-_]/g, ' ')
-        .replace(/\b\w/g, c => c.toUpperCase());
+      const name = f.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
       return { n: name, s: src };
     });
-
-    // Remove loading indicator and build tracklist rows
     if (loadingEl) loadingEl.remove();
-
     songs.forEach((song, i) => {
       const row = document.createElement('div');
       row.className = 'radio-track';
       row.dataset.idx = i;
-      row.innerHTML = `
-        <span class="radio-track-num">${String(i + 1).padStart(2, '0')}</span>
-        <span class="radio-track-name">${song.n}</span>
-        <span class="radio-track-playing-dot"></span>
-      `;
+      row.innerHTML = `<span class="radio-track-num">${String(i + 1).padStart(2, '0')}</span><span class="radio-track-name">${song.n}</span><span class="radio-track-playing-dot"></span>`;
       row.addEventListener('click', () => radioPlayIdx(i));
       radioTracklist.appendChild(row);
     });
-
-    // Set first track as ready label
     radioUpdateTrack();
-
   } catch (err) {
     console.error('Radio: failed to load tracklist —', err);
     if (loadingEl) {
@@ -1650,13 +1540,11 @@ function radioPrev() {
   radioPlayIdx(radioIdx);
 }
 
-// toggle panel
 radioToggleBtn.addEventListener('click', () => {
   radioPanel.classList.toggle('open');
   radioToggleBtn.classList.toggle('active', radioPanel.classList.contains('open'));
 });
 
-// play/pause
 radioPlayBtn.addEventListener('click', () => {
   if (!songs.length) return;
   if (radioAudio.src && !radioAudio.src.endsWith(window.location.href)) {
@@ -1684,7 +1572,6 @@ radioVolSlider.addEventListener('input', () => {
   radioVolVal.textContent = v;
 });
 
-// Kick off the GitHub fetch immediately
 loadGithubMusic();
 
 /* ── MAP INIT ───────────────────────────────────── */
@@ -1697,7 +1584,7 @@ async function loadGithubImages(opts) {
   const { user, repo, branch, path, dotEl, statusEl, countEl, totEl, gallery, emptyEl, cardClass, aspectClass, onCardCreated } = opts;
   const IMAGE_EXTS = ['.jpg','.jpeg','.png','.webp','.gif'];
   function setStatus(type, msg) {
-    dotEl.className   = 'status-dot ' + type;
+    dotEl.className    = 'status-dot ' + type;
     statusEl.className = 'status-text ' + (type === 'loading' ? '' : type);
     statusEl.textContent = msg;
   }
@@ -1970,12 +1857,12 @@ const TRAILERS = [
 let tlbIdx = 0;
 let tlbMusicWasPlaying = false;
 
-const tlbEl     = document.getElementById('trailerLB');
-const tlbVideo  = document.getElementById('tlbVideo');
-const tlbTitle  = document.getElementById('tlbTitle');
-const tlbYear   = document.getElementById('tlbYear');
-const tlbCur    = document.getElementById('tlbCur');
-const tlbTot    = document.getElementById('tlbTot');
+const tlbEl    = document.getElementById('trailerLB');
+const tlbVideo = document.getElementById('tlbVideo');
+const tlbTitle = document.getElementById('tlbTitle');
+const tlbYear  = document.getElementById('tlbYear');
+const tlbCur   = document.getElementById('tlbCur');
+const tlbTot   = document.getElementById('tlbTot');
 
 tlbTot.textContent = TRAILERS.length;
 
@@ -2020,7 +1907,6 @@ function initTrailers() {
   const obs = new IntersectionObserver(entries => {
     entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); obs.unobserve(en.target); } });
   }, { threshold: 0.08 });
-
   document.querySelectorAll('.trailer-card').forEach(el => {
     obs.observe(el);
     if (el.classList.contains('tba')) return;
