@@ -79,7 +79,7 @@ body {
 
 /* ── HAMBURGER ────────────────────────────────────── */
 .hamburger-btn {
-  position: fixed; top: 22px; right: 26px; z-index: 220;
+  position: fixed; top: 22px; right: 26px; z-index: 200;
   width: 52px; height: 52px; border-radius: 50%;
   background: rgba(0,255,255,0.05);
   border: 1.5px solid rgba(0,255,255,0.25);
@@ -113,9 +113,8 @@ body {
 .hamburger-btn.open .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background: var(--pink); }
 
 /* ── NAV OVERLAY ──────────────────────────────────── */
-/* FIX: z-index raised to 210 so it covers radio (z:200) and src buttons (z:200) */
 .nav-overlay {
-  position: fixed; inset: 0; z-index: 210;
+  position: fixed; inset: 0; z-index: 150;
   pointer-events: none; opacity: 0; transition: opacity 0.4s ease;
 }
 .nav-overlay.open { pointer-events: all; opacity: 1; }
@@ -501,7 +500,6 @@ body {
   border-color: rgba(255,255,255,0.6); color: #ffffff;
   box-shadow: 0 0 14px rgba(255,255,255,0.15);
 }
-
 /* ── RADIO PLAYER ─────────────────────────────────── */
 .radio-toggle-btn {
   position: fixed; bottom: 22px; left: 22px; z-index: 200;
@@ -512,8 +510,7 @@ body {
   backdrop-filter: blur(16px);
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  /* FIX: added opacity and visibility to transition list */
-  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1), opacity 0.3s ease, visibility 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1);
   animation: fadeSlideInLeft 0.8s cubic-bezier(0.34,1.4,0.64,1) both;
 }
 @keyframes fadeSlideInLeft {
@@ -533,6 +530,7 @@ body {
 .radio-toggle-btn svg { width: 22px; height: 22px; fill: var(--cyan); transition: fill 0.3s; }
 .radio-toggle-btn.active svg { fill: var(--pink); }
 
+/* pulse ring when playing */
 .radio-toggle-btn.playing::before {
   content: '';
   position: absolute; inset: -6px;
@@ -545,6 +543,7 @@ body {
   100% { transform: scale(1.6); opacity: 0; }
 }
 
+/* panel */
 .radio-panel {
   position: fixed; bottom: 84px; left: 22px; z-index: 199;
   width: 320px;
@@ -563,6 +562,8 @@ body {
   transform: scale(1) translateY(0);
   opacity: 1; pointer-events: all;
 }
+
+/* scanline overlay */
 .radio-panel::before {
   content: '';
   position: absolute; inset: 0; z-index: 0; pointer-events: none;
@@ -570,6 +571,7 @@ body {
     0deg, transparent, transparent 3px, rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px
   );
 }
+
 .radio-header {
   position: relative; z-index: 1;
   display: flex; align-items: center; justify-content: space-between;
@@ -587,6 +589,8 @@ body {
   font-size: 11px; font-weight: 700; letter-spacing: 0.15em;
   color: rgba(255,0,200,0.5);
 }
+
+/* now playing */
 .radio-now {
   position: relative; z-index: 1;
   padding: 14px 16px 10px;
@@ -614,6 +618,8 @@ body {
   80%  { transform: translateX(-60%); }
   100% { transform: translateX(0); }
 }
+
+/* waveform bars */
 .radio-wave {
   display: flex; align-items: flex-end; gap: 3px; height: 22px; margin-top: 8px;
 }
@@ -640,6 +646,8 @@ body {
 .radio-wave span:nth-child(11) { height: 7px;  --ws: 0.62s; }
 .radio-wave span:nth-child(12) { height: 13px; --ws: 0.37s; }
 @keyframes wvDance { from{transform:scaleY(0.2)} to{transform:scaleY(1)} }
+
+/* controls */
 .radio-controls {
   position: relative; z-index: 1;
   display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -678,6 +686,8 @@ body {
   color: var(--pink);
   box-shadow: 0 0 18px rgba(255,0,200,0.2);
 }
+
+/* volume */
 .radio-vol-wrap {
   position: relative; z-index: 1;
   display: flex; align-items: center; gap: 10px;
@@ -702,6 +712,8 @@ body {
   font-size: 11px; font-weight: 900; letter-spacing: 0.1em;
   color: rgba(255,255,255,0.2); min-width: 28px; text-align: right;
 }
+
+/* tracklist */
 .radio-tracklist {
   position: relative; z-index: 1;
   max-height: 200px; overflow-y: auto;
@@ -711,6 +723,8 @@ body {
 .radio-tracklist::-webkit-scrollbar { width: 3px; }
 .radio-tracklist::-webkit-scrollbar-track { background: transparent; }
 .radio-tracklist::-webkit-scrollbar-thumb { background: rgba(0,255,255,0.15); border-radius: 4px; }
+
+/* loading state for tracklist */
 .radio-tracklist-loading {
   position: relative; z-index: 1;
   padding: 16px;
@@ -725,6 +739,7 @@ body {
   font-size: 10px; font-weight: 600; font-family: monospace;
   color: rgba(255,255,255,0.2); letter-spacing: 0.1em;
 }
+
 .radio-track {
   display: flex; align-items: center; gap: 10px;
   padding: 7px 16px; cursor: pointer;
@@ -837,14 +852,20 @@ body {
 /* ══════════════════════════════════════════════════
    TRAILERS PAGE
 ══════════════════════════════════════════════════ */
-#page-trailers { isolation: isolate; }
-#page-trailers .page-main { overflow-y: auto; height: 100%; }
+#page-trailers {
+  isolation: isolate;
+}
+#page-trailers .page-main {
+  overflow-y: auto;
+  height: 100%;
+}
 .trailers-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
 }
 #page-trailers .page-header { margin-bottom: 48px; }
+
 .trailer-card {
   border-radius: 16px; overflow: hidden;
   border: 1.5px solid rgba(0,255,255,0.14);
@@ -852,7 +873,10 @@ body {
   box-shadow: 0 8px 40px rgba(0,0,0,0.6);
   opacity: 0; transform: scale(0.93) translateY(16px);
   transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34,1.4,0.64,1), border-color 0.2s, box-shadow 0.2s;
-  position: relative; isolation: isolate; will-change: transform; cursor: pointer;
+  position: relative;
+  isolation: isolate;
+  will-change: transform;
+  cursor: pointer;
 }
 .trailer-card.visible { opacity: 1; transform: scale(1) translateY(0); }
 .trailer-card:hover {
@@ -860,13 +884,26 @@ body {
   box-shadow: 0 16px 56px rgba(0,0,0,0.7), 0 0 30px rgba(0,255,255,0.1);
   transform: translateY(-3px) scale(1.005);
 }
-.trailer-card:nth-child(even) { border-color: rgba(255,0,200,0.18); background: rgba(4, 0, 26, 0.6); }
+.trailer-card:nth-child(even) {
+  border-color: rgba(255,0,200,0.18);
+  background: rgba(4, 0, 26, 0.6);
+}
 .trailer-card:nth-child(even):hover {
   border-color: rgba(255,0,200,0.35);
   box-shadow: 0 16px 56px rgba(0,0,0,0.7), 0 0 30px rgba(255,0,200,0.1);
 }
-.thumb-wrap { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #000; }
-.thumb-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+
+.thumb-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: #000;
+}
+.thumb-wrap img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 0.4s ease;
+}
 .trailer-card:hover .thumb-wrap img { transform: scale(1.04); }
 .thumb-overlay {
   position: absolute; inset: 0;
@@ -874,7 +911,9 @@ body {
   display: flex; align-items: center; justify-content: center;
   transition: background 0.2s;
 }
-.trailer-card:hover .thumb-overlay { background: linear-gradient(0deg, rgba(4,0,26,0.4) 0%, transparent 60%); }
+.trailer-card:hover .thumb-overlay {
+  background: linear-gradient(0deg, rgba(4,0,26,0.4) 0%, transparent 60%);
+}
 .play-circle {
   width: 62px; height: 62px; border-radius: 50%;
   background: rgba(255,255,255,0.12);
@@ -884,10 +923,13 @@ body {
   transition: transform 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 .trailer-card:hover .play-circle {
-  transform: scale(1.12); background: rgba(255,0,0,0.75);
-  border-color: #fff; box-shadow: 0 0 28px rgba(255,0,0,0.4);
+  transform: scale(1.12);
+  background: rgba(255,0,0,0.75);
+  border-color: #fff;
+  box-shadow: 0 0 28px rgba(255,0,0,0.4);
 }
 .play-circle svg { width: 24px; height: 24px; fill: #fff; margin-left: 4px; }
+
 .new-badge {
   position: absolute; top: 14px; right: 14px; z-index: 10;
   font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 900;
@@ -899,6 +941,7 @@ body {
   pointer-events: none;
 }
 @keyframes pulseBadge { 0%,100%{box-shadow:0 0 16px rgba(0,255,255,0.5)} 50%{box-shadow:0 0 28px rgba(0,255,255,0.9)} }
+
 .card-label {
   padding: 12px 16px;
   display: flex; align-items: center; justify-content: space-between;
@@ -911,7 +954,21 @@ body {
   letter-spacing: 0.14em; text-transform: uppercase;
   color: rgba(255,255,255,0.65);
 }
-.card-label-year { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; color: rgba(255,255,255,0.25); }
+.card-label-year {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.25);
+}
+.trailer-card.tba .thumb-wrap {
+  display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px;
+}
+.tba-icon { font-size: 48px; opacity: 0.15; }
+.tba-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; font-weight: 900;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(255,255,255,0.12);
+}
 
 /* ══════════════════════════════════════════════════
    TRAILER LIGHTBOX
@@ -927,6 +984,7 @@ body {
   backdrop-filter: blur(20px);
 }
 #trailerLB.active { opacity: 1; pointer-events: all; }
+
 .tlb-close {
   position: fixed; top: 20px; right: 26px; z-index: 9001;
   width: 46px; height: 46px; border-radius: 50%;
@@ -937,8 +995,16 @@ body {
   cursor: pointer; display: flex; align-items: center; justify-content: center;
   transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.15s;
 }
-.tlb-close:hover { background: rgba(255,60,60,0.25); border-color: rgba(255,60,60,0.5); color: #fff; transform: scale(1.08); }
-.tlb-inner { width: 100%; max-width: 1060px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.tlb-close:hover {
+  background: rgba(255,60,60,0.25); border-color: rgba(255,60,60,0.5);
+  color: #fff; transform: scale(1.08);
+}
+
+.tlb-inner {
+  width: 100%; max-width: 1060px;
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+}
+
 .tlb-video-wrap {
   width: 100%; aspect-ratio: 16/9;
   border-radius: 14px; overflow: hidden;
@@ -946,232 +1012,56 @@ body {
   box-shadow: 0 0 60px rgba(0,255,255,0.08), 0 24px 70px rgba(0,0,0,0.85);
   background: #000; position: relative;
 }
-.tlb-video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
-.tlb-footer { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+.tlb-video-wrap iframe {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; border: none;
+}
+
+.tlb-footer {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .tlb-meta { display: flex; align-items: center; gap: 14px; }
-.tlb-title { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
-.tlb-year { font-size: 11px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.25); }
-.tlb-sep { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,0,200,0.5); }
+.tlb-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22px; font-weight: 900;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+}
+.tlb-year {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+}
+.tlb-sep {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: rgba(255,0,200,0.5);
+}
+
 .tlb-nav { display: flex; align-items: center; gap: 12px; }
 .tlb-btn {
-  font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 900;
-  color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.05);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 20px; font-weight: 900;
+  color: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 999px; padding: 8px 22px;
   cursor: pointer; letter-spacing: 0.06em;
   transition: color 0.15s, border-color 0.15s, background 0.15s, transform 0.15s;
 }
-.tlb-btn:hover { color: #fff; border-color: rgba(0,255,255,0.4); background: rgba(0,255,255,0.08); transform: scale(1.06); }
-.tlb-counter { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 900; letter-spacing: 0.2em; color: rgba(255,255,255,0.25); min-width: 60px; text-align: center; }
+.tlb-btn:hover {
+  color: #fff; border-color: rgba(0,255,255,0.4);
+  background: rgba(0,255,255,0.08); transform: scale(1.06);
+}
+.tlb-counter {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; font-weight: 900;
+  letter-spacing: 0.2em; color: rgba(255,255,255,0.25);
+  min-width: 60px; text-align: center;
+}
 .tlb-counter span { color: var(--cyan); }
-
-/* ══════════════════════════════════════════════════
-   SOURCE CODE BUTTON + POPUP
-══════════════════════════════════════════════════ */
-.src-btn {
-  position: fixed; bottom: 22px; right: 22px; z-index: 200;
-  display: flex; align-items: center; gap: 9px;
-  padding: 0 18px 0 14px; height: 52px; border-radius: 999px;
-  background: rgba(4,0,26,0.7);
-  border: 1.5px solid rgba(119,0,255,0.35);
-  box-shadow: 0 0 20px rgba(119,0,255,0.15), inset 0 1px 0 rgba(255,255,255,0.08);
-  backdrop-filter: blur(16px);
-  cursor: pointer;
-  /* FIX: added opacity and visibility to transition list */
-  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1), opacity 0.3s ease, visibility 0.3s ease;
-  animation: fadeSlideInRight 0.8s cubic-bezier(0.34,1.4,0.64,1) 0.2s both;
-}
-@keyframes fadeSlideInRight {
-  from { opacity: 0; transform: translateX(20px) scale(0.8); }
-  to   { opacity: 1; transform: translateX(0) scale(1); }
-}
-.src-btn:hover {
-  border-color: var(--purple);
-  box-shadow: 0 0 32px rgba(119,0,255,0.3), inset 0 1px 0 rgba(255,255,255,0.12);
-  transform: scale(1.05) translateY(-2px);
-}
-.src-btn svg { width: 18px; height: 18px; fill: rgba(119,0,255,0.85); flex-shrink: 0; transition: fill 0.2s; }
-.src-btn:hover svg { fill: #b060ff; }
-.src-btn-label {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 13px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase;
-  color: rgba(180,100,255,0.8); transition: color 0.2s;
-  white-space: nowrap;
-}
-.src-btn:hover .src-btn-label { color: #c080ff; }
-
-/* Source code popup overlay */
-.src-overlay {
-  position: fixed; inset: 0; z-index: 9500;
-  background: rgba(4,0,26,0.85); backdrop-filter: blur(28px);
-  display: flex; align-items: center; justify-content: center;
-  padding: 24px;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-.src-overlay.active { opacity: 1; pointer-events: all; }
-
-.src-modal {
-  width: min(520px, 94vw);
-  background: rgba(4,0,26,0.8);
-  border: 1px solid rgba(119,0,255,0.3);
-  border-radius: 22px;
-  box-shadow: 0 0 60px rgba(119,0,255,0.12), 0 0 100px rgba(255,0,200,0.06), 0 24px 80px rgba(0,0,0,0.8);
-  overflow: hidden;
-  transform: scale(0.88) translateY(16px);
-  transition: transform 0.45s cubic-bezier(0.34,1.4,0.64,1), opacity 0.3s ease;
-  opacity: 0;
-  position: relative;
-}
-.src-overlay.active .src-modal {
-  transform: scale(1) translateY(0);
-  opacity: 1;
-}
-.src-modal::before {
-  content: '';
-  position: absolute; inset: 0; z-index: 0; pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg, transparent, transparent 3px, rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px
-  );
-}
-.src-modal::after {
-  content: ''; position: absolute; top: 0; left: 15%; right: 15%; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(119,0,255,0.6), transparent);
-  z-index: 1; pointer-events: none;
-}
-
-.src-modal-header {
-  position: relative; z-index: 2;
-  padding: 28px 28px 20px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
-}
-.src-modal-title-block {}
-.src-modal-eyebrow {
-  font-size: 10px; font-weight: 600; letter-spacing: 0.4em; text-transform: uppercase;
-  color: rgba(119,0,255,0.6); margin-bottom: 6px;
-}
-.src-modal-title {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 34px; font-weight: 900; text-transform: uppercase;
-  letter-spacing: 0.04em; color: #fff; line-height: 1;
-}
-.src-modal-close {
-  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: rgba(255,255,255,0.4); font-size: 16px; font-weight: 700;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.15s;
-}
-.src-modal-close:hover { background: rgba(255,60,60,0.15); border-color: rgba(255,60,60,0.4); color: #fff; transform: scale(1.1); }
-
-.src-modal-body {
-  position: relative; z-index: 2;
-  padding: 22px 28px 28px;
-}
-
-.src-countdown-block { text-align: center; margin-bottom: 26px; }
-.src-countdown-label {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase;
-  color: rgba(255,255,255,0.25); margin-bottom: 14px;
-}
-.src-countdown-pills {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-}
-.src-cd-pill {
-  display: flex; flex-direction: column; align-items: center;
-  padding: 10px 16px 8px; border-radius: 12px;
-  background: rgba(119,0,255,0.06);
-  border: 1px solid rgba(119,0,255,0.2);
-  min-width: 66px;
-}
-.src-cd-num {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 32px; font-weight: 900; line-height: 1;
-  color: #b060ff; letter-spacing: -0.02em;
-  text-shadow: 0 0 20px rgba(119,0,255,0.5);
-}
-.src-cd-lbl {
-  font-size: 8px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase;
-  color: rgba(255,255,255,0.25); margin-top: 4px;
-}
-.src-cd-sep {
-  font-family: 'Barlow Condensed', sans-serif; font-size: 26px; font-weight: 900;
-  color: rgba(119,0,255,0.4); margin-bottom: 10px;
-  animation: sepBlink 1s ease-in-out infinite;
-}
-.src-avail-date {
-  font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
-  color: rgba(255,255,255,0.3); margin-top: 14px;
-}
-.src-avail-date span { color: var(--pink); text-shadow: 0 0 12px rgba(255,0,200,0.4); }
-
-.src-desc {
-  font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.4);
-  line-height: 1.75; margin-bottom: 24px;
-}
-.src-desc strong { color: rgba(255,255,255,0.65); font-weight: 600; }
-
-.src-dl-btn {
-  width: 100%; height: 52px; border-radius: 14px;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 16px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase;
-  cursor: pointer; border: none;
-  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1);
-  text-decoration: none;
-  position: relative; overflow: hidden;
-}
-.src-dl-btn.locked {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: rgba(255,255,255,0.25);
-  cursor: not-allowed;
-}
-.src-dl-btn.locked svg { fill: rgba(255,255,255,0.2); }
-.src-dl-btn.unlocked {
-  background: linear-gradient(135deg, rgba(119,0,255,0.25), rgba(255,0,200,0.15));
-  border: 1px solid rgba(119,0,255,0.45);
-  color: #c080ff;
-  box-shadow: 0 0 30px rgba(119,0,255,0.2);
-}
-.src-dl-btn.unlocked:hover {
-  background: linear-gradient(135deg, rgba(119,0,255,0.4), rgba(255,0,200,0.25));
-  border-color: rgba(119,0,255,0.7);
-  color: #fff;
-  box-shadow: 0 0 50px rgba(119,0,255,0.35), 0 8px 30px rgba(0,0,0,0.4);
-  transform: translateY(-2px);
-}
-.src-dl-btn.unlocked::before {
-  content: '';
-  position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-  animation: shimmerSlide 3s ease-in-out infinite;
-}
-@keyframes shimmerSlide { 0%{left:-100%} 60%,100%{left:100%} }
-.src-dl-btn svg { width: 18px; height: 18px; flex-shrink: 0; transition: fill 0.2s; }
-.src-dl-btn.unlocked svg { fill: currentColor; }
-
-.src-unlocked-state { display: none; }
-.src-unlocked-state.show { display: block; }
-.src-locked-state.hide { display: none; }
-
-.src-unlock-badge {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 16px; border-radius: 10px;
-  background: rgba(0,255,160,0.05); border: 1px solid rgba(0,255,160,0.2);
-  margin-bottom: 20px;
-}
-.src-unlock-dot {
-  width: 7px; height: 7px; border-radius: 50; flex-shrink: 0;
-  background: #00ffa0; box-shadow: 0 0 8px #00ffa0;
-  animation: blink 2s ease-in-out infinite;
-}
-.src-unlock-text {
-  font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
-  color: rgba(0,255,160,0.6);
-}
 
 /* ── SHARED KEYFRAMES ─────────────────────────────── */
 @keyframes popIn {
@@ -1181,7 +1071,9 @@ body {
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
 /* ── RESPONSIVE ───────────────────────────────────── */
-@media (max-width: 900px) { .trailers-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 900px) {
+  .trailers-grid { grid-template-columns: 1fr 1fr; }
+}
 @media (max-width: 680px) {
   .trailers-grid { grid-template-columns: 1fr; }
   .viewer-inner  { flex-direction: column; align-items: center; gap: 20px; max-height: none; overflow-y: auto; }
@@ -1196,11 +1088,11 @@ body {
   .pill-num { font-size: 32px; }
   .sep { font-size: 24px; }
   .nav-panel { padding: 70px 28px; }
+  .music-wrap { width: 160px; }
+  .music-title { max-width: 100px; }
 }
-@media (max-width: 600px) { .page-main { padding: 80px 20px 60px; } }
-@media (max-width: 480px) {
-  .src-btn-label { display: none; }
-  .src-btn { padding: 0; width: 52px; justify-content: center; }
+@media (max-width: 600px) {
+  .page-main { padding: 80px 20px 60px; }
 }
 </style>
 </head>
@@ -1374,7 +1266,10 @@ body {
       </div>
       <div class="count-badge"><span>3</span> trailers</div>
     </div>
+
     <div class="trailers-grid">
+
+      <!-- Trailer 1 -->
       <div class="trailer-card" data-vid="QdBZY2fkU-0" data-title="Trailer 1" data-year="Dec 2023" style="transition-delay:0s">
         <div class="thumb-wrap">
           <img src="https://img.youtube.com/vi/QdBZY2fkU-0/maxresdefault.jpg" alt="GTA VI Trailer 1" loading="lazy">
@@ -1384,6 +1279,8 @@ body {
           <span class="card-label-year">Dec 2023</span>
         </div>
       </div>
+
+      <!-- Trailer 2 -->
       <div class="trailer-card" data-vid="VQRLujxTm3c" data-title="Trailer 2" data-year="May 2025" style="transition-delay:0.1s">
         <div class="thumb-wrap">
           <img src="https://img.youtube.com/vi/VQRLujxTm3c/maxresdefault.jpg" alt="GTA VI Trailer 2" loading="lazy">
@@ -1393,6 +1290,8 @@ body {
           <span class="card-label-year">May 2025</span>
         </div>
       </div>
+
+      <!-- Trailer 3 -->
       <div class="trailer-card" data-vid="XJhz0IuSZNo" data-title="Trailer 3" data-year="2026" style="transition-delay:0.2s">
         <div class="thumb-wrap">
           <img src="https://img.youtube.com/vi/XJhz0IuSZNo/hqdefault.jpg" alt="GTA VI Trailer 3" loading="lazy">
@@ -1402,6 +1301,7 @@ body {
           <span class="card-label-year">2026</span>
         </div>
       </div>
+
     </div>
   </div>
 </div>
@@ -1446,6 +1346,7 @@ body {
     <input class="radio-vol-slider" id="radioVolSlider" type="range" min="0" max="100" value="50">
     <div class="radio-vol-val" id="radioVolVal">50</div>
   </div>
+  <!-- tracklist: populated dynamically from GitHub -->
   <div class="radio-tracklist" id="radioTracklist">
     <div class="radio-tracklist-loading" id="radioTracklistLoading">
       <div class="radio-tracklist-loading-dot"></div>
@@ -1456,79 +1357,6 @@ body {
 
 <!-- AUDIO ELEMENT -->
 <audio id="radioAudio" preload="none"></audio>
-
-<!-- SOURCE CODE BUTTON (bottom right) -->
-<button class="src-btn" id="srcBtn" aria-label="Source Code">
-  <svg viewBox="0 0 24 24"><path d="M9.4 16.6 4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0 4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
-  <span class="src-btn-label">Source Code</span>
-</button>
-
-<!-- SOURCE CODE POPUP -->
-<div class="src-overlay" id="srcOverlay">
-  <div class="src-modal" id="srcModal">
-    <div class="src-modal-header">
-      <div class="src-modal-title-block">
-        <div class="src-modal-eyebrow">Repository</div>
-        <div class="src-modal-title">Source Code</div>
-      </div>
-      <button class="src-modal-close" id="srcModalClose">✕</button>
-    </div>
-    <div class="src-modal-body">
-
-      <!-- LOCKED STATE -->
-      <div class="src-locked-state" id="srcLockedState">
-        <div class="src-countdown-block">
-          <div class="src-countdown-label">Available in</div>
-          <div class="src-countdown-pills">
-            <div class="src-cd-pill">
-              <span class="src-cd-num" id="src-n-d">00</span>
-              <span class="src-cd-lbl">Days</span>
-            </div>
-            <div class="src-cd-sep">:</div>
-            <div class="src-cd-pill">
-              <span class="src-cd-num" id="src-n-h">00</span>
-              <span class="src-cd-lbl">Hours</span>
-            </div>
-            <div class="src-cd-sep">:</div>
-            <div class="src-cd-pill">
-              <span class="src-cd-num" id="src-n-m">00</span>
-              <span class="src-cd-lbl">Mins</span>
-            </div>
-            <div class="src-cd-sep">:</div>
-            <div class="src-cd-pill">
-              <span class="src-cd-num" id="src-n-s">00</span>
-              <span class="src-cd-lbl">Secs</span>
-            </div>
-          </div>
-          <div class="src-avail-date">Drops <span>June 13, 2026 · 1:00 PM</span></div>
-        </div>
-        <div class="src-desc">
-          The full source code for <strong>Welcome to Leonida</strong> will be released publicly on June 13th at 1 PM. Check back then to download the complete repository.
-        </div>
-        <button class="src-dl-btn locked" disabled>
-          <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-          Locked Until June 13
-        </button>
-      </div>
-
-      <!-- UNLOCKED STATE -->
-      <div class="src-unlocked-state" id="srcUnlockedState">
-        <div class="src-unlock-badge">
-          <div class="src-unlock-dot"></div>
-          <div class="src-unlock-text">Source code is now available</div>
-        </div>
-        <div class="src-desc">
-          Download the complete <strong>Welcome to Leonida</strong> repository — all HTML, CSS, JavaScript, assets, and configuration files included.
-        </div>
-        <a class="src-dl-btn unlocked" id="srcDownloadLink" href="https://github.com/vocql/leonida/archive/refs/heads/main.zip" download>
-          <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-          Download ZIP
-        </a>
-      </div>
-
-    </div>
-  </div>
-</div>
 
 <!-- ═══════════════════════════════════════════════════════════
      LIGHTBOXES
@@ -1603,43 +1431,17 @@ body {
 'use strict';
 
 /* ── HAMBURGER ──────────────────────────────────── */
-const hBtn     = document.getElementById('hamburgerBtn');
-const overlay  = document.getElementById('navOverlay');
-const backdrop = document.getElementById('navBackdrop');
-
-// Declared early so toggleMenu can reference them
-const srcBtn         = document.getElementById('srcBtn');
-const radioToggleBtn = document.getElementById('radioToggleBtn');
-const radioPanel     = document.getElementById('radioPanel');
-
+const hBtn    = document.getElementById('hamburgerBtn');
+const overlay = document.getElementById('navOverlay');
+const backdrop= document.getElementById('navBackdrop');
 function toggleMenu(force) {
   if (typeof force === 'boolean') {
-    if (force) overlay.classList.add('open');
-    else overlay.classList.remove('open');
+    if (force) overlay.classList.add('open'); else overlay.classList.remove('open');
   } else {
     overlay.classList.toggle('open');
   }
-  const isOpen = overlay.classList.contains('open');
-  hBtn.classList.toggle('open', isOpen);
-
-  // ── FIX: hide radio + source-code buttons when nav is open ──
-  // opacity fades them out; visibility removes them from hit-testing
-  // immediately on close (visibility snaps back so transition feels right)
-  srcBtn.style.opacity        = isOpen ? '0' : '';
-  srcBtn.style.visibility     = isOpen ? 'hidden' : '';
-  srcBtn.style.pointerEvents  = isOpen ? 'none' : '';
-
-  radioToggleBtn.style.opacity       = isOpen ? '0' : '';
-  radioToggleBtn.style.visibility    = isOpen ? 'hidden' : '';
-  radioToggleBtn.style.pointerEvents = isOpen ? 'none' : '';
-
-  // Close the radio panel if nav is opening
-  if (isOpen) {
-    radioPanel.classList.remove('open');
-    radioToggleBtn.classList.remove('active');
-  }
+  hBtn.classList.toggle('open', overlay.classList.contains('open'));
 }
-
 hBtn.addEventListener('click', () => toggleMenu());
 backdrop.addEventListener('click', () => toggleMenu(false));
 
@@ -1672,12 +1474,11 @@ document.addEventListener('keydown', e => {
     if (document.getElementById('trailerLB').classList.contains('active')) { closeTLB(); return; }
     const openLB = document.querySelector('.lb-viewer.active');
     if (openLB) { openLB.classList.remove('active'); return; }
-    if (document.getElementById('srcOverlay').classList.contains('active')) { closeSrcModal(); return; }
     if (overlay.classList.contains('open')) { toggleMenu(false); return; }
   }
 });
 
-/* ── COUNTDOWN (main) ───────────────────────────── */
+/* ── COUNTDOWN ──────────────────────────────────── */
 const prev = { d:'', h:'', m:'', s:'' };
 function bounce(id) {
   const el = document.getElementById('n-' + id);
@@ -1702,66 +1503,13 @@ function tick() {
 }
 tick(); setInterval(tick, 1000);
 
-/* ── SOURCE CODE MODAL ──────────────────────────── */
-const SRC_RELEASE = new Date('2026-06-13T13:00:00');
-
-const srcOverlay       = document.getElementById('srcOverlay');
-const srcModalClose    = document.getElementById('srcModalClose');
-const srcLockedState   = document.getElementById('srcLockedState');
-const srcUnlockedState = document.getElementById('srcUnlockedState');
-
-function isSrcUnlocked() {
-  return new Date() >= SRC_RELEASE;
-}
-
-function updateSrcCountdown() {
-  const diff = SRC_RELEASE - new Date();
-  if (diff <= 0) {
-    srcLockedState.classList.add('hide');
-    srcUnlockedState.classList.add('show');
-    return;
-  }
-  const d = String(Math.floor(diff / 86400000)).padStart(2, '0');
-  const h = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
-  const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
-  const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
-  document.getElementById('src-n-d').textContent = d;
-  document.getElementById('src-n-h').textContent = h;
-  document.getElementById('src-n-m').textContent = m;
-  document.getElementById('src-n-s').textContent = s;
-}
-
-let srcCountdownInterval = null;
-
-function openSrcModal() {
-  if (isSrcUnlocked()) {
-    srcLockedState.classList.add('hide');
-    srcUnlockedState.classList.add('show');
-  } else {
-    srcLockedState.classList.remove('hide');
-    srcUnlockedState.classList.remove('show');
-    updateSrcCountdown();
-    if (!srcCountdownInterval) {
-      srcCountdownInterval = setInterval(updateSrcCountdown, 1000);
-    }
-  }
-  srcOverlay.classList.add('active');
-}
-
-function closeSrcModal() {
-  srcOverlay.classList.remove('active');
-}
-
-srcBtn.addEventListener('click', openSrcModal);
-srcModalClose.addEventListener('click', closeSrcModal);
-srcOverlay.addEventListener('click', e => { if (e.target === srcOverlay) closeSrcModal(); });
-
-updateSrcCountdown();
-
 /* ── RADIO PLAYER ───────────────────────────────── */
+// songs is populated dynamically from GitHub — no hardcoded list needed
 let songs = [];
 
 const radioAudio      = document.getElementById('radioAudio');
+const radioPanel      = document.getElementById('radioPanel');
+const radioToggleBtn  = document.getElementById('radioToggleBtn');
 const radioPlayBtn    = document.getElementById('radioPlayBtn');
 const radioIconPlay   = document.getElementById('radioIconPlay');
 const radioIconPause  = document.getElementById('radioIconPause');
@@ -1780,40 +1528,66 @@ let radioShuffle = false;
 
 radioAudio.volume = 0.5;
 
+/* ── Load songs from GitHub API, same pattern as loadGithubImages ── */
 async function loadGithubMusic() {
   const GITHUB_USER   = 'vocql';
   const GITHUB_REPO   = 'leonida';
   const GITHUB_BRANCH = 'main';
   const MUSIC_PATH    = 'leonida/music';
   const AUDIO_EXTS    = ['.mp3', '.ogg', '.wav', '.flac', '.aac', '.m4a'];
+
   const loadingEl = document.getElementById('radioTracklistLoading');
+
   try {
     const apiURL = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${MUSIC_PATH}?ref=${GITHUB_BRANCH}`;
     const res = await fetch(apiURL, { headers: { 'Accept': 'application/vnd.github.v3+json' } });
+
     if (!res.ok) throw new Error('GitHub API returned ' + res.status);
+
     const files = await res.json();
     if (!Array.isArray(files)) throw new Error('Unexpected response');
-    const audioFiles = files.filter(f => f.type === 'file' && AUDIO_EXTS.some(ext => f.name.toLowerCase().endsWith(ext)));
+
+    // Filter to audio files only
+    const audioFiles = files.filter(f =>
+      f.type === 'file' && AUDIO_EXTS.some(ext => f.name.toLowerCase().endsWith(ext))
+    );
+
     if (!audioFiles.length) {
       if (loadingEl) loadingEl.innerHTML = '<div class="radio-tracklist-loading-text" style="color:rgba(255,80,80,0.5)">No audio files found in leonida/music/</div>';
       radioNowTitle.textContent = 'No tracks found';
       return;
     }
+
+    // Build songs array from filenames
     songs = audioFiles.map(f => {
       const src  = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${MUSIC_PATH}/${f.name}`;
-      const name = f.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+      // Pretty-print name: strip extension, replace dashes/underscores, title-case
+      const name = f.name
+        .replace(/\.[^.]+$/, '')
+        .replace(/[-_]/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
       return { n: name, s: src };
     });
+
+    // Remove loading indicator and build tracklist rows
     if (loadingEl) loadingEl.remove();
+
     songs.forEach((song, i) => {
       const row = document.createElement('div');
       row.className = 'radio-track';
       row.dataset.idx = i;
-      row.innerHTML = `<span class="radio-track-num">${String(i + 1).padStart(2, '0')}</span><span class="radio-track-name">${song.n}</span><span class="radio-track-playing-dot"></span>`;
+      row.innerHTML = `
+        <span class="radio-track-num">${String(i + 1).padStart(2, '0')}</span>
+        <span class="radio-track-name">${song.n}</span>
+        <span class="radio-track-playing-dot"></span>
+      `;
       row.addEventListener('click', () => radioPlayIdx(i));
       radioTracklist.appendChild(row);
     });
+
+    // Set first track as ready label
     radioUpdateTrack();
+
   } catch (err) {
     console.error('Radio: failed to load tracklist —', err);
     if (loadingEl) {
@@ -1876,11 +1650,13 @@ function radioPrev() {
   radioPlayIdx(radioIdx);
 }
 
+// toggle panel
 radioToggleBtn.addEventListener('click', () => {
   radioPanel.classList.toggle('open');
   radioToggleBtn.classList.toggle('active', radioPanel.classList.contains('open'));
 });
 
+// play/pause
 radioPlayBtn.addEventListener('click', () => {
   if (!songs.length) return;
   if (radioAudio.src && !radioAudio.src.endsWith(window.location.href)) {
@@ -1908,6 +1684,7 @@ radioVolSlider.addEventListener('input', () => {
   radioVolVal.textContent = v;
 });
 
+// Kick off the GitHub fetch immediately
 loadGithubMusic();
 
 /* ── MAP INIT ───────────────────────────────────── */
@@ -1920,7 +1697,7 @@ async function loadGithubImages(opts) {
   const { user, repo, branch, path, dotEl, statusEl, countEl, totEl, gallery, emptyEl, cardClass, aspectClass, onCardCreated } = opts;
   const IMAGE_EXTS = ['.jpg','.jpeg','.png','.webp','.gif'];
   function setStatus(type, msg) {
-    dotEl.className    = 'status-dot ' + type;
+    dotEl.className   = 'status-dot ' + type;
     statusEl.className = 'status-text ' + (type === 'loading' ? '' : type);
     statusEl.textContent = msg;
   }
@@ -2193,12 +1970,12 @@ const TRAILERS = [
 let tlbIdx = 0;
 let tlbMusicWasPlaying = false;
 
-const tlbEl    = document.getElementById('trailerLB');
-const tlbVideo = document.getElementById('tlbVideo');
-const tlbTitle = document.getElementById('tlbTitle');
-const tlbYear  = document.getElementById('tlbYear');
-const tlbCur   = document.getElementById('tlbCur');
-const tlbTot   = document.getElementById('tlbTot');
+const tlbEl     = document.getElementById('trailerLB');
+const tlbVideo  = document.getElementById('tlbVideo');
+const tlbTitle  = document.getElementById('tlbTitle');
+const tlbYear   = document.getElementById('tlbYear');
+const tlbCur    = document.getElementById('tlbCur');
+const tlbTot    = document.getElementById('tlbTot');
 
 tlbTot.textContent = TRAILERS.length;
 
@@ -2243,6 +2020,7 @@ function initTrailers() {
   const obs = new IntersectionObserver(entries => {
     entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); obs.unobserve(en.target); } });
   }, { threshold: 0.08 });
+
   document.querySelectorAll('.trailer-card').forEach(el => {
     obs.observe(el);
     if (el.classList.contains('tba')) return;
