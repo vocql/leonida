@@ -113,7 +113,6 @@ body {
 .hamburger-btn.open .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background: var(--pink); }
 
 /* ── NAV OVERLAY ──────────────────────────────────── */
-/* z-index 210 ensures it covers radio (z:200) and other fixed buttons */
 .nav-overlay {
   position: fixed; inset: 0; z-index: 210;
   pointer-events: none; opacity: 0; transition: opacity 0.4s ease;
@@ -483,14 +482,17 @@ body {
   display: flex; align-items: center; gap: 14px;
 }
 .subtitle-divider { width: 28px; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent); }
-.subtitle span.date { color: var(--pink); text-shadow: 0 0 14px rgba(255,0,200,0.4); }
+
+/* ── PLATFORM BADGES ──────────────────────────────── */
 .platforms {
   display: flex; align-items: center; gap: 8px;
   animation: popIn 1s cubic-bezier(0.34,1.56,0.64,1) 0.4s both;
 }
 .platform-badge {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
-  padding: 5px 14px; border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 8px 20px;
+  border-radius: 6px;
   border: 1px solid rgba(255,255,255,0.15);
   color: rgba(255,255,255,0.45);
   background: rgba(4,0,26,0.45);
@@ -512,7 +514,6 @@ body {
   backdrop-filter: blur(16px);
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  /* FIX: include opacity + visibility in transition so nav-open hide is smooth */
   transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1), opacity 0.3s ease, visibility 0.3s ease;
   animation: fadeSlideInLeft 0.8s cubic-bezier(0.34,1.4,0.64,1) both;
 }
@@ -545,7 +546,6 @@ body {
   100% { transform: scale(1.6); opacity: 0; }
 }
 
-/* FIX: added visibility to transition so panel fades cleanly when nav opens */
 .radio-panel {
   position: fixed; bottom: 84px; left: 22px; z-index: 199;
   width: 320px;
@@ -833,9 +833,7 @@ body {
 .bio-text p:last-child { margin-bottom: 0; }
 .bio-no-info { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.2); letter-spacing: 0.1em; text-transform: uppercase; padding: 30px 0; text-align: center; }
 
-/* ══════════════════════════════════════════════════
-   TRAILERS PAGE
-══════════════════════════════════════════════════ */
+/* ── TRAILERS PAGE ────────────────────────────────── */
 #page-trailers { isolation: isolate; }
 #page-trailers .page-main { overflow-y: auto; height: 100%; }
 .trailers-grid {
@@ -922,9 +920,7 @@ body {
   color: rgba(255,255,255,0.12);
 }
 
-/* ══════════════════════════════════════════════════
-   TRAILER LIGHTBOX
-══════════════════════════════════════════════════ */
+/* ── TRAILER LIGHTBOX ─────────────────────────────── */
 #trailerLB {
   position: fixed; inset: 0; z-index: 9000;
   background: rgba(0,0,0,0.92);
@@ -997,8 +993,6 @@ body {
   .pill-num { font-size: 32px; }
   .sep { font-size: 24px; }
   .nav-panel { padding: 70px 28px; }
-  .music-wrap { width: 160px; }
-  .music-title { max-width: 100px; }
 }
 @media (max-width: 600px) { .page-main { padding: 80px 20px 60px; } }
 </style>
@@ -1073,7 +1067,7 @@ body {
   <div class="subtitle-wrap">
     <div class="subtitle">
       <div class="subtitle-divider"></div>
-      Release <span class="date">November 19, 2026</span>
+      <span style="color:#e8f4ff;text-shadow:0 0 18px rgba(220,240,255,0.7),0 0 6px rgba(255,255,255,0.4);letter-spacing:0.3em;font-weight:700;">MADE BY VOQCL</span>
       <div class="subtitle-divider"></div>
     </div>
   </div>
@@ -1256,9 +1250,7 @@ body {
 <!-- AUDIO ELEMENT -->
 <audio id="radioAudio" preload="none"></audio>
 
-<!-- ═══════════════════════════════════════════════════════════
-     LIGHTBOXES
-════════════════════════════════════════════════════════════ -->
+<!-- LIGHTBOXES -->
 
 <!-- PLACES LIGHTBOX -->
 <div class="lb-viewer" id="placesLB">
@@ -1344,13 +1336,10 @@ function toggleMenu(force) {
   const isOpen = overlay.classList.contains('open');
   hBtn.classList.toggle('open', isOpen);
 
-  // ── FIX: hide radio button AND panel when nav opens ──────────────────
-  // The toggle button
   radioToggleBtn.style.opacity       = isOpen ? '0' : '';
   radioToggleBtn.style.visibility    = isOpen ? 'hidden' : '';
   radioToggleBtn.style.pointerEvents = isOpen ? 'none' : '';
 
-  // The panel itself — close it and also make it invisible
   if (isOpen) {
     radioPanel.classList.remove('open');
     radioToggleBtn.classList.remove('active');
@@ -1358,7 +1347,6 @@ function toggleMenu(force) {
   radioPanel.style.opacity       = isOpen ? '0' : '';
   radioPanel.style.visibility    = isOpen ? 'hidden' : '';
   radioPanel.style.pointerEvents = isOpen ? 'none' : '';
-  // ────────────────────────────────────────────────────────────────────
 }
 
 hBtn.addEventListener('click', () => toggleMenu());
