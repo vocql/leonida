@@ -245,13 +245,13 @@ body{min-height:100vh;font-family:'Rajdhani',sans-serif;overflow:hidden;backgrou
   animation: popIn 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.1s both;
 }
 .community-week-label {
-  font-size: 10px; 
-  font-weight: 700; 
+  font-size: 10px;
+  font-weight: 700;
   letter-spacing: 0.45em;
-  text-transform: uppercase; 
-  color: #f0f8ff;                    /* Frost White */
+  text-transform: uppercase;
+  color: #f0f8ff;
   margin-bottom: 5px;
-  text-shadow: 
+  text-shadow:
     0 0 18px rgba(220, 240, 255, 0.85),
     0 0 8px rgba(255, 255, 255, 0.7),
     0 0 4px rgba(180, 230, 255, 0.5);
@@ -275,7 +275,7 @@ body{min-height:100vh;font-family:'Rajdhani',sans-serif;overflow:hidden;backgrou
   padding: 16px 20px;
   border-radius: 16px;
   border: 1px solid rgba(0,255,255,0.1);
-  background: rgba(0,0,0,0.25);
+  background: rgba(4,0,26,0.35);
   backdrop-filter: blur(14px);
   position: relative;
   overflow: hidden;
@@ -292,12 +292,16 @@ body{min-height:100vh;font-family:'Rajdhani',sans-serif;overflow:hidden;backgrou
 /* Rank-specific styles */
 .member-row[data-rank="1"] { border-color: rgba(255,200,0,0.22); background: rgba(255,200,0,0.025); }
 .member-row[data-rank="1"]:hover { border-color: rgba(255,200,0,0.38); box-shadow: 0 8px 36px rgba(0,0,0,0.5), 0 0 28px rgba(255,200,0,0.08); }
-.member-row[data-rank="2"] { border-color: rgba(180,200,220,0.18); background: rgba(180,200,220,0.02); }
-.member-row[data-rank="2"]:hover { border-color: rgba(180,200,220,0.32); }
+.member-row[data-rank="2"] { border-color: rgba(255,0,200,0.15); background: rgba(255,0,200,0.02); }
+.member-row[data-rank="2"]:hover { border-color: rgba(255,0,200,0.32); box-shadow: 0 8px 28px rgba(0,0,0,0.45), 0 0 20px rgba(255,0,200,0.07); }
 .member-row[data-rank="3"] { border-color: rgba(210,140,80,0.18); background: rgba(210,140,80,0.02); }
 .member-row[data-rank="3"]:hover { border-color: rgba(210,140,80,0.32); }
-.member-row[data-rank="4"], .member-row[data-rank="5"] { border-color: rgba(255,0,200,0.1); }
-.member-row[data-rank="4"]:hover, .member-row[data-rank="5"]:hover { border-color: rgba(255,0,200,0.22); }
+
+/* FIX: Rows 4 & 5 — cyan theme, bright background to fight the dark dock BG */
+.member-row[data-rank="4"] { border-color: rgba(0,255,255,0.12); background: rgba(0,255,255,0.02); }
+.member-row[data-rank="4"]:hover { border-color: rgba(0,255,255,0.28); box-shadow: 0 8px 28px rgba(0,0,0,0.4), 0 0 20px rgba(0,255,255,0.06); }
+.member-row[data-rank="5"] { border-color: rgba(0,255,120,0.1); background: rgba(0,255,120,0.015); }
+.member-row[data-rank="5"]:hover { border-color: rgba(0,255,120,0.24); box-shadow: 0 8px 28px rgba(0,0,0,0.4), 0 0 18px rgba(0,255,120,0.05); }
 
 /* Left accent strip */
 .member-row::before {
@@ -306,10 +310,11 @@ body{min-height:100vh;font-family:'Rajdhani',sans-serif;overflow:hidden;backgrou
   border-radius: 3px 0 0 3px;
 }
 .member-row[data-rank="1"]::before { background: linear-gradient(180deg,#ffd700,#ff9800); box-shadow: 0 0 10px rgba(255,200,0,0.4); }
-.member-row[data-rank="2"]::before { background: linear-gradient(180deg,#c8d8e8,#8898a8); }
+.member-row[data-rank="2"]::before { background: linear-gradient(180deg,rgba(255,0,200,0.7),rgba(180,0,140,0.4)); box-shadow: 0 0 8px rgba(255,0,200,0.25); }
 .member-row[data-rank="3"]::before { background: linear-gradient(180deg,#e89060,#b86030); }
-.member-row[data-rank="4"]::before { background: linear-gradient(180deg,rgba(255,0,200,0.5),rgba(100,0,180,0.5)); }
-.member-row[data-rank="5"]::before { background: linear-gradient(180deg,rgba(255,0,200,0.3),rgba(100,0,180,0.3)); }
+/* FIX: Both #4 and #5 get full cyan accent strips */
+.member-row[data-rank="4"]::before { background: linear-gradient(180deg,rgba(0,255,255,0.7),rgba(0,180,200,0.5)); box-shadow: 0 0 8px rgba(0,255,255,0.25); }
+.member-row[data-rank="5"]::before { background: linear-gradient(180deg,rgba(0,255,120,0.5),rgba(0,180,80,0.3)); }
 
 /* Rank number */
 .member-rank {
@@ -319,8 +324,11 @@ body{min-height:100vh;font-family:'Rajdhani',sans-serif;overflow:hidden;backgrou
   color: rgba(255,255,255,0.25);
 }
 .member-row[data-rank="1"] .member-rank { color: #ffd700; font-size: 15px; text-shadow: 0 0 10px rgba(255,210,0,0.5); }
-.member-row[data-rank="2"] .member-rank { color: #b0c8e0; }
+.member-row[data-rank="2"] .member-rank { color: rgba(255,0,200,0.7); }
 .member-row[data-rank="3"] .member-rank { color: #d08848; }
+/* FIX: #4 and #5 rank numbers in cyan */
+.member-row[data-rank="4"] .member-rank { color: rgba(0,255,255,0.6); }
+.member-row[data-rank="5"] .member-rank { color: rgba(0,255,120,0.6); }
 
 /* Avatar — compact circle */
 .member-avatar {
@@ -333,10 +341,11 @@ body{min-height:100vh;font-family:'Rajdhani',sans-serif;overflow:hidden;backgrou
   box-shadow: 0 0 0 2px rgba(255,255,255,0.08);
 }
 .member-row[data-rank="1"] .member-avatar { box-shadow: 0 0 0 2px rgba(255,210,0,0.35), 0 0 14px rgba(255,210,0,0.2); }
-.member-row[data-rank="2"] .member-avatar { box-shadow: 0 0 0 2px rgba(180,200,220,0.28); }
+.member-row[data-rank="2"] .member-avatar { box-shadow: 0 0 0 2px rgba(255,0,200,0.28); }
 .member-row[data-rank="3"] .member-avatar { box-shadow: 0 0 0 2px rgba(210,140,80,0.28); }
-.member-row[data-rank="4"] .member-avatar { box-shadow: 0 0 0 2px rgba(255,0,200,0.2); }
-.member-row[data-rank="5"] .member-avatar { box-shadow: 0 0 0 2px rgba(255,0,200,0.14); }
+/* FIX: #4 and #5 avatar rings in cyan */
+.member-row[data-rank="4"] .member-avatar { box-shadow: 0 0 0 2px rgba(0,255,255,0.25); }
+.member-row[data-rank="5"] .member-avatar { box-shadow: 0 0 0 2px rgba(0,255,120,0.2); }
 .member-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
 .member-avatar-placeholder {
   width: 100%; height: 100%;
@@ -365,6 +374,9 @@ body{min-height:100vh;font-family:'Rajdhani',sans-serif;overflow:hidden;backgrou
   text-transform: uppercase; color: rgba(255,255,255,0.18);
 }
 .member-row[data-rank="1"] .member-tag { color: rgba(255,200,0,0.45); }
+/* FIX: #4 and #5 tags in cyan tint */
+.member-row[data-rank="4"] .member-tag { color: rgba(0,255,255,0.3); }
+.member-row[data-rank="5"] .member-tag { color: rgba(0,255,120,0.35); }
 
 /* Crown */
 .member-crown {
@@ -541,7 +553,7 @@ body{min-height:100vh;font-family:'Rajdhani',sans-serif;overflow:hidden;backgrou
         <div class="eyebrow">Leonida ·</div>
         <div class="page-title-grad" style="font-size:clamp(36px,6vw,72px)">Community</div>
       </div>
-      <div class="count-badge"><span style="color:var(--pink);text-shadow:0 0 12px rgba(255,0,200,0.5)">5</span> members</div>
+    <span style="color: #f0f8ff; text-shadow: 0 0 18px rgba(220, 240, 255, 0.9), 0 0 10px rgba(255, 255, 255, 0.8), 0 0 5px rgba(180, 230, 255, 0.6);">5</span>members</div>
     </div>
 
     <div class="community-intro">
@@ -554,13 +566,11 @@ body{min-height:100vh;font-family:'Rajdhani',sans-serif;overflow:hidden;backgrou
       <div class="member-row" data-rank="1">
         <div class="member-rank">#1</div>
         <div class="member-avatar">
-          <!-- pfp: put leonida/community/1.jpg in your repo -->
           <img src="leonida/community/1.jpg" alt=""
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div class="member-avatar-placeholder">?</div>
         </div>
         <div class="member-info">
-          <!-- ✏️ Change name below -->
           <div class="member-name">Member Name</div>
           <div class="member-tag">Top of the Week</div>
         </div>
@@ -653,7 +663,7 @@ body{min-height:100vh;font-family:'Rajdhani',sans-serif;overflow:hidden;backgrou
   </div>
 </div>
 
-<!-- CHARACTERS LB — image only, no bio -->
+<!-- CHARACTERS LB -->
 <div class="lb-viewer" id="charLB">
   <button class="lb-close" data-lb="char">✕</button>
   <img class="lb-img" id="char-lb-img" src="" alt="">
