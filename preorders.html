@@ -1130,7 +1130,7 @@ body {
         <div class="news-slide" data-slide="1">
           <div class="news-img-wrap">
             <span class="news-tag alt">New</span>
-            <img src="https://img.youtube.com/vi/EiQEBYDox_k/hqdefault.jpg" alt="Cover Art Reveal">
+            <img src="https://img.youtube.com/vi/EiQEBYDox_k/hqdefault.jpg" alt="Trailer 3">
             <div class="news-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
           </div>
           <div class="news-body">
@@ -1561,6 +1561,8 @@ tick(); setInterval(tick, 1000);
   const slides = [...newsSlidesEl.querySelectorAll('.news-slide')];
   const dots   = [...newsDotsEl.querySelectorAll('.news-dot')];
   let newsIdx = 0;
+  let trailerImgWrap = null;
+  let trailerImgWrapOriginal = null;
 
   function goTo(i) {
     newsIdx = (i + slides.length) % slides.length;
@@ -1568,7 +1570,12 @@ tick(); setInterval(tick, 1000);
     dots.forEach((d, di) => d.classList.toggle('active', di === newsIdx));
   }
   function openNews()  { newsOverlay.classList.add('open'); }
-  function closeNews() { newsOverlay.classList.remove('open'); }
+  function closeNews() {
+    newsOverlay.classList.remove('open');
+    if (trailerImgWrap && trailerImgWrapOriginal && trailerImgWrap.querySelector('iframe')) {
+      trailerImgWrap.innerHTML = trailerImgWrapOriginal;
+    }
+  }
 
   dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
   newsClose.addEventListener('click', closeNews);
@@ -1578,14 +1585,16 @@ tick(); setInterval(tick, 1000);
     if (!newsPopup.contains(e.target)) closeNews();
   });
 
-  // Trailer 3 slide opens the trailer lightbox
+  // Trailer 3 slide plays inline, right inside the news card — fully separate from the Trailers page lightbox
   const trailerSlide = newsSlidesEl.querySelector('[data-slide="1"]');
   if (trailerSlide) {
+    trailerImgWrap = trailerSlide.querySelector('.news-img-wrap');
+    trailerImgWrapOriginal = trailerImgWrap.innerHTML;
+    const NEWS_TRAILER_VID = 'XJhz0IuSZNo';
     trailerSlide.classList.add('clickable');
     trailerSlide.addEventListener('click', () => {
-      closeNews();
-      const idx = TRAILERS.findIndex(t => t.vid === 'XJhz0IuSZNo');
-      if (idx >= 0) openTLB(idx);
+      if (trailerImgWrap.querySelector('iframe')) return; // already playing
+      trailerImgWrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${NEWS_TRAILER_VID}?autoplay=1&rel=0&modestbranding=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;z-index:3;"></iframe>`;
     });
   }
 
