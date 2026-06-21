@@ -114,12 +114,12 @@ body {
   background: rgba(4,0,26,0.92); backdrop-filter: blur(28px);
 }
 
-/* 3-column panel */
+/* 3-column panel — FIXED: news col narrower, radio col clips fixed */
 .nav-panel {
   position: absolute; top: 0; right: 0; bottom: 0;
   width: 100%; max-width: 100vw;
   display: grid;
-  grid-template-columns: 340px 1fr 320px;
+  grid-template-columns: 300px 240px 300px;
   transform: translateY(16px);
   opacity: 0;
   transition: transform 0.45s cubic-bezier(0.34,1.2,0.64,1), opacity 0.35s ease;
@@ -127,19 +127,22 @@ body {
 }
 .nav-overlay.open .nav-panel { transform: translateY(0); opacity: 1; }
 
-/* Left col — Radio + Themes */
+/* Left col — Radio + Themes — FIXED: overflow visible so scroll works */
 .nav-col-radio {
   background: rgba(4,0,26,0.45);
   border-right: 1px solid rgba(255,140,80,0.08);
   display: flex; flex-direction: column;
   padding: 72px 0 0;
-  overflow: hidden;
+  overflow: visible;
+  min-width: 0;
 }
 
-/* Center col — News */
+/* Center col — News — FIXED: narrower, smaller text */
 .nav-col-news {
-  padding: 72px 36px 36px;
+  padding: 72px 24px 36px;
   overflow-y: auto;
+  overflow-x: hidden;
+  min-width: 0;
   scrollbar-width: thin;
   scrollbar-color: rgba(255,140,80,0.12) transparent;
 }
@@ -152,9 +155,10 @@ body {
   border-left: 1px solid rgba(255,140,80,0.08);
   box-shadow: -30px 0 80px rgba(0,0,0,0.35);
   display: flex; flex-direction: column; justify-content: center;
-  padding: 80px 48px;
+  padding: 80px 40px;
   overflow: hidden;
   position: relative;
+  min-width: 0;
 }
 .nav-col-links::before {
   content: ''; position: absolute; top: -80px; right: -80px;
@@ -169,7 +173,7 @@ body {
   pointer-events: none;
 }
 
-/* Nav label / links / footer — same as before */
+/* Nav label / links / footer */
 .nav-label {
   font-size: 10px; font-weight: 600; letter-spacing: 0.4em;
   text-transform: uppercase; color: rgba(255,179,71,0.35); margin-bottom: 36px;
@@ -187,17 +191,17 @@ body {
 .nav-overlay.open .nav-links li:nth-child(6){opacity:1;transform:none;transition-delay:.32s}
 .nav-links li a {
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: clamp(36px,4.5vw,52px); font-weight: 900;
+  font-size: clamp(32px,3.8vw,46px); font-weight: 900;
   text-transform: uppercase; letter-spacing: 0.04em;
   text-decoration: none; color: rgba(255,255,255,0.18);
-  display: block; padding: 9px 0; line-height: 1;
+  display: block; padding: 8px 0; line-height: 1;
   cursor: pointer;
   transition: color 0.2s, letter-spacing 0.25s;
 }
 .nav-links li a:hover { color: #fff; letter-spacing: 0.08em; }
 .nav-links li a.active { color: #fff; }
 .nav-footer {
-  position: absolute; bottom: 36px; left: 48px; right: 48px;
+  position: absolute; bottom: 36px; left: 40px; right: 40px;
   padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.05);
   display: flex; align-items: center; justify-content: space-between;
   opacity: 0; transition: opacity 0.4s ease 0.38s; z-index: 1;
@@ -214,6 +218,7 @@ body {
 /* ── RADIO IN NAV ─────────────────────────────────── */
 .nav-radio-section {
   flex: 1; display: flex; flex-direction: column; min-height: 0;
+  overflow: hidden;
 }
 .nav-radio-header {
   padding: 0 22px 14px;
@@ -230,7 +235,6 @@ body {
   color: rgba(232,80,122,0.45);
 }
 
-/* Inline radio — compact version inside nav */
 .nav-radio-now {
   padding: 14px 22px 10px;
   border-bottom: 1px solid rgba(255,255,255,0.04);
@@ -336,11 +340,12 @@ body {
 .nav-radio-tracklist-loading-dot { width: 6px; height: 6px; border-radius: 50%; background: #ffcc00; box-shadow: 0 0 6px #ffcc00; animation: blink 0.8s ease-in-out infinite; }
 .nav-radio-tracklist-loading-text { font-size: 10px; font-weight: 600; font-family: monospace; color: rgba(255,255,255,0.2); }
 
-/* ── THEMES SECTION ───────────────────────────────── */
+/* ── THEMES SECTION — FIXED: overflow visible so scroll works ─── */
 .nav-themes-section {
   border-top: 1px solid rgba(255,255,255,0.06);
   padding: 0;
   flex-shrink: 0;
+  overflow: visible;
 }
 .nav-themes-header {
   display: flex; align-items: center; justify-content: space-between;
@@ -355,18 +360,20 @@ body {
   color: rgba(255,255,255,0.25); text-transform: uppercase;
   max-width: 130px; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-/* Scroll wheel — horizontal pill carousel */
+/* Scroll wheel — horizontal pill carousel — FIXED: proper overflow */
 .themes-scroll-wrap {
   padding: 0 0 14px;
   position: relative;
+  overflow: hidden;
 }
 .themes-scroll {
   display: flex; gap: 8px;
-  overflow-x: auto; overflow-y: hidden;
+  overflow-x: auto; overflow-y: visible;
   padding: 6px 22px 8px;
   scroll-behavior: smooth;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
 }
 .themes-scroll::-webkit-scrollbar { display: none; }
 /* fade edges */
@@ -406,31 +413,31 @@ body {
 .theme-pill.active .theme-check { display: flex; }
 .theme-check svg { width: 16px; height: 16px; fill: #fff; }
 
-/* ── NEWS SECTION ─────────────────────────────────── */
+/* ── NEWS SECTION — smaller text to fit narrower col ─ */
 .news-section-label {
   font-size: 10px; font-weight: 700; letter-spacing: 0.4em;
   text-transform: uppercase; color: rgba(255,179,71,0.35);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 .news-section-title {
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 38px; font-weight: 900; text-transform: uppercase;
+  font-size: 28px; font-weight: 900; text-transform: uppercase;
   line-height: 0.95; letter-spacing: 0.02em;
   background: linear-gradient(90deg, var(--theme-a,#ffd580), var(--theme-b,#ffb347), var(--theme-c,#ff8c69), var(--theme-d,#e8507a), var(--theme-e,#c94b8c), var(--theme-b,#ffb347), var(--theme-a,#ffd580));
   background-size: 300% auto;
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   animation: textShimmer 8s linear infinite;
-  margin-bottom: 22px;
+  margin-bottom: 16px;
 }
 .news-divider {
   width: 100%; height: 1px;
   background: linear-gradient(90deg, rgba(255,179,71,0.2), rgba(232,80,122,0.15), transparent);
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
-.news-feed { display: flex; flex-direction: column; gap: 14px; }
+.news-feed { display: flex; flex-direction: column; gap: 10px; }
 .news-item {
-  padding: 14px 16px;
-  border-radius: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
   background: rgba(255,140,80,0.03);
   border: 1px solid rgba(255,140,80,0.1);
   cursor: pointer;
@@ -453,22 +460,22 @@ body {
 .news-item:nth-child(even) { background: rgba(232,80,122,0.03); border-color: rgba(232,80,122,0.1); }
 .news-item:nth-child(even):hover { background: rgba(232,80,122,0.07); border-color: rgba(232,80,122,0.22); }
 .news-item-tag {
-  font-size: 9px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase;
-  color: rgba(255,179,71,0.55); margin-bottom: 5px;
+  font-size: 8px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(255,179,71,0.55); margin-bottom: 4px;
 }
 .news-item:nth-child(even) .news-item-tag { color: rgba(232,80,122,0.55); }
 .news-item-headline {
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 17px; font-weight: 900; text-transform: uppercase;
+  font-size: 14px; font-weight: 900; text-transform: uppercase;
   letter-spacing: 0.03em; color: rgba(255,255,255,0.72); line-height: 1.1;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
 .news-item-sub {
-  font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.28); line-height: 1.5;
+  font-size: 10px; font-weight: 500; color: rgba(255,255,255,0.28); line-height: 1.45;
 }
 .news-item-date {
   font-size: 9px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
-  color: rgba(255,255,255,0.18); margin-top: 8px;
+  color: rgba(255,255,255,0.18); margin-top: 6px;
 }
 
 /* ── SHARED TEXT SHIMMER ──────────────────────────── */
@@ -627,7 +634,7 @@ body {
 .platform-badge { font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding: 8px 20px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.45); background: rgba(4,0,26,0.45); backdrop-filter: blur(8px); transition: border-color 0.2s, color 0.2s, box-shadow 0.2s; }
 .platform-badge:hover { border-color: rgba(255,255,255,0.6); color: #ffffff; box-shadow: 0 0 14px rgba(255,255,255,0.15); }
 
-/* ── RADIO TOGGLE (floating, hidden when nav open) ── */
+/* ── RADIO TOGGLE (floating) ──────────────────────── */
 .radio-toggle-btn {
   position: fixed; bottom: 22px; left: 22px; z-index: 200;
   width: 52px; height: 52px; border-radius: 50%;
@@ -723,7 +730,7 @@ body {
 
 /* ── RESPONSIVE ───────────────────────────────────── */
 @media (max-width: 1100px) {
-  .nav-panel { grid-template-columns: 300px 1fr 280px; }
+  .nav-panel { grid-template-columns: 280px 200px 260px; }
 }
 @media (max-width: 900px) {
   .trailers-grid { grid-template-columns: 1fr 1fr; }
@@ -824,9 +831,7 @@ body {
       <div class="news-section-label">Latest</div>
       <div class="news-section-title">GTA VI<br>News</div>
       <div class="news-divider"></div>
-      <div class="news-feed" id="newsFeed">
-        <!-- Populated by JS -->
-      </div>
+      <div class="news-feed" id="newsFeed"></div>
     </div>
 
     <!-- COL 3: NAV LINKS -->
@@ -849,7 +854,7 @@ body {
   </div>
 </div>
 
-<!-- FLOATING RADIO TOGGLE (visible when nav closed, shows playing state) -->
+<!-- FLOATING RADIO TOGGLE -->
 <button class="radio-toggle-btn" id="radioToggleBtn" aria-label="Open menu for radio" title="Open navigation for radio">
   <svg viewBox="0 0 24 24"><path d="M20 6H4l-2-4h20l-2 4zm1 1H3a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1zM8 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-2a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm9-3h-4v-1h4v1zm0 2h-4v-1h4v1zm0 2h-4v-1h4v1z"/></svg>
 </button>
@@ -1135,7 +1140,6 @@ function toggleMenu(force) {
 }
 hBtn.addEventListener('click', () => toggleMenu());
 backdrop.addEventListener('click', () => toggleMenu(false));
-// floating radio btn opens the nav (radio is inside now)
 radioToggleBtn.addEventListener('click', () => toggleMenu(true));
 
 /* ─── PAGE ROUTING ────────────────────────────────── */
