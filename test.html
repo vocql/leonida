@@ -60,7 +60,8 @@ body {
 }
 #page-places,
 #page-characters,
-#page-screenshots {
+#page-screenshots,
+#page-news {
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -957,6 +958,92 @@ body {
 .tlb-counter { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 900; letter-spacing: 0.2em; color: rgba(255,255,255,0.25); min-width: 60px; text-align: center; }
 .tlb-counter span { color: var(--sunset-b); }
 
+/* ── NEWS / PRE-ORDER PAGE (hidden route) ─────────── */
+.news-banner-wrap {
+  width: 100%;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255,140,80,0.18);
+  box-shadow: 0 0 50px rgba(255,140,80,0.07), 0 12px 50px rgba(0,0,0,0.6);
+  margin-bottom: 32px;
+  animation: popIn 0.8s cubic-bezier(0.34,1.56,0.64,1) 0.05s both;
+}
+.news-banner-wrap img { width: 100%; display: block; }
+.news-feed { display: flex; flex-direction: column; gap: 20px; }
+.news-item {
+  border-radius: 16px;
+  border: 1.5px solid rgba(255,140,80,0.14);
+  background: rgba(255,140,80,0.03);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  padding: 26px 28px 28px;
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34,1.4,0.64,1);
+}
+.news-item.visible { opacity: 1; transform: translateY(0); }
+.news-item:nth-child(even) { border-color: rgba(232,80,122,0.16); background: rgba(232,80,122,0.03); }
+.news-item-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.news-tag {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(255,179,71,0.75); background: rgba(255,179,71,0.08);
+  border: 1px solid rgba(255,179,71,0.25);
+  padding: 4px 12px; border-radius: 999px;
+}
+.news-item:nth-child(even) .news-tag {
+  color: rgba(232,80,122,0.8); background: rgba(232,80,122,0.08); border-color: rgba(232,80,122,0.25);
+}
+.news-date { font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.2); }
+.news-title { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(24px,3.5vw,32px); font-weight: 900; text-transform: uppercase; letter-spacing: 0.02em; color: #fff; line-height: 1.05; margin-bottom: 10px; }
+.news-text { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.5); line-height: 1.75; margin-bottom: 4px; }
+
+.editions-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 22px; }
+.edition-card {
+  border-radius: 14px;
+  border: 1.5px solid rgba(255,140,80,0.18);
+  background: rgba(4,0,26,0.4);
+  padding: 22px 22px 24px;
+  position: relative; overflow: hidden;
+}
+.edition-card.ultimate { border-color: rgba(232,80,122,0.3); }
+.edition-badge {
+  position: absolute; top: 16px; right: 16px;
+  font-size: 9px; font-weight: 900; letter-spacing: 0.15em; text-transform: uppercase;
+  color: #04001a; background: var(--sunset-b);
+  padding: 4px 10px; border-radius: 999px;
+}
+.edition-card.ultimate .edition-badge { background: var(--sunset-d); color: #fff; }
+.edition-name {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 900;
+  text-transform: uppercase; letter-spacing: 0.04em; color: #fff; margin-bottom: 4px;
+}
+.edition-sub { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 16px; }
+.edition-perks { list-style: none; margin-bottom: 20px; }
+.edition-perks li {
+  font-size: 12.5px; font-weight: 500; color: rgba(255,255,255,0.5);
+  padding: 6px 0 6px 20px; position: relative; line-height: 1.5;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.edition-perks li:last-child { border-bottom: none; }
+.edition-perks li::before {
+  content: '▸'; position: absolute; left: 0; color: var(--sunset-b);
+}
+.edition-card.ultimate .edition-perks li::before { color: var(--sunset-d); }
+.edition-btn {
+  display: block; width: 100%; text-align: center; text-decoration: none;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 900;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 13px 0; border-radius: 10px;
+  color: #F0F8FF;
+  background: linear-gradient(90deg, #ffd580, #ffb347, #ff8c69);
+  box-shadow: 0 0 18px rgba(255,140,80,0.25), 0 6px 18px rgba(0,0,0,0.4);
+  transition: transform 0.2s cubic-bezier(0.34,1.4,0.64,1), box-shadow 0.2s;
+}
+.edition-card.ultimate .edition-btn {
+  background: linear-gradient(90deg, #e8507a, #c94b8c);
+  box-shadow: 0 0 18px rgba(210,70,110,0.28), 0 6px 18px rgba(0,0,0,0.4);
+}
+.edition-btn:hover { transform: translateY(-2px) scale(1.015); box-shadow: 0 0 28px rgba(255,140,80,0.4), 0 8px 22px rgba(0,0,0,0.5); }
+.news-fine { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; color: rgba(255,255,255,0.15); margin-top: 14px; text-transform: uppercase; }
+
 /* ── SHARED KEYFRAMES ─────────────────────────────── */
 @keyframes popIn {
   from { opacity: 0; transform: scale(0.9) translateY(10px); }
@@ -973,6 +1060,7 @@ body {
   .viewer-bio-col{ max-height: none; width: 100%; }
   .map-wrap      { width: 92vw; height: 62vw; border-radius: 12px; }
   .tlb-footer    { flex-direction: column; gap: 14px; align-items: flex-start; }
+  .editions-row  { grid-template-columns: 1fr; }
 }
 @media (max-width: 500px) {
   .pills { gap: 6px; }
@@ -982,112 +1070,10 @@ body {
   .nav-panel { padding: 70px 28px; }
 }
 @media (max-width: 600px) { .page-main { padding: 80px 20px 60px; } }
-
-/* ── PRE-ORDER MODAL ───────────────────────────────── */
-.preorder-overlay {
-  position: fixed; inset: 0; z-index: 9999;
-  background: rgba(4,0,26,0.85);
-  backdrop-filter: blur(20px);
-  display: flex; align-items: center; justify-content: center;
-  padding: 20px;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.35s ease;
-}
-.preorder-overlay.active { opacity: 1; pointer-events: all; }
- 
-.preorder-card {
-  position: relative;
-  width: min(440px, 92vw);
-  background: linear-gradient(160deg, rgba(255,179,71,0.07), rgba(232,80,122,0.07)), rgba(4,0,26,0.92);
-  border: 1.5px solid rgba(255,140,80,0.25);
-  border-radius: 22px;
-  box-shadow: 0 0 60px rgba(255,140,80,0.12), 0 0 120px rgba(232,80,122,0.08), 0 24px 80px rgba(0,0,0,0.8);
-  overflow: hidden;
-  text-align: center;
-  transform: scale(0.9) translateY(16px);
-  transition: transform 0.4s cubic-bezier(0.34,1.4,0.64,1);
-}
-.preorder-overlay.active .preorder-card { transform: scale(1) translateY(0); }
- 
-.preorder-banner {
-  width: 100%; display: block;
-  border-bottom: 1px solid rgba(255,140,80,0.2);
-}
- 
-.preorder-body { padding: 30px 30px 30px; }
- 
-.preorder-close {
-  position: absolute; top: 14px; right: 16px; z-index: 2;
-  width: 30px; height: 30px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px; color: rgba(255,255,255,0.6);
-  background: rgba(4,0,26,0.55);
-  border: 1px solid rgba(255,255,255,0.15);
-  backdrop-filter: blur(6px);
-  cursor: pointer;
-  font-family: 'Rajdhani', sans-serif; font-weight: 700;
-  transition: color 0.15s, border-color 0.15s, background 0.15s, transform 0.15s;
-}
-.preorder-close:hover { color: #fff; border-color: var(--sunset-b); background: rgba(255,140,80,0.15); transform: scale(1.08); }
- 
-.preorder-eyebrow {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.35em; text-transform: uppercase;
-  color: rgba(255,179,71,0.55); margin-bottom: 10px;
-}
-.preorder-title {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: clamp(34px, 7vw, 46px); font-weight: 900;
-  text-transform: uppercase; line-height: 0.95;
-  background: linear-gradient(90deg, #ffd580, #ffb347, #ff8c69, #e8507a, #c94b8c, #ffb347, #ffd580);
-  background-size: 300% auto;
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  animation: textShimmer 8s linear infinite;
-  filter: drop-shadow(0 2px 16px rgba(0,0,0,0.6));
-  margin-bottom: 14px;
-}
-.preorder-sub {
-  font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.45);
-  line-height: 1.6; margin-bottom: 26px;
-}
-.preorder-btn {
-  display: inline-block; width: 100%;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 19px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase;
-  text-decoration: none;
-  padding: 16px 0;
-  border-radius: 12px;
-  color: #F0F8FF;
-  background: linear-gradient(90deg, #ffd580, #ffb347, #ff8c69, #e8507a, #c94b8c);
-  box-shadow: 0 0 24px rgba(255,140,80,0.35), 0 8px 24px rgba(0,0,0,0.4);
-  transition: transform 0.2s cubic-bezier(0.34,1.4,0.64,1), box-shadow 0.2s;
-}
-.preorder-btn:hover {
-  transform: translateY(-2px) scale(1.015);
-  box-shadow: 0 0 36px rgba(255,140,80,0.5), 0 10px 28px rgba(0,0,0,0.5);
-}
-.preorder-fine {
-  font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
-  color: rgba(255,255,255,0.18); margin-top: 16px;
-}  
 </style>
 </head>
 <body>
 
-<!-- PRE-ORDER MODAL -->
-<div class="preorder-overlay" id="preorderOverlay">
-  <div class="preorder-card">
-    <button class="preorder-close" id="preorderClose" aria-label="Close">✕</button>
-    <img class="preorder-banner" src="leonida/images/banner.png" alt="Grand Theft Auto VI key art">
-    <div class="preorder-body">
-      <div class="preorder-eyebrow">Pre-Orders Are Live</div>
-      <div class="preorder-title">Grand Theft Auto VI</div>
-      <div class="preorder-sub">Lock in your copy now before launch on November 19, 2026. Pre-order today on PlayStation Store.</div>
-      <a class="preorder-btn" id="preorderBtn" href="https://store.playstation.com/en-us/concept/10005172" target="_blank" rel="noopener">Pre Order Now</a>
-      <div class="preorder-fine">Redirects to the PlayStation Store</div>
-    </div>
-  </div>
-</div>
-  
 <!-- BG LAYERS -->
 <div class="bg-darken"></div>
 <div class="bg-tint"></div>
@@ -1293,6 +1279,89 @@ body {
   </div>
 </div>
 
+<!-- PAGE: NEWS (hidden — not in nav, reachable via #news URL) -->
+<div id="page-news" class="page">
+  <div class="page-main">
+    <div class="page-header">
+      <div>
+        <div class="eyebrow">Leonida ·</div>
+        <div class="page-title-grad" style="font-size:clamp(36px,6vw,72px)">Wire</div>
+      </div>
+      <div class="count-badge"><span id="news-count">0</span> updates</div>
+    </div>
+
+    <div class="news-banner-wrap">
+      <img src="leonida/images/banner.png" alt="Grand Theft Auto VI key art">
+    </div>
+
+    <div class="news-feed" id="newsFeed">
+
+      <div class="news-item">
+        <div class="news-item-top">
+          <span class="news-tag">Pre-Orders Live</span>
+          <span class="news-date">Nov 19, 2026 Release</span>
+        </div>
+        <div class="news-title">Grand Theft Auto VI Pre-Orders Are Open</div>
+        <div class="news-text">Lock in your copy now before launch. Choose Standard or Ultimate Edition below and pre-order today on the PlayStation Store.</div>
+
+        <div class="editions-row">
+          <div class="edition-card">
+            <span class="edition-badge">Standard</span>
+            <div class="edition-name">Standard Edition</div>
+            <div class="edition-sub">The complete base game</div>
+            <ul class="edition-perks">
+              <li>Full single-player campaign</li>
+              <li>Online access at launch</li>
+              <li>Digital or physical copy</li>
+            </ul>
+            <a class="edition-btn" href="https://store.playstation.com/en-us/concept/10005172" target="_blank" rel="noopener">Pre-Order Standard</a>
+          </div>
+          <div class="edition-card ultimate">
+            <span class="edition-badge">Ultimate</span>
+            <div class="edition-name">Ultimate Edition</div>
+            <div class="edition-sub">Base game + bonus content</div>
+            <ul class="edition-perks">
+              <li>Everything in Standard Edition</li>
+              <li>Exclusive bonus content (details TBA)</li>
+              <li>Early access perks (details TBA)</li>
+            </ul>
+            <a class="edition-btn" href="https://store.playstation.com/en-us/concept/10005172" target="_blank" rel="noopener">Pre-Order Ultimate</a>
+          </div>
+        </div>
+        <div class="news-fine">Redirects to the PlayStation Store · Pricing & bonus details subject to change</div>
+      </div>
+
+      <div class="news-item">
+        <div class="news-item-top">
+          <span class="news-tag">Site Update</span>
+          <span class="news-date">This Week</span>
+        </div>
+        <div class="news-title">Wave FM Radio Dashboard Is Live</div>
+        <div class="news-text">Hit the radio icon in the bottom-left corner to stream the full Leonida soundtrack, browse the tracklist, and control playback right from the site.</div>
+      </div>
+
+      <div class="news-item">
+        <div class="news-item-top">
+          <span class="news-tag">Site Update</span>
+          <span class="news-date">This Week</span>
+        </div>
+        <div class="news-title">Interactive State of Leonida Map Added</div>
+        <div class="news-text">Explore the full State of Leonida map right from the Map tab — pan, zoom, and get familiar with the territory before launch.</div>
+      </div>
+
+      <div class="news-item">
+        <div class="news-item-top">
+          <span class="news-tag">Trailers</span>
+          <span class="news-date">June 2026</span>
+        </div>
+        <div class="news-title">Trailer 3 Now Available</div>
+        <div class="news-text">The third official trailer has landed — head to the Trailers tab to watch it in fullscreen alongside Trailer 1 and Trailer 2.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <!-- RADIO TOGGLE BUTTON -->
 <button class="radio-toggle-btn" id="radioToggleBtn" aria-label="Toggle radio">
   <svg viewBox="0 0 24 24"><path d="M20 6H4l-2-4h20l-2 4zm1 1H3a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1zM8 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-2a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm9-3h-4v-1h4v1zm0 2h-4v-1h4v1zm0 2h-4v-1h4v1z"/></svg>
@@ -1442,7 +1511,10 @@ backdrop.addEventListener('click', () => toggleMenu(false));
 const pages      = document.querySelectorAll('.page');
 const navAnchors = document.querySelectorAll('[data-page]');
 const initialized = {};
-function showPage(id) {
+const HIDDEN_PAGES = ['news']; // valid via URL hash only, not shown in nav
+
+function showPage(id, opts) {
+  opts = opts || {};
   pages.forEach(p => { p.classList.remove('active'); });
   const page = document.getElementById('page-' + id);
   if (!page) return;
@@ -1456,8 +1528,16 @@ function showPage(id) {
     if (id === 'characters')  initCharacters();
     if (id === 'screenshots') initScreenshots();
     if (id === 'trailers')    initTrailers();
+    if (id === 'news')        initNews();
   }
   page.scrollTop = 0;
+  if (!opts.skipHash) {
+    if (HIDDEN_PAGES.includes(id)) {
+      history.replaceState(null, '', '#' + id);
+    } else if (location.hash) {
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+  }
 }
 navAnchors.forEach(a => {
   a.addEventListener('click', e => { e.preventDefault(); showPage(a.dataset.page); });
@@ -1470,6 +1550,17 @@ document.addEventListener('keydown', e => {
     if (overlay.classList.contains('open')) { toggleMenu(false); return; }
   }
 });
+
+/* Route based on the URL hash on load/reload (e.g. yoursite.com/#news).
+   This route is intentionally left out of the nav menu. */
+function routeFromHash() {
+  const slug = location.hash.replace('#', '').trim().toLowerCase();
+  if (HIDDEN_PAGES.includes(slug)) {
+    showPage(slug, { skipHash: true });
+  }
+}
+window.addEventListener('hashchange', routeFromHash);
+routeFromHash();
 
 /* ── COUNTDOWN ──────────────────────────────────── */
 const prev = { d:'', h:'', m:'', s:'' };
@@ -1880,19 +1971,19 @@ function initTrailers() {
   });
 }
 
-'use strict';
-/* ── PRE-ORDER POPUP ───────────────────────────────── */
-const PRE_ORDER_URL = 'https://www.playstation.com/en-us/games/grand-theft-auto-vi/';
-const preorderOverlay = document.getElementById('preorderOverlay');
-const preorderClose   = document.getElementById('preorderClose');
-const preorderBtn     = document.getElementById('preorderBtn');
-preorderBtn.href = PRE_ORDER_URL;
-function openPreorder() { preorderOverlay.classList.add('active'); }
-function closePreorder() { preorderOverlay.classList.remove('active'); }
-preorderClose.addEventListener('click', closePreorder);
-preorderOverlay.addEventListener('click', e => { if (e.target === preorderOverlay) closePreorder(); });
-window.addEventListener('load', () => { setTimeout(openPreorder, 600); });  
+/* ── NEWS PAGE INIT ──────────────────────────────── */
+function initNews() {
+  const feed = document.getElementById('newsFeed');
+  const items = feed.querySelectorAll('.news-item');
+  document.getElementById('news-count').textContent = items.length;
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); obs.unobserve(en.target); } });
+  }, { threshold: 0.05 });
+  items.forEach((el, i) => {
+    el.style.transitionDelay = (i * 0.06).toFixed(2) + 's';
+    obs.observe(el);
+  });
+}
 </script>
 </body>
 </html>
-
