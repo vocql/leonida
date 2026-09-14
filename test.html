@@ -31,13 +31,18 @@ body {
   min-height: 100vh;
   font-family: 'Rajdhani', sans-serif;
   overflow: hidden;
+  background: var(--bg);
+}
+
+/* ── SHARED BG LAYERS ─────────────────────────────── */
+#bgImageLayer {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background-image: url('leonida/images/lucia.jpg');
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
+  transition: background-image 0.6s ease;
 }
-
-/* ── SHARED BG LAYERS ─────────────────────────────── */
 .bg-darken {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background: rgba(4,0,26,0.52);
@@ -465,249 +470,6 @@ body.on-home .home-meta { opacity: 1; pointer-events: all; }
 }
 .subtitle-divider { width: 28px; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,179,71,0.35), transparent); }
 
-/* ── RADIO PLAYER ─────────────────────────────────── */
-.radio-toggle-btn {
-  position: fixed; top: 22px; right: 26px; z-index: 230;
-  width: 52px; height: 52px; border-radius: 50%;
-  background: rgba(4,0,26,0.7);
-  border: 1.5px solid rgba(255,140,80,0.3);
-  box-shadow: 0 0 20px rgba(255,140,80,0.15), inset 0 1px 0 rgba(255,255,255,0.08);
-  backdrop-filter: blur(16px);
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1);
-  animation: fadeSlideIn 0.8s cubic-bezier(0.34,1.4,0.64,1) both;
-}
-.radio-toggle-btn:hover {
-  border-color: var(--sunset-b);
-  box-shadow: 0 0 32px rgba(255,179,71,0.3), inset 0 1px 0 rgba(255,255,255,0.12);
-  transform: scale(1.1);
-}
-.radio-toggle-btn.active {
-  border-color: var(--sunset-d);
-  box-shadow: 0 0 28px rgba(232,80,122,0.35);
-  background: rgba(232,80,122,0.08);
-}
-.radio-toggle-btn svg { width: 22px; height: 22px; fill: var(--sunset-b); transition: fill 0.3s; }
-.radio-toggle-btn.active svg { fill: var(--sunset-d); }
-.radio-toggle-btn.playing::before {
-  content: '';
-  position: absolute; inset: -6px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(232,80,122,0.35);
-  animation: radioRing 2s ease-out infinite;
-}
-@keyframes radioRing {
-  0%   { transform: scale(1);   opacity: 0.7; }
-  100% { transform: scale(1.6); opacity: 0; }
-}
-
-.radio-panel {
-  position: fixed; top: 84px; right: 26px; z-index: 229;
-  width: 320px;
-  background: rgba(4,0,26,0.55);
-  border: 1px solid rgba(255,140,80,0.18);
-  border-radius: 18px;
-  box-shadow: 0 0 40px rgba(255,140,80,0.06), 0 0 80px rgba(232,80,122,0.05), 0 16px 60px rgba(0,0,0,0.7);
-  backdrop-filter: blur(28px);
-  overflow: hidden;
-  transform-origin: top right;
-  transform: scale(0.88) translateY(-12px);
-  opacity: 0; pointer-events: none;
-  transition: transform 0.4s cubic-bezier(0.34,1.4,0.64,1), opacity 0.3s ease;
-}
-.radio-panel.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
-.radio-panel::before {
-  content: '';
-  position: absolute; inset: 0; z-index: 0; pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg, transparent, transparent 3px, rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px
-  );
-}
-.radio-header {
-  position: relative; z-index: 1;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 16px 10px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-.radio-station-name {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 13px; font-weight: 900; letter-spacing: 0.3em;
-  text-transform: uppercase; color: rgba(255,179,71,0.7);
-  text-shadow: 0 0 12px rgba(255,179,71,0.4);
-}
-.radio-freq {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 11px; font-weight: 700; letter-spacing: 0.15em;
-  color: rgba(232,80,122,0.5);
-}
-.radio-now {
-  position: relative; z-index: 1;
-  padding: 14px 16px 10px;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-}
-.radio-now-label {
-  font-size: 9px; font-weight: 700; letter-spacing: 0.4em;
-  text-transform: uppercase; color: rgba(255,255,255,0.2); margin-bottom: 4px;
-}
-.radio-now-title {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 22px; font-weight: 900; line-height: 1;
-  letter-spacing: 0.03em; text-transform: uppercase;
-  color: #fff;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.radio-now-title.marquee-active {
-  animation: radioMarquee 10s linear infinite;
-  text-overflow: clip; white-space: nowrap;
-}
-@keyframes radioMarquee {
-  0%   { transform: translateX(0); }
-  30%  { transform: translateX(0); }
-  80%  { transform: translateX(-60%); }
-  100% { transform: translateX(0); }
-}
-.radio-wave {
-  display: flex; align-items: flex-end; gap: 3px; height: 22px; margin-top: 8px;
-}
-.radio-wave span {
-  flex: 1; border-radius: 2px;
-  background: linear-gradient(180deg, var(--sunset-d), var(--sunset-e));
-  opacity: 0.3; transform-origin: bottom;
-  transition: opacity 0.3s;
-}
-.radio-wave.playing span {
-  opacity: 1;
-  animation: wvDance var(--ws) ease-in-out infinite alternate;
-}
-.radio-wave span:nth-child(1)  { height: 6px;  --ws: 0.52s; }
-.radio-wave span:nth-child(2)  { height: 14px; --ws: 0.38s; }
-.radio-wave span:nth-child(3)  { height: 9px;  --ws: 0.61s; }
-.radio-wave span:nth-child(4)  { height: 18px; --ws: 0.44s; }
-.radio-wave span:nth-child(5)  { height: 11px; --ws: 0.57s; }
-.radio-wave span:nth-child(6)  { height: 20px; --ws: 0.35s; }
-.radio-wave span:nth-child(7)  { height: 8px;  --ws: 0.66s; }
-.radio-wave span:nth-child(8)  { height: 15px; --ws: 0.41s; }
-.radio-wave span:nth-child(9)  { height: 12px; --ws: 0.53s; }
-.radio-wave span:nth-child(10) { height: 17px; --ws: 0.48s; }
-.radio-wave span:nth-child(11) { height: 7px;  --ws: 0.62s; }
-.radio-wave span:nth-child(12) { height: 13px; --ws: 0.37s; }
-@keyframes wvDance { from{transform:scaleY(0.2)} to{transform:scaleY(1)} }
-.radio-controls {
-  position: relative; z-index: 1;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  padding: 12px 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-}
-.radio-btn {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: rgba(255,255,255,0.45);
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s cubic-bezier(0.34,1.4,0.64,1);
-}
-.radio-btn:hover {
-  background: rgba(255,140,80,0.08);
-  border-color: rgba(255,140,80,0.35);
-  color: var(--sunset-b); transform: scale(1.12);
-  box-shadow: 0 0 14px rgba(255,140,80,0.2);
-}
-.radio-btn svg { width: 14px; height: 14px; fill: currentColor; }
-.radio-btn-play {
-  width: 46px; height: 46px;
-  background: rgba(255,140,80,0.07);
-  border-color: rgba(255,140,80,0.3);
-  color: var(--sunset-b);
-}
-.radio-btn-play:hover {
-  background: rgba(255,140,80,0.15);
-  box-shadow: 0 0 22px rgba(255,140,80,0.3);
-}
-.radio-btn-play svg { width: 18px; height: 18px; }
-.radio-btn-play.playing {
-  background: rgba(232,80,122,0.08);
-  border-color: rgba(232,80,122,0.35);
-  color: var(--sunset-d);
-  box-shadow: 0 0 18px rgba(232,80,122,0.2);
-}
-.radio-vol-wrap {
-  position: relative; z-index: 1;
-  display: flex; align-items: center; gap: 10px;
-  padding: 8px 16px 10px;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-}
-.radio-vol-icon { color: rgba(255,255,255,0.25); flex-shrink: 0; }
-.radio-vol-icon svg { width: 13px; height: 13px; fill: currentColor; display: block; }
-.radio-vol-slider {
-  flex: 1; -webkit-appearance: none; appearance: none;
-  height: 3px; border-radius: 999px;
-  background: rgba(255,255,255,0.1); outline: none; cursor: pointer;
-}
-.radio-vol-slider::-webkit-slider-thumb {
-  -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%;
-  background: var(--sunset-b); box-shadow: 0 0 8px rgba(255,179,71,0.5);
-  cursor: pointer; transition: transform 0.15s;
-}
-.radio-vol-slider::-webkit-slider-thumb:hover { transform: scale(1.3); }
-.radio-vol-val {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 11px; font-weight: 900; letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.2); min-width: 28px; text-align: right;
-}
-.radio-tracklist {
-  position: relative; z-index: 1;
-  max-height: 200px; overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,140,80,0.15) transparent;
-}
-.radio-tracklist::-webkit-scrollbar { width: 3px; }
-.radio-tracklist::-webkit-scrollbar-track { background: transparent; }
-.radio-tracklist::-webkit-scrollbar-thumb { background: rgba(255,140,80,0.15); border-radius: 4px; }
-.radio-tracklist-loading {
-  position: relative; z-index: 1;
-  padding: 16px;
-  display: flex; align-items: center; gap: 10px;
-}
-.radio-tracklist-loading-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: #ffcc00; box-shadow: 0 0 6px #ffcc00;
-  animation: blink 0.8s ease-in-out infinite; flex-shrink: 0;
-}
-.radio-tracklist-loading-text {
-  font-size: 10px; font-weight: 600; font-family: monospace;
-  color: rgba(255,255,255,0.2); letter-spacing: 0.1em;
-}
-.radio-track {
-  display: flex; align-items: center; gap: 10px;
-  padding: 7px 16px; cursor: pointer;
-  transition: background 0.15s;
-  border-bottom: 1px solid rgba(255,255,255,0.03);
-}
-.radio-track:hover { background: rgba(255,140,80,0.05); }
-.radio-track.active { background: rgba(232,80,122,0.06); }
-.radio-track-num {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 10px; font-weight: 900; letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.15); min-width: 22px;
-}
-.radio-track.active .radio-track-num { color: var(--sunset-d); }
-.radio-track-name {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 14px; font-weight: 700; letter-spacing: 0.04em;
-  text-transform: uppercase; color: rgba(255,255,255,0.45); flex: 1;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.radio-track.active .radio-track-name { color: rgba(255,255,255,0.85); }
-.radio-track-playing-dot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--sunset-d); box-shadow: 0 0 6px var(--sunset-d);
-  flex-shrink: 0; opacity: 0;
-  animation: dotPulse 1.4s ease-in-out infinite;
-}
-.radio-track.active .radio-track-playing-dot { opacity: 1; }
-@keyframes dotPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(0.55)} }
-
 /* ── MAP PAGE ─────────────────────────────────────── */
 #page-map.active {
   display: flex; flex-direction: column;
@@ -911,6 +673,108 @@ body.on-home .home-meta { opacity: 1; pointer-events: all; }
 .tlb-counter { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 900; letter-spacing: 0.2em; color: rgba(255,255,255,0.25); min-width: 60px; text-align: center; }
 .tlb-counter span { color: var(--sunset-b); }
 
+/* ── ACCOUNT TOGGLE BUTTON ────────────────────────── */
+.account-toggle-btn {
+  position: fixed; top: 22px; right: 26px; z-index: 230;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(4,0,26,0.7);
+  border: 1.5px solid rgba(255,140,80,0.3);
+  box-shadow: 0 0 20px rgba(255,140,80,0.15), inset 0 1px 0 rgba(255,255,255,0.08);
+  backdrop-filter: blur(16px);
+  cursor: pointer; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1);
+  animation: fadeSlideIn 0.8s cubic-bezier(0.34,1.4,0.64,1) both;
+}
+.account-toggle-btn:hover { border-color: var(--sunset-b); box-shadow: 0 0 32px rgba(255,179,71,0.3); transform: scale(1.08); }
+.account-toggle-btn.open  { border-color: var(--sunset-d); box-shadow: 0 0 28px rgba(232,80,122,0.35); }
+.account-toggle-btn.role-vip   { border-color: #c084fc; box-shadow: 0 0 18px rgba(192,132,252,0.45); }
+.account-toggle-btn.role-owner { border-color: #ffd700; box-shadow: 0 0 18px rgba(255,215,0,0.5); }
+.account-toggle-btn svg { width: 22px; height: 22px; fill: var(--sunset-b); }
+.account-toggle-btn img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.account-panel {
+  position: fixed; top: 84px; right: 26px; z-index: 229;
+  width: 320px; max-height: 74vh; overflow-y: auto;
+  background: rgba(4,0,26,0.72);
+  border: 1px solid rgba(255,140,80,0.18);
+  border-radius: 18px;
+  box-shadow: 0 0 40px rgba(255,140,80,0.06), 0 16px 60px rgba(0,0,0,0.7);
+  backdrop-filter: blur(28px);
+  transform-origin: top right;
+  transform: scale(0.88) translateY(-12px);
+  opacity: 0; pointer-events: none;
+  transition: transform 0.35s cubic-bezier(0.34,1.4,0.64,1), opacity 0.3s ease;
+  scrollbar-width: thin; scrollbar-color: rgba(255,140,80,0.2) transparent;
+}
+.account-panel.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
+.acct-pad { padding: 18px 18px 20px; }
+.acct-tabs { display: flex; gap: 6px; padding: 12px 12px 0; }
+.acct-tab {
+  flex: 1; text-align: center; padding: 9px 0; cursor: pointer;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+  color: rgba(255,255,255,0.35); border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.acct-tab.active { color: var(--sunset-b); border-color: var(--sunset-b); }
+.acct-field { margin-bottom: 12px; }
+.acct-field label { display:block; font-size: 9px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color: rgba(255,255,255,0.3); margin-bottom: 5px; }
+.acct-field input {
+  width: 100%; padding: 10px 12px; border-radius: 8px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+  color: #fff; font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 600;
+  outline: none; transition: border-color 0.2s;
+}
+.acct-field input:focus { border-color: rgba(255,140,80,0.4); }
+.acct-btn {
+  width: 100%; padding: 11px 0; border-radius: 999px; cursor: pointer;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 900;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  background: linear-gradient(90deg, var(--sunset-b), var(--sunset-d));
+  border: none; color: #04001a;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.acct-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(232,80,122,0.35); }
+.acct-btn.ghost { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.65); border: 1px solid rgba(255,255,255,0.12); }
+.acct-error { font-size: 11px; font-weight: 600; color: #ff6b7a; margin: -4px 0 10px; min-height: 1px; }
+.acct-hint  { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.25); text-align:center; margin-top: 10px; letter-spacing: 0.05em; }
+
+.acct-profile-head { display: flex; align-items: center; gap: 12px; padding: 16px 18px 14px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.acct-avatar-wrap { position: relative; width: 56px; height: 56px; border-radius: 50%; flex-shrink:0; cursor: pointer; }
+.acct-avatar-wrap img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,140,80,0.3); }
+.acct-avatar-wrap .acct-avatar-edit {
+  position: absolute; bottom: -2px; right: -2px; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--sunset-d); display:flex; align-items:center; justify-content:center;
+  border: 2px solid rgba(4,0,26,0.9);
+}
+.acct-avatar-edit svg { width: 10px; height: 10px; fill: #fff; }
+.acct-uname { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 900; text-transform: uppercase; color: #fff; line-height: 1.1; }
+.acct-role-badge {
+  display: inline-block; margin-top: 4px; font-size: 9px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 999px;
+}
+.acct-role-badge.member { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.12); }
+.acct-role-badge.vip { background: rgba(192,132,252,0.12); color: #d8a8ff; border: 1px solid rgba(192,132,252,0.35); text-shadow: 0 0 8px rgba(192,132,252,0.5); }
+.acct-role-badge.owner { background: rgba(255,215,0,0.1); color: #ffd700; border: 1px solid rgba(255,215,0,0.35); text-shadow: 0 0 8px rgba(255,215,0,0.5); }
+
+.acct-section-title { font-size: 9px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,179,71,0.45); padding: 16px 18px 8px; }
+.bg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 18px 16px; }
+.bg-thumb {
+  aspect-ratio: 16/10; border-radius: 8px; overflow: hidden; cursor: pointer;
+  border: 2px solid rgba(255,255,255,0.08); background-size: cover; background-position: center;
+  transition: border-color 0.2s, transform 0.15s;
+}
+.bg-thumb:hover { transform: scale(1.04); }
+.bg-thumb.selected { border-color: var(--sunset-b); box-shadow: 0 0 12px rgba(255,179,71,0.4); }
+
+.acct-userlist { padding: 0 18px 16px; display: flex; flex-direction: column; gap: 6px; }
+.acct-user-row { display:flex; align-items:center; justify-content:space-between; padding: 7px 10px; border-radius: 8px; background: rgba(255,255,255,0.03); }
+.acct-user-row .un { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); }
+.acct-user-row .acct-role-badge { margin-top: 0; }
+.acct-vip-toggle { font-size: 9px; font-weight: 800; letter-spacing:0.1em; text-transform:uppercase; padding: 4px 9px; border-radius: 999px; cursor: pointer; background: rgba(192,132,252,0.1); color: #d8a8ff; border: 1px solid rgba(192,132,252,0.3); }
+.acct-vip-toggle.active { background: rgba(192,132,252,0.3); }
+.acct-logout-row { padding: 14px 18px 18px; }
+
 /* ── SHARED KEYFRAMES ─────────────────────────────── */
 @keyframes popIn {
   from { opacity: 0; transform: scale(0.9) translateY(10px); }
@@ -944,6 +808,7 @@ body.on-home .home-meta { opacity: 1; pointer-events: all; }
 <body class="on-home">
 
 <!-- BG LAYERS -->
+<div id="bgImageLayer"></div>
 <div class="bg-darken"></div>
 <div class="bg-tint"></div>
 
@@ -1165,56 +1030,66 @@ body.on-home .home-meta { opacity: 1; pointer-events: all; }
   </div>
 </div>
 
-<!-- RADIO TOGGLE BUTTON -->
-<button class="radio-toggle-btn" id="radioToggleBtn" aria-label="Toggle radio">
-  <svg viewBox="0 0 24 24"><path d="M20 6H4l-2-4h20l-2 4zm1 1H3a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1zM8 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-2a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm9-3h-4v-1h4v1zm0 2h-4v-1h4v1zm0 2h-4v-1h4v1z"/></svg>
+<!-- ACCOUNT TOGGLE -->
+<button class="account-toggle-btn" id="accountToggleBtn" aria-label="Account">
+  <svg id="acctGuestIcon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="var(--sunset-b)"/><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8" fill="var(--sunset-b)"/></svg>
+  <img id="acctBtnAvatar" src="" alt="" style="display:none">
 </button>
 
-<!-- RADIO PANEL -->
-<div class="radio-panel" id="radioPanel">
-  <div class="radio-header">
-    <div class="radio-station-name">Wave FM</div>
-    <div class="radio-freq">102.3 MHz</div>
-  </div>
-  <div class="radio-now">
-    <div class="radio-now-label">Now Playing</div>
-    <div class="radio-now-title" id="radioNowTitle">Loading tracks…</div>
-    <div class="radio-wave" id="radioWave">
-      <span></span><span></span><span></span><span></span><span></span>
-      <span></span><span></span><span></span><span></span><span></span>
-      <span></span><span></span>
+<!-- ACCOUNT PANEL -->
+<div class="account-panel" id="accountPanel">
+
+  <!-- LOGGED OUT: AUTH -->
+  <div id="authView">
+    <div class="acct-tabs">
+      <div class="acct-tab active" data-tab="login">Log In</div>
+      <div class="acct-tab" data-tab="register">Create Account</div>
+    </div>
+    <div class="acct-pad">
+      <form id="loginForm">
+        <div class="acct-field"><label>Username</label><input type="text" id="loginUsername" autocomplete="username" required></div>
+        <div class="acct-field"><label>Password</label><input type="password" id="loginPassword" autocomplete="current-password" required></div>
+        <div class="acct-error" id="loginError"></div>
+        <button type="submit" class="acct-btn">Log In</button>
+      </form>
+      <form id="registerForm" style="display:none">
+        <div class="acct-field"><label>Username</label><input type="text" id="regUsername" autocomplete="username" required minlength="3" maxlength="20"></div>
+        <div class="acct-field"><label>Password</label><input type="password" id="regPassword" autocomplete="new-password" required minlength="6"></div>
+        <div class="acct-field"><label>Confirm Password</label><input type="password" id="regPassword2" autocomplete="new-password" required minlength="6"></div>
+        <div class="acct-error" id="registerError"></div>
+        <button type="submit" class="acct-btn">Create Account</button>
+      </form>
+      <div class="acct-hint">First account created becomes the site Owner.</div>
     </div>
   </div>
-  <div class="radio-controls">
-    <button class="radio-btn" id="radioPrevBtn" title="Previous">
-      <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
-    </button>
-    <button class="radio-btn radio-btn-play" id="radioPlayBtn" title="Play / Pause">
-      <svg id="radioIconPlay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-      <svg id="radioIconPause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-    </button>
-    <button class="radio-btn" id="radioNextBtn" title="Next">
-      <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zm2.5-6 5.5-4v8l-5.5-4zM16 6h2v12h-2z"/></svg>
-    </button>
-    <button class="radio-btn" id="radioShuffleBtn" title="Shuffle" style="margin-left:4px">
-      <svg viewBox="0 0 24 24"><path d="M10.59 9.17 5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
-    </button>
-  </div>
-  <div class="radio-vol-wrap">
-    <div class="radio-vol-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></div>
-    <input class="radio-vol-slider" id="radioVolSlider" type="range" min="0" max="100" value="50">
-    <div class="radio-vol-val" id="radioVolVal">50</div>
-  </div>
-  <div class="radio-tracklist" id="radioTracklist">
-    <div class="radio-tracklist-loading" id="radioTracklistLoading">
-      <div class="radio-tracklist-loading-dot"></div>
-      <div class="radio-tracklist-loading-text">Scanning leonida/music/ …</div>
+
+  <!-- LOGGED IN: PROFILE / SETTINGS -->
+  <div id="profileView" style="display:none">
+    <div class="acct-profile-head">
+      <div class="acct-avatar-wrap" id="pfpUploadTrigger">
+        <img id="profileAvatarImg" src="" alt="">
+        <div class="acct-avatar-edit"><svg viewBox="0 0 24 24"><path d="M4 20h4l10-10-4-4L4 16v4z"/></svg></div>
+      </div>
+      <div>
+        <div class="acct-uname" id="profileUsername"></div>
+        <span class="acct-role-badge" id="profileRoleBadge"></span>
+      </div>
+    </div>
+    <input type="file" id="pfpFileInput" accept="image/*" style="display:none">
+
+    <div class="acct-section-title">Choose Background</div>
+    <div class="bg-grid" id="bgGrid"></div>
+
+    <div id="ownerAdminSection" style="display:none">
+      <div class="acct-section-title">Manage Members</div>
+      <div class="acct-userlist" id="acctUserList"></div>
+    </div>
+
+    <div class="acct-logout-row">
+      <button class="acct-btn ghost" id="logoutBtn">Log Out</button>
     </div>
   </div>
 </div>
-
-<!-- AUDIO ELEMENT -->
-<audio id="radioAudio" preload="none"></audio>
 
 <!-- PLACES LIGHTBOX -->
 <div class="lb-viewer" id="placesLB">
@@ -1343,130 +1218,6 @@ function tick() {
   if (s !== prev.s) { document.getElementById('n-s').textContent = s; bounce('s'); prev.s = s; }
 }
 tick(); setInterval(tick, 1000);
-
-/* ── RADIO PLAYER ───────────────────────────────── */
-let songs = [];
-const radioAudio      = document.getElementById('radioAudio');
-const radioPlayBtn    = document.getElementById('radioPlayBtn');
-const radioIconPlay   = document.getElementById('radioIconPlay');
-const radioIconPause  = document.getElementById('radioIconPause');
-const radioPrevBtn    = document.getElementById('radioPrevBtn');
-const radioNextBtn    = document.getElementById('radioNextBtn');
-const radioShuffleBtn = document.getElementById('radioShuffleBtn');
-const radioNowTitle   = document.getElementById('radioNowTitle');
-const radioWave       = document.getElementById('radioWave');
-const radioTracklist  = document.getElementById('radioTracklist');
-const radioVolSlider  = document.getElementById('radioVolSlider');
-const radioVolVal     = document.getElementById('radioVolVal');
-const radioToggleBtn  = document.getElementById('radioToggleBtn');
-const radioPanel      = document.getElementById('radioPanel');
-let radioIdx = 0, radioPlaying = false, radioShuffle = false;
-radioAudio.volume = 0.5;
-
-async function loadGithubMusic() {
-  const GITHUB_USER='vocql', GITHUB_REPO='leonida', GITHUB_BRANCH='main', MUSIC_PATH='leonida/music';
-  const AUDIO_EXTS=['.mp3','.ogg','.wav','.flac','.aac','.m4a'];
-  const loadingEl = document.getElementById('radioTracklistLoading');
-  try {
-    const res = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${MUSIC_PATH}?ref=${GITHUB_BRANCH}`, { headers: { 'Accept': 'application/vnd.github.v3+json' } });
-    if (!res.ok) throw new Error('GitHub API returned ' + res.status);
-    const files = await res.json();
-    if (!Array.isArray(files)) throw new Error('Unexpected response');
-    const audioFiles = files.filter(f => f.type === 'file' && AUDIO_EXTS.some(ext => f.name.toLowerCase().endsWith(ext)));
-    if (!audioFiles.length) {
-      if (loadingEl) loadingEl.innerHTML = '<div class="radio-tracklist-loading-text" style="color:rgba(255,80,80,0.5)">No audio files found in leonida/music/</div>';
-      radioNowTitle.textContent = 'No tracks found'; return;
-    }
-    songs = audioFiles.map(f => {
-      const src  = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${MUSIC_PATH}/${f.name}`;
-      const name = f.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-      return { n: name, s: src };
-    });
-    if (loadingEl) loadingEl.remove();
-    songs.forEach((song, i) => {
-      const row = document.createElement('div');
-      row.className = 'radio-track'; row.dataset.idx = i;
-      row.innerHTML = `<span class="radio-track-num">${String(i+1).padStart(2,'0')}</span><span class="radio-track-name">${song.n}</span><span class="radio-track-playing-dot"></span>`;
-      row.addEventListener('click', () => radioPlayIdx(i));
-      radioTracklist.appendChild(row);
-    });
-    radioUpdateTrack();
-  } catch (err) {
-    console.error('Radio: failed to load tracklist —', err);
-    if (loadingEl) {
-      loadingEl.querySelector('.radio-tracklist-loading-dot').style.background = '#ff3040';
-      loadingEl.querySelector('.radio-tracklist-loading-dot').style.boxShadow  = '0 0 6px #ff3040';
-      loadingEl.querySelector('.radio-tracklist-loading-text').textContent = 'Could not load tracks';
-    }
-    radioNowTitle.textContent = 'No tracks';
-  }
-}
-
-function radioSetPlaying(state) {
-  radioPlaying = state;
-  radioPlayBtn.classList.toggle('playing', state);
-  radioIconPlay.style.display  = state ? 'none' : '';
-  radioIconPause.style.display = state ? '' : 'none';
-  radioWave.classList.toggle('playing', state);
-  radioToggleBtn.classList.toggle('playing', state);
-}
-function radioUpdateTrack() {
-  if (!songs.length) return;
-  const song = songs[radioIdx];
-  radioNowTitle.textContent = song.n;
-  radioNowTitle.classList.remove('marquee-active');
-  void radioNowTitle.offsetWidth;
-  if (song.n.length > 18) radioNowTitle.classList.add('marquee-active');
-  document.querySelectorAll('.radio-track').forEach(r => { r.classList.toggle('active', parseInt(r.dataset.idx) === radioIdx); });
-  const active = radioTracklist.querySelector('.radio-track.active');
-  if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-}
-function radioPlayIdx(idx) {
-  if (!songs.length) return;
-  radioIdx = idx;
-  radioAudio.src = songs[radioIdx].s;
-  radioAudio.load();
-  radioAudio.play().then(() => radioSetPlaying(true)).catch(() => radioSetPlaying(false));
-  radioUpdateTrack();
-}
-function radioNext() {
-  if (!songs.length) return;
-  if (radioShuffle) { const r = songs.map((_,i)=>i).filter(i=>i!==radioIdx); radioIdx = r.length ? r[Math.floor(Math.random()*r.length)] : 0; }
-  else radioIdx = (radioIdx + 1) % songs.length;
-  radioPlayIdx(radioIdx);
-}
-function radioPrev() {
-  if (!songs.length) return;
-  if (radioAudio.currentTime > 3) { radioAudio.currentTime = 0; return; }
-  radioIdx = (radioIdx - 1 + songs.length) % songs.length;
-  radioPlayIdx(radioIdx);
-}
-radioToggleBtn.addEventListener('click', () => {
-  radioPanel.classList.toggle('open');
-  radioToggleBtn.classList.toggle('active', radioPanel.classList.contains('open'));
-});
-radioPlayBtn.addEventListener('click', () => {
-  if (!songs.length) return;
-  if (radioAudio.src && !radioAudio.src.endsWith(window.location.href)) {
-    if (radioPlaying) { radioAudio.pause(); radioSetPlaying(false); }
-    else { radioAudio.play().then(() => radioSetPlaying(true)).catch(() => {}); }
-  } else { radioPlayIdx(0); }
-});
-radioPrevBtn.addEventListener('click', radioPrev);
-radioNextBtn.addEventListener('click', radioNext);
-radioAudio.addEventListener('ended', radioNext);
-radioShuffleBtn.addEventListener('click', () => {
-  radioShuffle = !radioShuffle;
-  radioShuffleBtn.style.color       = radioShuffle ? 'var(--sunset-b)' : '';
-  radioShuffleBtn.style.borderColor = radioShuffle ? 'rgba(255,140,80,0.35)' : '';
-  radioShuffleBtn.style.boxShadow   = radioShuffle ? '0 0 12px rgba(255,140,80,0.2)' : '';
-});
-radioVolSlider.addEventListener('input', () => {
-  const v = parseInt(radioVolSlider.value);
-  radioAudio.volume = v / 100;
-  radioVolVal.textContent = v;
-});
-loadGithubMusic();
 
 /* ── MAP INIT ───────────────────────────────────── */
 function initMap() {
@@ -1706,11 +1457,9 @@ function openTLB(idx) {
   tlbVideo.innerHTML = `<iframe src="https://www.youtube.com/embed/${t.vid}?autoplay=1&rel=0&modestbranding=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
   tlbTitle.textContent = t.title; tlbYear.textContent = t.year; tlbCur.textContent = idx+1;
   tlbEl.classList.add('active'); document.body.style.overflow = 'hidden';
-  if (radioPlaying) { radioAudio.pause(); radioSetPlaying(false); tlbMusicWasPlaying = true; }
 }
 function closeTLB() {
   tlbEl.classList.remove('active'); tlbVideo.innerHTML = ''; document.body.style.overflow = '';
-  if (tlbMusicWasPlaying) { tlbMusicWasPlaying = false; radioAudio.play().then(() => radioSetPlaying(true)).catch(() => {}); }
 }
 function stepTLB(dir) { tlbIdx = (tlbIdx + dir + TRAILERS.length) % TRAILERS.length; tlbVideo.innerHTML = ''; setTimeout(() => openTLB(tlbIdx), 80); }
 
@@ -1730,5 +1479,6 @@ function initTrailers() {
   });
 }
 </script>
+<script src="account.js"></script>
 </body>
 </html>
