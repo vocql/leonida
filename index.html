@@ -81,115 +81,93 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── HAMBURGER ────────────────────────────────────── */
-.hamburger-btn {
-  position: fixed; top: 22px; right: 26px; z-index: 220;
-  width: 52px; height: 52px; border-radius: 50%;
-  background: rgba(255,140,80,0.05);
-  border: 1.5px solid rgba(255,140,80,0.25);
-  box-shadow: 0 0 20px rgba(255,140,80,0.1), inset 0 1px 0 rgba(255,255,255,0.1);
-  backdrop-filter: blur(16px);
-  cursor: pointer;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
-  transition: all 0.3s ease;
-  animation: fadeSlideIn 0.8s cubic-bezier(0.34,1.4,0.64,1) both;
+/* ── BRAND MARK (top left) ────────────────────────── */
+.brand-mark {
+  position: fixed; top: 26px; left: 30px; z-index: 220;
+  display: flex; flex-direction: column; align-items: flex-start;
+  animation: fadeSlideInLeft 0.8s cubic-bezier(0.34,1.4,0.64,1) both;
+  user-select: none; pointer-events: none;
+}
+.brand-mark-logo {
+  height: 52px;
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 2px 10px rgba(0,0,0,0.5));
+}
+.brand-mark-sub {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.35em; text-transform: uppercase;
+  color: rgba(255,255,255,0.4); margin-top: 7px; margin-left: 2px;
+}
+@keyframes fadeSlideInLeft {
+  from { opacity: 0; transform: translateX(-20px) scale(0.8); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
 }
 @keyframes fadeSlideIn {
   from { opacity: 0; transform: translateX(20px) scale(0.8); }
   to   { opacity: 1; transform: translateX(0) scale(1); }
 }
-.hamburger-btn:hover {
-  background: rgba(255,140,80,0.1); border-color: var(--sunset-b);
-  box-shadow: 0 0 28px rgba(255,140,80,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
-  transform: scale(1.08);
-}
-.hamburger-btn.open {
-  background: rgba(232,80,122,0.08); border-color: rgba(232,80,122,0.3);
-  box-shadow: 0 0 28px rgba(232,80,122,0.2);
-}
-.bar {
-  width: 20px; height: 2px; border-radius: 2px; background: var(--sunset-b);
-  transition: transform 0.35s cubic-bezier(0.34,1.4,0.64,1), opacity 0.2s;
-  transform-origin: center;
-}
-.hamburger-btn.open .bar:nth-child(1) { transform: translateY(7px) rotate(45deg);  background: var(--sunset-d); }
-.hamburger-btn.open .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
-.hamburger-btn.open .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background: var(--sunset-d); }
 
-/* ── NAV OVERLAY ──────────────────────────────────── */
-.nav-overlay {
-  position: fixed; inset: 0; z-index: 210;
-  pointer-events: none; opacity: 0; transition: opacity 0.4s ease;
+/* ── HOME CORNER LINKS ────────────────────────────── */
+.home-meta {
+  position: fixed; bottom: 34px; z-index: 200;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.65); text-decoration: none; cursor: pointer;
+  background: none; border: none; font-family: 'Rajdhani', sans-serif;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.5s ease 0.15s, color 0.2s;
 }
-.nav-overlay.open { pointer-events: all; opacity: 1; }
-.nav-backdrop {
-  position: absolute; inset: 0;
-  background: rgba(4,0,26,0.88); backdrop-filter: blur(24px);
+body.on-home .home-meta { opacity: 1; pointer-events: all; }
+.home-meta.meta-left { left: 32px; }
+.home-meta.meta-right { right: 32px; }
+.home-meta svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; transition: transform 0.2s; }
+.home-meta:hover { color: #fff; }
+.home-meta.meta-left:hover svg { transform: translate(2px,-2px); }
+.home-meta.meta-right:hover svg { transform: translateY(2px); }
+
+/* ── BOTTOM NAV ───────────────────────────────────── */
+.bottom-nav {
+  position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%);
+  z-index: 220;
+  display: flex; align-items: center; gap: 2px;
+  padding: 9px 12px;
+  border-radius: 999px;
+  background: rgba(4,0,26,0.58);
+  border: 1px solid rgba(255,140,80,0.16);
+  box-shadow: 0 0 30px rgba(255,140,80,0.07), 0 16px 50px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);
+  backdrop-filter: blur(20px);
+  animation: navPopIn 0.9s cubic-bezier(0.34,1.56,0.64,1) 0.2s both;
 }
-.nav-panel {
-  position: absolute; top: 0; right: 0;
-  width: min(380px,100vw); height: 100%;
-  background: linear-gradient(160deg, rgba(255,179,71,0.04), rgba(232,80,122,0.04));
-  border-left: 1px solid rgba(255,140,80,0.12);
-  box-shadow: -30px 0 80px rgba(0,0,0,0.5);
-  transform: translateX(100%);
-  transition: transform 0.5s cubic-bezier(0.34,1.2,0.64,1);
-  display: flex; flex-direction: column; justify-content: center;
-  padding: 80px 48px; overflow: hidden;
+@keyframes navPopIn {
+  from { opacity: 0; transform: translateX(-50%) scale(0.9) translateY(10px); }
+  to   { opacity: 1; transform: translateX(-50%) scale(1) translateY(0); }
 }
-.nav-panel::before {
-  content: ''; position: absolute; top: -80px; right: -80px;
-  width: 360px; height: 360px;
-  background: radial-gradient(circle, rgba(255,179,71,0.06) 0%, transparent 70%);
-  pointer-events: none;
+.bottom-nav-sep { width: 1px; height: 18px; background: rgba(255,255,255,0.09); margin: 0 5px; flex-shrink: 0; }
+.bottom-nav-btn {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent; border: none; cursor: pointer;
+  color: rgba(255,255,255,0.4); position: relative;
+  transition: color 0.2s, background 0.2s, transform 0.2s;
 }
-.nav-panel::after {
-  content: ''; position: absolute; bottom: -60px; left: -60px;
-  width: 280px; height: 280px;
-  background: radial-gradient(circle, rgba(232,80,122,0.06) 0%, transparent 70%);
-  pointer-events: none;
+.bottom-nav-btn svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.bottom-nav-btn:hover { color: #fff; background: rgba(255,140,80,0.1); transform: translateY(-2px); }
+.bottom-nav-btn.active { color: var(--sunset-b); background: rgba(255,140,80,0.13); }
+.bottom-nav-btn.active::after {
+  content: ''; position: absolute; bottom: 1px; left: 50%; transform: translateX(-50%);
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--sunset-b); box-shadow: 0 0 7px var(--sunset-b);
 }
-.nav-overlay.open .nav-panel { transform: translateX(0); }
-.nav-label {
-  font-size: 10px; font-weight: 600; letter-spacing: 0.4em;
-  text-transform: uppercase; color: rgba(255,179,71,0.35); margin-bottom: 36px;
+.bottom-nav-tip {
+  position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%) translateY(4px);
+  font-size: 9px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(255,255,255,0.8); white-space: nowrap;
+  background: rgba(4,0,26,0.92); border: 1px solid rgba(255,140,80,0.25);
+  padding: 4px 10px; border-radius: 6px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
 }
-.nav-links { list-style: none; display: flex; flex-direction: column; gap: 2px; }
-.nav-links li {
-  opacity: 0; transform: translateX(28px);
-  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34,1.4,0.64,1);
-}
-.nav-overlay.open .nav-links li:nth-child(1){opacity:1;transform:none;transition-delay:.07s}
-.nav-overlay.open .nav-links li:nth-child(2){opacity:1;transform:none;transition-delay:.12s}
-.nav-overlay.open .nav-links li:nth-child(3){opacity:1;transform:none;transition-delay:.17s}
-.nav-overlay.open .nav-links li:nth-child(4){opacity:1;transform:none;transition-delay:.22s}
-.nav-overlay.open .nav-links li:nth-child(5){opacity:1;transform:none;transition-delay:.27s}
-.nav-overlay.open .nav-links li:nth-child(6){opacity:1;transform:none;transition-delay:.32s}
-.nav-links li a {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: clamp(36px,6vw,52px); font-weight: 900;
-  text-transform: uppercase; letter-spacing: 0.04em;
-  text-decoration: none; color: rgba(255,255,255,0.18);
-  display: block; padding: 9px 0; line-height: 1;
-  cursor: pointer;
-  transition: color 0.2s, letter-spacing 0.25s;
-}
-.nav-links li a:hover { color: #fff; letter-spacing: 0.08em; }
-.nav-links li a.active { color: #fff; }
-.nav-footer {
-  position: absolute; bottom: 36px; left: 48px; right: 48px;
-  padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.05);
-  display: flex; align-items: center; justify-content: space-between;
-  opacity: 0; transition: opacity 0.4s ease 0.38s;
-}
-.nav-overlay.open .nav-footer { opacity: 1; }
-.nav-footer-text { font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.18); }
-.nav-footer-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--sunset-d); box-shadow: 0 0 8px var(--sunset-d);
-  animation: dotPulse 2s ease-in-out infinite;
-}
-@keyframes dotPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(0.55)} }
+.bottom-nav-btn:hover .bottom-nav-tip { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 /* ── SHARED TEXT SHIMMER ──────────────────────────── */
 @keyframes textShimmer { 0%{background-position:0%} 100%{background-position:300%} }
@@ -379,7 +357,7 @@ body {
 /* ── MAIN CONTENT WRAPPER ─────────────────────────── */
 .page-main {
   position: relative;
-  padding: 90px 40px 80px;
+  padding: 90px 40px 110px;
   max-width: 1400px; margin: 0 auto;
 }
 .page-header {
@@ -487,30 +465,9 @@ body {
 }
 .subtitle-divider { width: 28px; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,179,71,0.35), transparent); }
 
-/* ── PLATFORM BADGES ──────────────────────────────── */
-.platforms {
-  display: flex; align-items: center; gap: 8px;
-  animation: popIn 1s cubic-bezier(0.34,1.56,0.64,1) 0.4s both;
-}
-.platform-badge {
-  font-size: 12px;
-  font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
-  padding: 8px 20px;
-  border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.15);
-  color: rgba(255,255,255,0.45);
-  background: rgba(4,0,26,0.45);
-  backdrop-filter: blur(8px);
-  transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
-}
-.platform-badge:hover {
-  border-color: rgba(255,255,255,0.6); color: #ffffff;
-  box-shadow: 0 0 14px rgba(255,255,255,0.15);
-}
-
 /* ── RADIO PLAYER ─────────────────────────────────── */
 .radio-toggle-btn {
-  position: fixed; bottom: 22px; left: 22px; z-index: 200;
+  position: fixed; top: 22px; right: 26px; z-index: 230;
   width: 52px; height: 52px; border-radius: 50%;
   background: rgba(4,0,26,0.7);
   border: 1.5px solid rgba(255,140,80,0.3);
@@ -518,12 +475,8 @@ body {
   backdrop-filter: blur(16px);
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1), opacity 0.3s ease, visibility 0.3s ease;
-  animation: fadeSlideInLeft 0.8s cubic-bezier(0.34,1.4,0.64,1) both;
-}
-@keyframes fadeSlideInLeft {
-  from { opacity: 0; transform: translateX(-20px) scale(0.8); }
-  to   { opacity: 1; transform: translateX(0) scale(1); }
+  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1);
+  animation: fadeSlideIn 0.8s cubic-bezier(0.34,1.4,0.64,1) both;
 }
 .radio-toggle-btn:hover {
   border-color: var(--sunset-b);
@@ -550,7 +503,7 @@ body {
 }
 
 .radio-panel {
-  position: fixed; bottom: 84px; left: 22px; z-index: 199;
+  position: fixed; top: 84px; right: 26px; z-index: 229;
   width: 320px;
   background: rgba(4,0,26,0.55);
   border: 1px solid rgba(255,140,80,0.18);
@@ -558,10 +511,10 @@ body {
   box-shadow: 0 0 40px rgba(255,140,80,0.06), 0 0 80px rgba(232,80,122,0.05), 0 16px 60px rgba(0,0,0,0.7);
   backdrop-filter: blur(28px);
   overflow: hidden;
-  transform-origin: bottom left;
-  transform: scale(0.88) translateY(12px);
+  transform-origin: top right;
+  transform: scale(0.88) translateY(-12px);
   opacity: 0; pointer-events: none;
-  transition: transform 0.4s cubic-bezier(0.34,1.4,0.64,1), opacity 0.3s ease, visibility 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.34,1.4,0.64,1), opacity 0.3s ease;
 }
 .radio-panel.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
 .radio-panel::before {
@@ -753,6 +706,7 @@ body {
   animation: dotPulse 1.4s ease-in-out infinite;
 }
 .radio-track.active .radio-track-playing-dot { opacity: 1; }
+@keyframes dotPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(0.55)} }
 
 /* ── MAP PAGE ─────────────────────────────────────── */
 #page-map.active {
@@ -767,7 +721,7 @@ body {
 }
 .map-page-title { font-size: clamp(36px, 5vw, 68px); }
 .map-wrap {
-  width: min(860px, 92vw); height: min(640px, 70vh);
+  width: min(860px, 92vw); height: min(640px, 66vh);
   border-radius: 18px; overflow: hidden;
   border: 1px solid rgba(255,140,80,0.18);
   box-shadow: 0 0 50px rgba(255,140,80,0.07), 0 0 100px rgba(232,80,122,0.05), 0 12px 50px rgba(0,0,0,0.7);
@@ -779,18 +733,18 @@ body {
 #page-characters .card-img-wrap { aspect-ratio: 1/1; }
 .viewer-inner {
   display: flex; align-items: flex-start; gap: 40px;
-  max-width: 1140px; width: 100%; max-height: 88vh;
+  max-width: 1140px; width: 100%; max-height: 84vh;
 }
 .viewer-img-col { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; }
 #char-lb-img {
-  max-width: 500px; max-height: 500px; width: auto; height: auto;
+  max-width: 500px; max-height: 460px; width: auto; height: auto;
   border-radius: 12px;
   border: 1px solid rgba(255,140,80,0.2);
   box-shadow: 0 0 60px rgba(255,140,80,0.1);
   object-fit: contain; transition: opacity 0.15s; display: block;
 }
 .viewer-bio-col {
-  flex: 1 1 0; min-width: 0; max-height: 560px; overflow-y: auto; padding-right: 6px;
+  flex: 1 1 0; min-width: 0; max-height: 520px; overflow-y: auto; padding-right: 6px;
   scrollbar-width: thin; scrollbar-color: rgba(255,140,80,0.2) transparent;
 }
 .viewer-bio-col::-webkit-scrollbar { width: 4px; }
@@ -973,18 +927,21 @@ body {
   .viewer-bio-col{ max-height: none; width: 100%; }
   .map-wrap      { width: 92vw; height: 62vw; border-radius: 12px; }
   .tlb-footer    { flex-direction: column; gap: 14px; align-items: flex-start; }
+  .bottom-nav-btn { width: 36px; height: 36px; }
+  .home-meta span { display: none; }
 }
 @media (max-width: 500px) {
   .pills { gap: 6px; }
   .pill  { min-width: 66px; padding: 12px 14px 10px; }
   .pill-num { font-size: 32px; }
   .sep { font-size: 24px; }
-  .nav-panel { padding: 70px 28px; }
+  .bottom-nav { gap: 0; padding: 7px 8px; }
+  .bottom-nav-sep { margin: 0 2px; }
 }
-@media (max-width: 600px) { .page-main { padding: 80px 20px 60px; } }
+@media (max-width: 600px) { .page-main { padding: 80px 20px 100px; } }
 </style>
 </head>
-<body>
+<body class="on-home">
 
 <!-- BG LAYERS -->
 <div class="bg-darken"></div>
@@ -995,32 +952,50 @@ body {
   <source src="leonida/music/relax.mp3" type="audio/mpeg">
 </audio>
 
-<!-- HAMBURGER -->
-<button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle menu">
-  <div class="bar"></div>
-  <div class="bar"></div>
-  <div class="bar"></div>
+<!-- BRAND MARK -->
+<div class="brand-mark">
+  <img class="brand-mark-logo" src="leonida/images/logo-mark.png?v=2" alt="Leonida">
+  <div class="brand-mark-sub">Leonida Hub</div>
+</div>
+
+<!-- HOME CORNER LINKS -->
+<button class="home-meta meta-left" id="metaLatest">
+  <span>Latest trailer</span>
+  <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+</button>
+<button class="home-meta meta-right" id="metaExplore">
+  <span>Explore Leonida</span>
+  <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M12 19l-6-6M12 19l6-6"/></svg>
 </button>
 
-<!-- NAV OVERLAY -->
-<div class="nav-overlay" id="navOverlay">
-  <div class="nav-backdrop" id="navBackdrop"></div>
-  <div class="nav-panel">
-    <div class="nav-label">Navigation</div>
-    <ul class="nav-links" id="navLinks">
-      <li><a data-page="home" class="active">Home</a></li>
-      <li><a data-page="map">Map</a></li>
-      <li><a data-page="places">Places</a></li>
-      <li><a data-page="characters">Characters</a></li>
-      <li><a data-page="screenshots">Screenshots</a></li>
-      <li><a data-page="trailers">Trailers</a></li>
-    </ul>
-    <div class="nav-footer">
-      <span class="nav-footer-text">November 19, 2026</span>
-      <div class="nav-footer-dot"></div>
-    </div>
-  </div>
-</div>
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="bottom-nav-btn active" data-page="home" aria-label="Home">
+    <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 11.5 12 4l9 7.5"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 10v9a1 1 0 0 0 1 1h4v-5.5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1V20h4a1 1 0 0 0 1-1v-9"/></svg>
+    <span class="bottom-nav-tip">Home</span>
+  </button>
+  <div class="bottom-nav-sep"></div>
+  <button class="bottom-nav-btn" data-page="map" aria-label="Map">
+    <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5 4 7v13l5-2 6 2 5-2V5l-5 2-6-2Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 5v13M15 7v13"/></svg>
+    <span class="bottom-nav-tip">Map</span>
+  </button>
+  <button class="bottom-nav-btn" data-page="places" aria-label="Places">
+    <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21V9l9-6 9 6v12"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 21v-7h6v7"/></svg>
+    <span class="bottom-nav-tip">Places</span>
+  </button>
+  <button class="bottom-nav-btn" data-page="characters" aria-label="Characters">
+    <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path stroke-linecap="round" stroke-linejoin="round" d="M15.5 14.2c2.6.4 4.5 2.6 4.5 5.3"/></svg>
+    <span class="bottom-nav-tip">Characters</span>
+  </button>
+  <button class="bottom-nav-btn" data-page="screenshots" aria-label="Screenshots">
+    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path stroke-linecap="round" stroke-linejoin="round" d="m4 17 5-5 3.5 3.5L17 11l3 3"/></svg>
+    <span class="bottom-nav-tip">Screenshots</span>
+  </button>
+  <button class="bottom-nav-btn" data-page="trailers" aria-label="Trailers">
+    <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M10 9.5v5l4.5-2.5Z"/></svg>
+    <span class="bottom-nav-tip">Trailers</span>
+  </button>
+</nav>
 
 <!-- PAGE: HOME -->
 <div id="page-home" class="page active">
@@ -1310,43 +1285,17 @@ body {
 <script>
 'use strict';
 
-/* ── HAMBURGER ──────────────────────────────────── */
-const hBtn        = document.getElementById('hamburgerBtn');
-const overlay     = document.getElementById('navOverlay');
-const backdrop    = document.getElementById('navBackdrop');
-const radioPanel      = document.getElementById('radioPanel');
-const radioToggleBtn  = document.getElementById('radioToggleBtn');
-
-function toggleMenu(force) {
-  if (typeof force === 'boolean') {
-    if (force) overlay.classList.add('open'); else overlay.classList.remove('open');
-  } else {
-    overlay.classList.toggle('open');
-  }
-  const isOpen = overlay.classList.contains('open');
-  hBtn.classList.toggle('open', isOpen);
-  radioToggleBtn.style.opacity       = isOpen ? '0' : '';
-  radioToggleBtn.style.visibility    = isOpen ? 'hidden' : '';
-  radioToggleBtn.style.pointerEvents = isOpen ? 'none' : '';
-  if (isOpen) { radioPanel.classList.remove('open'); radioToggleBtn.classList.remove('active'); }
-  radioPanel.style.opacity       = isOpen ? '0' : '';
-  radioPanel.style.visibility    = isOpen ? 'hidden' : '';
-  radioPanel.style.pointerEvents = isOpen ? 'none' : '';
-}
-hBtn.addEventListener('click', () => toggleMenu());
-backdrop.addEventListener('click', () => toggleMenu(false));
-
-/* ── PAGE ROUTING ───────────────────────────────── */
-const pages      = document.querySelectorAll('.page');
-const navAnchors = document.querySelectorAll('[data-page]');
-const initialized = {};
+/* ── BOTTOM NAV + PAGE ROUTING ──────────────────── */
+const pages         = document.querySelectorAll('.page');
+const bottomNavBtns  = document.querySelectorAll('.bottom-nav-btn[data-page]');
+const initialized   = {};
 function showPage(id) {
   pages.forEach(p => { p.classList.remove('active'); });
   const page = document.getElementById('page-' + id);
   if (!page) return;
   page.classList.add('active');
-  navAnchors.forEach(a => { a.classList.toggle('active', a.dataset.page === id); });
-  toggleMenu(false);
+  bottomNavBtns.forEach(b => { b.classList.toggle('active', b.dataset.page === id); });
+  document.body.classList.toggle('on-home', id === 'home');
   if (!initialized[id]) {
     initialized[id] = true;
     if (id === 'map')         initMap();
@@ -1357,15 +1306,17 @@ function showPage(id) {
   }
   page.scrollTop = 0;
 }
-navAnchors.forEach(a => {
-  a.addEventListener('click', e => { e.preventDefault(); showPage(a.dataset.page); });
+bottomNavBtns.forEach(b => {
+  b.addEventListener('click', () => showPage(b.dataset.page));
 });
+document.getElementById('metaLatest').addEventListener('click', () => showPage('trailers'));
+document.getElementById('metaExplore').addEventListener('click', () => showPage('map'));
+
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     if (document.getElementById('trailerLB').classList.contains('active')) { closeTLB(); return; }
     const openLB = document.querySelector('.lb-viewer.active');
     if (openLB) { openLB.classList.remove('active'); return; }
-    if (overlay.classList.contains('open')) { toggleMenu(false); return; }
   }
 });
 
@@ -1408,6 +1359,8 @@ const radioWave       = document.getElementById('radioWave');
 const radioTracklist  = document.getElementById('radioTracklist');
 const radioVolSlider  = document.getElementById('radioVolSlider');
 const radioVolVal     = document.getElementById('radioVolVal');
+const radioToggleBtn  = document.getElementById('radioToggleBtn');
+const radioPanel      = document.getElementById('radioPanel');
 let radioIdx = 0, radioPlaying = false, radioShuffle = false;
 radioAudio.volume = 0.5;
 
@@ -1780,4 +1733,3 @@ function initTrailers() {
 </script>
 </body>
 </html>
-
