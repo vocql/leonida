@@ -797,15 +797,47 @@ body.on-home .home-meta { opacity: 1; pointer-events: all; }
 })();
 
 /* ── COUNTDOWN ──────────────────────────────────── */
+const RELEASE_DATE_STR = '2026-11-19T00:00:00';
 const prev = { d:'', h:'', m:'', s:'' };
 function bounce(id) {
   const el = document.getElementById('n-' + id);
   el.classList.remove('bounce'); void el.offsetWidth; el.classList.add('bounce');
   setTimeout(() => el.classList.remove('bounce'), 500);
 }
+
+/* Resolve what UTC instant "2026-11-19T00:00:00" (midnight, release day)
+   actually corresponds to in a given IANA timezone, e.g. 'America/Los_Angeles'.
+   Falls back to plain local-time parsing if the browser can't resolve it. */
+function getTzOffsetMinutes(timeZone, atDate) {
+  const dtf = new Intl.DateTimeFormat('en-US', { timeZone, timeZoneName: 'longOffset', hour: '2-digit', hour12: false });
+  const part = dtf.formatToParts(atDate).find(p => p.type === 'timeZoneName');
+  const m = part && part.value.match(/GMT([+-]\d{1,2})(?::?(\d{2}))?/);
+  if (!m) return 0;
+  const sign = m[1].charAt(0) === '-' ? -1 : 1;
+  const hh = Math.abs(parseInt(m[1], 10));
+  const mm = m[2] ? parseInt(m[2], 10) : 0;
+  return sign * (hh * 60 + mm);
+}
+function computeTargetMs(tz) {
+  if (!tz || tz === 'auto') return new Date(RELEASE_DATE_STR).getTime();
+  try {
+    const asUtcMs = Date.parse(RELEASE_DATE_STR + 'Z');
+    const offsetMin = getTzOffsetMinutes(tz, new Date(asUtcMs));
+    return asUtcMs - offsetMin * 60000;
+  } catch (e) {
+    return new Date(RELEASE_DATE_STR).getTime();
+  }
+}
+
+let cachedTz = null, cachedTarget = null;
+function getTargetMs() {
+  const tz = (window.LeonidaSettings && window.LeonidaSettings.get('timezone')) || 'auto';
+  if (tz !== cachedTz || cachedTarget === null) { cachedTz = tz; cachedTarget = computeTargetMs(tz); }
+  return cachedTarget;
+}
+
 function tick() {
-  const target = new Date('2026-11-19T00:00:00');
-  const diff   = target - new Date();
+  const diff = getTargetMs() - Date.now();
   if (diff <= 0) {
     ['d','h','m','s'].forEach(k => document.getElementById('n-' + k).textContent = '00');
     return;
