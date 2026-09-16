@@ -13,18 +13,11 @@
   var STORAGE_KEY = 'leonida_settings_v2';
   var PAGE_MAP = { index: 'home', map: 'map', places: 'places', characters: 'characters', screenshots: 'screenshots', trailers: 'trailers' };
 
-  var RADIO_STATIONS = [
-    { id: 'vicewave',     name: 'Vice Wave',      genre: 'Vaporwave / Retro',  url: 'https://ice1.somafm.com/vaporwaves-128-mp3' },
-    { id: 'sunsetgold',   name: 'Sunset Gold',    genre: '70s AM Gold',        url: 'https://ice1.somafm.com/seventies-128-mp3' },
-    { id: 'coastalchill', name: 'Coastal Chill',  genre: 'Ambient / Chillout', url: 'https://ice1.somafm.com/groovesalad-128-mp3' },
-    { id: 'undercover',   name: 'Undercover FM',  genre: 'Spy Lounge',         url: 'https://ice1.somafm.com/secretagent-128-mp3' },
-    { id: 'nightdrive',   name: 'Night Drive',    genre: 'Deep House',        url: 'https://ice1.somafm.com/fluid-128-mp3' },
-    { id: 'heatfm',       name: 'Heat FM',        genre: 'Techno',            url: 'https://ice1.somafm.com/thetrip-128-mp3' }
-  ];
+  var RADIO_STATIONS = [];
 
   var DEFAULTS = {
     /* radio */
-    radioStation: 'vicewave',
+    radioStation: '',
     radioVolume: 60,
     radioPlaying: false,
     /* countdown */
@@ -121,12 +114,13 @@
 
   function stationById(id) {
     for (var i = 0; i < RADIO_STATIONS.length; i++) { if (RADIO_STATIONS[i].id === id) return RADIO_STATIONS[i]; }
-    return RADIO_STATIONS[0];
+    return RADIO_STATIONS[0] || null;
   }
   function radioApplyVolume(v) { radioAudio.volume = Math.max(0, Math.min(100, v)) / 100; }
   function radioPlay(id) {
     var st = stationById(id || current.radioStation);
-    if (radioAudio.src !== st.url) radioAudio.src = st.url;
+    if (!st) return;
+    if (radioAudio.src.indexOf(st.url) === -1) radioAudio.src = st.url;
     radioApplyVolume(current.radioVolume);
     var p = radioAudio.play();
     if (p && p.catch) p.catch(function () { /* blocked until user interacts; retried below */ });
@@ -145,9 +139,34 @@
     radioApplyVolume(v);
     saveSettings(current);
   }
-
   radioApplyVolume(current.radioVolume);
-  if (current.radioPlaying) {
+
+  /* ---------- auto-load tracks from leonida/music/ via GitHub ----------
+     Same repo the photo/character/place galleries already pull from.
+     leonida/music/tracks.js is only used as a fallback if the API call
+     fails (offline, rate-limited, etc.) or turns up nothing. */
+  var GH_USER = 'vocql', GH_REPO = 'leonidagta', GH_BRANCH = 'main', GH_PATH = 'leonida/music';
+  var AUDIO_EXTS = ['.mp3', '.wav', '.m4a', '.ogg', '.flac', '.aac'];
+  var RADIO_CACHE_KEY = 'leonida_radio_cache_v1';
+
+  function titleFromFilename(name) {
+    return name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ').replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+  }
+  function tracksFromManifest() {
+    var raw = Array.isArray(window.LEONIDA_TRACKS) ? window.LEONIDA_TRACKS : [];
+    return raw.filter(function (t) { return t && t.file; }).map(function (t) {
+      return { id: t.file, name: t.title || titleFromFilename(t.file), genre: t.artist || '', url: GH_PATH + '/' + t.file };
+    });
+  }
+  function setStations(list) {
+    RADIO_STATIONS.length = 0;
+    Array.prototype.push.apply(RADIO_STATIONS, list);
+  }
+
+  var resumeStarted = false;
+  function attemptResume() {
+    if (resumeStarted) return; resumeStarted = true;
+    if (!current.radioPlaying) return;
     radioPlay(current.radioStation);
     var resumeOnce = function () {
       if (current.radioPlaying && radioAudio.paused) {
@@ -162,6 +181,41 @@
     document.addEventListener('keydown', resumeOnce, { once: true });
     document.addEventListener('touchstart', resumeOnce, { once: true });
   }
+  function notifyRadioReady() {
+    attemptResume();
+    try { document.dispatchEvent(new Event('leonida:radio-ready')); } catch (e) {}
+  }
+
+  (function loadTracks() {
+    var hadCache = false;
+    try {
+      var cached = JSON.parse(localStorage.getItem(RADIO_CACHE_KEY) || 'null');
+      if (cached && Array.isArray(cached.stations) && cached.stations.length) { setStations(cached.stations); hadCache = true; }
+    } catch (e) {}
+    if (hadCache) notifyRadioReady(); /* instant resume/UI from cache; fetch below refreshes in the background */
+
+    var apiURL = 'https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/contents/' + GH_PATH + '?ref=' + GH_BRANCH;
+    fetch(apiURL, { headers: { 'Accept': 'application/vnd.github.v3+json' } })
+      .then(function (res) { if (!res.ok) throw new Error('status ' + res.status); return res.json(); })
+      .then(function (files) {
+        if (!Array.isArray(files)) throw new Error('bad response');
+        var tracks = files
+          .filter(function (f) { return f.type === 'file' && AUDIO_EXTS.some(function (ext) { return f.name.toLowerCase().indexOf(ext) === f.name.toLowerCase().length - ext.length; }); })
+          .sort(function (a, b) { return a.name.localeCompare(b.name); })
+          .map(function (f) { return { id: f.name, name: titleFromFilename(f.name), genre: '', url: GH_PATH + '/' + f.name }; });
+        if (tracks.length) {
+          setStations(tracks);
+          try { localStorage.setItem(RADIO_CACHE_KEY, JSON.stringify({ stations: tracks, savedAt: Date.now() })); } catch (e) {}
+          notifyRadioReady();
+        } else if (!hadCache) {
+          setStations(tracksFromManifest());
+          notifyRadioReady();
+        }
+      })
+      .catch(function () {
+        if (!hadCache) { setStations(tracksFromManifest()); notifyRadioReady(); }
+      });
+  })();
 
   window.LeonidaSettings = {
     get: function (k) { return loadSettings()[k]; },
