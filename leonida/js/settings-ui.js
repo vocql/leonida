@@ -12,8 +12,75 @@
 
   var LS = window.LeonidaSettings;
 
+  /* ---- shared with index.html's countdown timer: keep this constant
+     in sync with RELEASE_DATE_STR in index.html ---- */
+  var RELEASE_DATE_STR = '2026-11-19T00:00:00';
+
+  function getTzOffsetMinutes(timeZone, atDate) {
+    try {
+      var dtf = new Intl.DateTimeFormat('en-US', { timeZone: timeZone, timeZoneName: 'longOffset', hour: '2-digit', hour12: false });
+      var part = dtf.formatToParts(atDate).find(function (p) { return p.type === 'timeZoneName'; });
+      var m = part && part.value.match(/GMT([+-]\d{1,2})(?::?(\d{2}))?/);
+      if (!m) return 0;
+      var sign = m[1].charAt(0) === '-' ? -1 : 1;
+      var hh = Math.abs(parseInt(m[1], 10));
+      var mm = m[2] ? parseInt(m[2], 10) : 0;
+      return sign * (hh * 60 + mm);
+    } catch (e) { return 0; }
+  }
+  function computeTargetMs(tz) {
+    if (!tz || tz === 'auto') return new Date(RELEASE_DATE_STR).getTime();
+    try {
+      var asUtcMs = Date.parse(RELEASE_DATE_STR + 'Z');
+      var offsetMin = getTzOffsetMinutes(tz, new Date(asUtcMs));
+      return asUtcMs - offsetMin * 60000;
+    } catch (e) { return new Date(RELEASE_DATE_STR).getTime(); }
+  }
+  function formatTzPreview(tz) {
+    try {
+      var targetMs = computeTargetMs(tz);
+      var opts = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short' };
+      if (tz && tz !== 'auto') opts.timeZone = tz;
+      return 'Hits zero: ' + new Intl.DateTimeFormat('en-US', opts).format(new Date(targetMs));
+    } catch (e) { return ''; }
+  }
+  function updateTzPreview() {
+    var previewEl = document.getElementById('lsTzPreview');
+    if (!previewEl) return;
+    var sel = document.querySelector('[data-key="timezone"]');
+    var tz = sel ? sel.value : (LS.get('timezone') || 'auto');
+    previewEl.textContent = formatTzPreview(tz);
+  }
+
   var SCHEMA = [
     { id: 'radio', label: 'Radio', custom: true },
+    { id: 'countdown', label: 'Countdown', fields: [
+      { key: 'timezone', type: 'select', label: 'Timezone', sub: 'Count down to release in this zone', instant: true,
+        options: [
+          ['auto', 'Automatic (Device)'],
+          ['UTC', 'UTC'],
+          ['America/Los_Angeles', 'US Pacific'],
+          ['America/Denver', 'US Mountain'],
+          ['America/Chicago', 'US Central'],
+          ['America/New_York', 'US Eastern'],
+          ['America/Mexico_City', 'Mexico City'],
+          ['America/Sao_Paulo', 'Brazil (São Paulo)'],
+          ['Europe/London', 'UK / Ireland'],
+          ['Europe/Berlin', 'Central Europe'],
+          ['Europe/Athens', 'Eastern Europe'],
+          ['Europe/Moscow', 'Moscow'],
+          ['Africa/Johannesburg', 'South Africa'],
+          ['Asia/Dubai', 'Gulf (Dubai)'],
+          ['Asia/Kolkata', 'India'],
+          ['Asia/Jakarta', 'Indonesia'],
+          ['Asia/Shanghai', 'China'],
+          ['Asia/Singapore', 'Singapore'],
+          ['Asia/Seoul', 'South Korea'],
+          ['Asia/Tokyo', 'Japan'],
+          ['Australia/Sydney', 'Australia Eastern'],
+          ['Pacific/Auckland', 'New Zealand']
+        ] }
+    ]},
     { id: 'appearance', label: 'Appearance', fields: [
       { key: 'theme', type: 'select', label: 'Theme', sub: 'Accent color across the site',
         options: [['sunset', 'Sunset'], ['vice', 'Vice Neon'], ['mono', 'Blackout Mono']] },
@@ -112,6 +179,7 @@
     } else if (f.type === 'select') {
       var sel = document.createElement('select');
       sel.className = 'ls-select'; sel.dataset.key = f.key;
+      if (f.instant) sel.dataset.instant = '1';
       f.options.forEach(function (o) {
         var opt = document.createElement('option');
         opt.value = o[0]; opt.textContent = o[1];
@@ -226,6 +294,12 @@
       } else {
         tab.fields.forEach(function (f) { pane.appendChild(fieldRow(f, current[f.key])); });
       }
+      if (tab.id === 'countdown') {
+        var tzPreview = el('div', 'ls-tz-preview'); tzPreview.id = 'lsTzPreview';
+        pane.appendChild(tzPreview);
+        var tzNote = el('div', 'ls-tz-note', 'Changes here save instantly \u2014 no need to hit Save.');
+        pane.appendChild(tzNote);
+      }
       body.appendChild(pane);
     });
 
@@ -318,6 +392,7 @@
     refs.body.querySelectorAll('select[data-key]').forEach(function (s) { s.value = current[s.dataset.key]; });
     refs.body.querySelectorAll('input[type="range"][data-key]').forEach(function (r) { r.value = current[r.dataset.key]; });
     updateDebug(refs.debug);
+    updateTzPreview();
   }
 
   function init() {
@@ -339,10 +414,16 @@
       refs.body.querySelectorAll('.ls-pane').forEach(function (p) { p.classList.toggle('active', p.dataset.pane === t.dataset.tab); });
     });
 
-    refs.body.addEventListener('input', function () {
+    refs.body.addEventListener('input', function (e) {
       var draft = readForm(refs.body);
       LS.apply(draft);
-      if (LS.get('autoSaveOnChange')) { LS.save(draft); updateDebug(refs.debug); }
+      if (e.target && e.target.dataset.key === 'timezone') updateTzPreview();
+      var isInstant = e.target && e.target.dataset.instant === '1';
+      if (LS.get('autoSaveOnChange') || isInstant) {
+        LS.save(draft);
+        updateDebug(refs.debug);
+        if (isInstant) showToast(refs.toast);
+      }
     });
 
     refs.body.addEventListener('click', function (e) {
