@@ -27,6 +27,8 @@
     radioStation: 'vicewave',
     radioVolume: 60,
     radioPlaying: false,
+    /* countdown */
+    timezone: 'auto',
     /* appearance */
     theme: 'sunset',
     bgDarken: 52,
