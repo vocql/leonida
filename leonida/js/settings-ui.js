@@ -215,14 +215,24 @@
     now.appendChild(eq); now.appendChild(text); now.appendChild(playBtn);
     wrap.appendChild(now);
 
-    var grid = el('div', 'ls-radio-stations');
-    radio.stations.forEach(function (st) {
-      var b = el('button', 'ls-station-btn', '<span class="ls-station-name">' + st.name + '</span><span class="ls-station-genre">' + st.genre + '</span>');
-      b.type = 'button';
-      b.dataset.station = st.id;
-      grid.appendChild(b);
-    });
-    wrap.appendChild(grid);
+    var list = el('div', 'ls-radio-tracklist');
+    if (radio.stations.length === 0) {
+      list.appendChild(el('div', 'ls-radio-empty',
+        'No tracks found in <b>leonida/music/</b> yet. Drop mp3s in there and they\u2019ll show up automatically \u2014 no editing required.'));
+    } else {
+      radio.stations.forEach(function (st) {
+        var b = el('button', 'ls-track-item');
+        b.type = 'button'; b.dataset.station = st.id;
+        b.appendChild(el('span', 'ls-track-dot'));
+        var info = el('span', 'ls-track-info');
+        info.appendChild(el('span', 'ls-track-title', st.name));
+        if (st.genre) info.appendChild(el('span', 'ls-track-artist', st.genre));
+        b.appendChild(info);
+        b.appendChild(el('span', 'ls-track-playicon', '&#9658;'));
+        list.appendChild(b);
+      });
+    }
+    wrap.appendChild(list);
 
     var volRow = el('div', 'ls-row');
     volRow.style.marginTop = '4px';
@@ -234,20 +244,24 @@
     wrap.appendChild(volRow);
 
     function refresh() {
+      if (radio.stations.length === 0) { nameEl.textContent = 'No tracks'; genreEl.textContent = ''; return; }
       var st = radio.stations.filter(function (s) { return s.id === radio.getStation(); })[0] || radio.stations[0];
       nameEl.textContent = st.name;
       genreEl.textContent = st.genre;
       var playing = radio.isPlaying();
       eq.classList.toggle('playing', playing);
       playBtn.innerHTML = playing ? '&#10074;&#10074;' : '&#9658;';
-      grid.querySelectorAll('.ls-station-btn').forEach(function (b) {
-        b.classList.toggle('active', b.dataset.station === st.id);
+      list.querySelectorAll('.ls-track-item').forEach(function (b) {
+        var isActive = b.dataset.station === st.id;
+        b.classList.toggle('active', isActive);
+        b.classList.toggle('playing', isActive && playing);
       });
     }
 
-    grid.addEventListener('click', function (e) {
-      var b = e.target.closest('.ls-station-btn'); if (!b) return;
-      radio.play(b.dataset.station);
+    list.addEventListener('click', function (e) {
+      var b = e.target.closest('.ls-track-item'); if (!b) return;
+      if (b.dataset.station === radio.getStation() && radio.isPlaying()) { radio.pause(); }
+      else { radio.play(b.dataset.station); }
       refresh();
     });
     playBtn.addEventListener('click', function () { radio.toggle(); refresh(); });
@@ -281,6 +295,7 @@
 
     var body = el('div', 'ls-body');
     var current = LS.getAll();
+    var radioPaneEl = null;
 
     SCHEMA.forEach(function (tab, i) {
       var tabBtn = el('button', 'ls-tab' + (i === 0 ? ' active' : ''), tab.label);
@@ -291,6 +306,7 @@
       pane.dataset.pane = tab.id;
       if (tab.custom && tab.id === 'radio') {
         pane.appendChild(buildRadioPane());
+        radioPaneEl = pane;
       } else {
         tab.fields.forEach(function (f) { pane.appendChild(fieldRow(f, current[f.key])); });
       }
@@ -319,7 +335,7 @@
 
     document.body.appendChild(overlay);
     document.body.appendChild(panel);
-    return { overlay: overlay, panel: panel, tabs: tabs, body: body, debug: debug, toast: toast };
+    return { overlay: overlay, panel: panel, tabs: tabs, body: body, debug: debug, toast: toast, radioPane: radioPaneEl };
   }
 
   function readForm(body) {
@@ -445,6 +461,12 @@
       LS.save(Object.assign({}, LS.defaults));
       LS.apply(LS.defaults);
       rerenderPanel(refs);
+    });
+
+    document.addEventListener('leonida:radio-ready', function () {
+      if (!refs.radioPane) return;
+      refs.radioPane.innerHTML = '';
+      refs.radioPane.appendChild(buildRadioPane());
     });
 
     initNavAutoHide();
