@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="leonida/css/settings.css">
+<script src="leonida/js/settings-core.js"></script>
 <link rel="icon" type="image/png" href="leonida/images/newlogo.png">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#e8507a">
@@ -10,6 +12,7 @@
 <meta property="og:image" content="https://vocql.github.io/leonida/leonida/images/newlogo.png">
 <meta property="og:image:type" content="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="leonida/js/settings-ui.js" defer></script>
 <title>Leonida Trailers</title>
 <meta name="description" content="Watch every official GTA VI trailer released so far.">
 <meta property="og:title" content="Leonida Trailers">
@@ -816,9 +819,18 @@ const tlbCur   = document.getElementById('tlbCur');
 const tlbTot   = document.getElementById('tlbTot');
 tlbTot.textContent = TRAILERS.length;
 
+function buildEmbedSrc(vid) {
+  const s = window.LeonidaSettings ? window.LeonidaSettings.getAll() : {};
+  const autoplay = s.autoplayTrailers === false ? 0 : 1;
+  const mute = s.muteTrailers ? 1 : 0;
+  let src = `https://www.youtube.com/embed/${vid}?autoplay=${autoplay}&rel=0&modestbranding=1&mute=${mute}`;
+  if (s.loopTrailer) src += `&loop=1&playlist=${vid}`;
+  return src;
+}
+
 function openTLB(idx) {
   tlbIdx = idx; const t = TRAILERS[idx];
-  tlbVideo.innerHTML = `<iframe src="https://www.youtube.com/embed/${t.vid}?autoplay=1&rel=0&modestbranding=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  tlbVideo.innerHTML = `<iframe src="${buildEmbedSrc(t.vid)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
   tlbTitle.textContent = t.title; tlbYear.textContent = t.year; tlbCur.textContent = idx+1;
   tlbEl.classList.add('active'); document.body.style.overflow = 'hidden';
 }
