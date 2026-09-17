@@ -15,9 +15,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="leonida/js/settings-ui.js?v=3" defer></script>
 <title>Welcome to Leonida</title>
-<meta name="description" content="Welcome to Leonida — a place for everything GTA VI. Explore the latest trailers, screenshots, characters, locations, the interactive map, and more, all in one place.">
+<meta name="description" content="Your home for everything GTA VI. Live countdown timer, all official trailers, the full interactive map, character profiles & location breakdowns. November 19, 2026.">
 <meta property="og:title" content="Welcome to Leonida">
-<meta property="og:description" content="A place for everything GTA VI. Explore the latest trailers, screenshots, characters, locations, the interactive map, and more, all in one place.">
+<meta property="og:description" content="Your home for everything GTA VI. Live countdown timer, all official trailers, the full interactive map, character profiles & location breakdowns. November 19, 2026.">
 
 <style>
 /* ── VARIABLES & RESET ────────────────────────────── */
@@ -469,7 +469,13 @@ body.on-home .home-meta { opacity: 1; pointer-events: all; }
   text-transform: uppercase; color: rgba(255,255,255,0.35);
   display: flex; align-items: center; gap: 14px;
 }
-.subtitle-divider { width: 28px; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,179,71,0.35), transparent); }
+.subtitle-divider { width: 28px; height: 1px; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--sunset-b) 35%, transparent), transparent); }
+.tz-note {
+  margin-top: 10px; font-size: 10px; font-weight: 600; letter-spacing: 0.15em;
+  text-transform: uppercase; color: rgba(255,255,255,0.28);
+  text-align: center; cursor: pointer; transition: color 0.2s; user-select: none;
+}
+.tz-note:hover { color: var(--sunset-b); text-decoration: underline; }
 
 /* ── MAP PAGE ─────────────────────────────────────── */
 #page-map.active {
@@ -776,6 +782,7 @@ body.on-home .home-meta { opacity: 1; pointer-events: all; }
       <span style="color:#e8f4ff;text-shadow:0 0 18px rgba(220,240,255,0.7),0 0 6px rgba(255,255,255,0.4);letter-spacing:0.3em;font-weight:700;">MADE BY VOQCL</span>
       <div class="subtitle-divider"></div>
     </div>
+    <div class="tz-note" id="tzNote">(Change timezone in Settings)</div>
   </div>
 </div>
 
@@ -795,6 +802,17 @@ body.on-home .home-meta { opacity: 1; pointer-events: all; }
     var dest = { map:'map', places:'places', characters:'characters', screenshots:'screenshots', trailers:'trailers' }[target];
     if (dest) { window.location.replace(dest); }
   }
+})();
+
+/* ── TIMEZONE NOTE: opens Settings straight to Countdown tab ── */
+(function () {
+  var tzNote = document.getElementById('tzNote');
+  if (!tzNote) return;
+  tzNote.addEventListener('click', function () {
+    if (window.LeonidaSettingsUI && window.LeonidaSettingsUI.openTab) {
+      window.LeonidaSettingsUI.openTab('countdown');
+    }
+  });
 })();
 
 /* ── COUNTDOWN ──────────────────────────────────── */
