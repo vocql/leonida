@@ -22,8 +22,14 @@
     radioPlaying: false,
     /* countdown */
     timezone: 'auto',
-    /* appearance */
+    /* theme */
     theme: 'sunset',
+    customA: '#ffd580',
+    customB: '#ffb347',
+    customC: '#ff8c69',
+    customD: '#e8507a',
+    customE: '#c94b8c',
+    /* appearance */
     bgDarken: 52,
     hideBackgroundImage: false,
     gridDensity: 'comfortable',
@@ -46,6 +52,16 @@
     hideCardNumbers: false,
     disableImageHoverZoom: false,
     lightboxSpeed: 'normal',
+    /* effects */
+    cursorGlow: false,
+    ambientPulse: false,
+    scanlineOverlay: false,
+    pageFadeIn: false,
+    /* sound & alerts */
+    uiClickSounds: false,
+    uiHoverSounds: false,
+    uiSoundVolume: 40,
+    milestoneAlerts: false,
     /* accessibility */
     reduceMotion: false,
     disableShimmerText: false,
@@ -84,10 +100,13 @@
     lightboxSpeed: function (v) { return ['--ls-lb-speed', { slow: '0.35s', normal: '0.15s', fast: '0.05s' }[v] || '0.15s']; }
   };
 
+  var CUSTOM_COLOR_KEYS = ['customA', 'customB', 'customC', 'customD', 'customE'];
+  var SUNSET_VARS = ['--sunset-a', '--sunset-b', '--sunset-c', '--sunset-d', '--sunset-e'];
+
   function apply(s) {
     var root = document.documentElement;
     Object.keys(s).forEach(function (k) {
-      if (k === 'lastPage' || k === '_savedAt' || k === 'radioStation' || k === 'radioVolume' || k === 'radioPlaying') return;
+      if (k === 'lastPage' || k === '_savedAt' || k === 'radioStation' || k === 'radioVolume' || k === 'radioPlaying' || CUSTOM_COLOR_KEYS.indexOf(k) !== -1) return;
       var v = s[k];
       if (typeof v === 'boolean') root.classList.toggle('ls-' + k, v);
       else if (typeof v === 'string') root.setAttribute('data-ls-' + k, v);
@@ -95,6 +114,11 @@
     Object.keys(VAR_RULES).forEach(function (k) {
       if (s[k] !== undefined) { var pair = VAR_RULES[k](s[k]); root.style.setProperty(pair[0], pair[1]); }
     });
+    if (s.theme === 'custom') {
+      CUSTOM_COLOR_KEYS.forEach(function (k, i) { root.style.setProperty(SUNSET_VARS[i], s[k]); });
+    } else {
+      SUNSET_VARS.forEach(function (v) { root.style.removeProperty(v); });
+    }
   }
 
   var current = loadSettings();
@@ -140,6 +164,22 @@
     saveSettings(current);
   }
   radioApplyVolume(current.radioVolume);
+  radioAudio.addEventListener('play', function () { document.documentElement.classList.add('ls-radio-playing'); });
+  radioAudio.addEventListener('pause', function () { document.documentElement.classList.remove('ls-radio-playing'); });
+  radioAudio.addEventListener('ended', function () { document.documentElement.classList.remove('ls-radio-playing'); });
+
+  /* ---------- cursor glow trail (Effects tab) ----------
+     Always tracked; CSS hides it unless html.ls-cursorGlow is set. */
+  var cursorGlowEl = null;
+  document.addEventListener('mousemove', function (e) {
+    if (!document.body) return;
+    if (!cursorGlowEl) {
+      cursorGlowEl = document.createElement('div');
+      cursorGlowEl.id = 'lsCursorGlow';
+      document.body.appendChild(cursorGlowEl);
+    }
+    cursorGlowEl.style.transform = 'translate(' + e.clientX + 'px,' + e.clientY + 'px)';
+  }, { passive: true });
 
   /* ---------- auto-load tracks from leonida/music/ via GitHub ----------
      Same repo the photo/character/place galleries already pull from.
