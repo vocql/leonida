@@ -89,6 +89,7 @@
   function saveSettings(s) {
     s._savedAt = Date.now();
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch (e) {}
+    try { document.dispatchEvent(new CustomEvent('leonida:settings-changed', { detail: s })); } catch (e) {}
     return s;
   }
   function clearSettings() {
@@ -171,25 +172,57 @@
   /* ---------- live clock (top-right pill) ----------
      Reads the same "timezone" setting as the countdown, so changing
      it in Settings updates the clock too. Only runs if a page has
-     a #lsClockTime element. */
+     a #lsClockTime element.
+     - Ticks once a second for the time itself.
+     - Also re-renders immediately (no up-to-1s lag) whenever the
+       timezone setting changes, either in this tab (saveSettings
+       fires 'leonida:settings-changed') or in another tab/page
+       (the browser's built-in 'storage' event).
+     - The tz value is cached and only re-read from storage when a
+       change event actually fires, instead of JSON-parsing
+       localStorage on every single tick. */
+  var clockTz = current.timezone;
   function formatClockTime(tz) {
     var opts = { hour: '2-digit', minute: '2-digit', hour12: true };
     if (tz && tz !== 'auto') opts.timeZone = tz;
     try { return new Intl.DateTimeFormat('en-US', opts).format(new Date()); }
-    catch (e) { return new Intl.DateTimeFormat('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date()); }
+    catch (e) {
+      try { return new Intl.DateTimeFormat('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date()); }
+      catch (e2) { var d = new Date(); return (d.getHours() % 12 || 12) + ':' + String(d.getMinutes()).padStart(2, '0'); }
+    }
   }
   function tickClock() {
-    var el = document.getElementById('lsClockTime');
-    if (!el) return;
-    el.textContent = formatClockTime(loadSettings().timezone);
+    try {
+      var el = document.getElementById('lsClockTime');
+      if (!el) return;
+      el.textContent = formatClockTime(clockTz);
+    } catch (e) { /* never let a formatting hiccup kill the interval */ }
   }
-  function startClock() {
-    if (!document.getElementById('lsClockTime')) return;
+  function refreshClockTz() {
+    clockTz = loadSettings().timezone;
     tickClock();
-    setInterval(tickClock, 1000);
+  }
+  var clockTimer = null;
+  function startClock() {
+    var el = document.getElementById('lsClockTime');
+    if (!el) {
+      /* Element not in the DOM yet on this pass (e.g. injected later
+         by another script) - keep checking briefly instead of giving
+         up silently. */
+      setTimeout(startClock, 100);
+      return;
+    }
+    if (clockTimer) return; /* already running */
+    tickClock();
+    clockTimer = setInterval(tickClock, 1000);
+    document.addEventListener('leonida:settings-changed', refreshClockTz);
+    window.addEventListener('storage', function (e) {
+      if (!e.key || e.key === STORAGE_KEY) refreshClockTz();
+    });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', startClock);
   else startClock();
+  window.addEventListener('load', startClock); /* safety net in case DOMContentLoaded was missed */
 
   /* ---------- cursor glow trail (Effects tab) ----------
      Always tracked; CSS hides it unless html.ls-cursorGlow is set. */
