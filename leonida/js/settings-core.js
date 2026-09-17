@@ -18,7 +18,7 @@
   var DEFAULTS = {
     /* radio */
     radioStation: '',
-    radioVolume: 60,
+    radioVolume: 25,
     radioPlaying: false,
     /* countdown */
     timezone: 'auto',
