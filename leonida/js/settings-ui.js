@@ -153,15 +153,10 @@
     ]}
   ];
 
-  var GEAR_SVG = '<svg viewBox="0 0 24 24" class="ls-gear-svg">' +
-    '<defs><linearGradient id="lsGearGrad" x1="0%" y1="0%" x2="100%" y2="100%">' +
-    '<stop offset="0%"><animate attributeName="stop-color" values="#ff6fa0;#4dd8ff;#c94bff;#7fe8ff;#ff6fa0" dur="6s" repeatCount="indefinite"/></stop>' +
-    '<stop offset="100%"><animate attributeName="stop-color" values="#4dd8ff;#ff6fa0;#7fe8ff;#c94bff;#4dd8ff" dur="6s" repeatCount="indefinite"/></stop>' +
-    '</linearGradient></defs>' +
-    '<g fill="none" stroke="url(#lsGearGrad)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' +
-    '<circle cx="12" cy="12" r="3"/>' +
-    '<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>' +
-    '</g></svg>';
+ var GEAR_SVG = '<svg viewBox="0 0 24 24">' +
+  '<circle cx="12" cy="12" r="3"/>' +
+  '<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>' +
+'</svg>';
 
   function el(tag, cls, html) {
     var e = document.createElement(tag);
@@ -611,8 +606,8 @@
     if (!btn) return;
     var refs = buildPanel();
 
-    function open() { rerenderPanel(refs); updateDebug(refs.debug); refs.overlay.classList.add('active'); refs.panel.classList.add('active'); }
-    function close() { refs.overlay.classList.remove('active'); refs.panel.classList.remove('active'); LS.apply(LS.getAll()); }
+ function open() { rerenderPanel(refs); updateDebug(refs.debug); refs.overlay.classList.add('active'); refs.panel.classList.add('active'); btn.classList.add('active'); }
+function close() { refs.overlay.classList.remove('active'); refs.panel.classList.remove('active'); btn.classList.remove('active'); LS.apply(LS.getAll()); }
 
     btn.addEventListener('click', open);
     document.getElementById('lsClose').addEventListener('click', close);
@@ -958,15 +953,22 @@
   }
 
   var THEME_PRESETS = [
-    ['sunset', 'Sunset', ['#ffd580', '#ffb347', '#ff8c69', '#e8507a', '#c94b8c']],
-    ['vice', 'Vice Neon', ['#8ff4ff', '#4dd8ff', '#7fe8ff', '#ff5fa8', '#c94bff']],
-    ['mono', 'Blackout Mono', ['#dcdcdc', '#b8b8b8', '#9a9a9a', '#7d7d7d', '#5e5e5e']],
-    ['emerald', 'Emerald Heist', ['#7cffcb', '#34e5b0', '#00c9a7', '#0aa398', '#067a6f']],
-    ['bloodorange', 'Blood Orange', ['#ffd166', '#ff9f1c', '#ff6b35', '#e63946', '#9d0208']],
-    ['grape', 'Grape Soda', ['#e0aaff', '#c77dff', '#9d4edd', '#7b2cbf', '#5a189a']],
-    ['arctic', 'Arctic', ['#e0fbfc', '#c2dfe3', '#9db4c0', '#5c6b73', '#253237']],
-    ['goldrush', 'Gold Rush', ['#fff3b0', '#ffd60a', '#ffc300', '#ff9500', '#ff5400']]
-  ];
+  ['sunset', 'Sunset', ['#ffd580', '#ffb347', '#ff8c69', '#e8507a', '#c94b8c']],
+  ['vice', 'Vice Neon', ['#8ff4ff', '#4dd8ff', '#7fe8ff', '#ff5fa8', '#c94bff']],
+  ['mono', 'Blackout Mono', ['#dcdcdc', '#b8b8b8', '#9a9a9a', '#7d7d7d', '#5e5e5e']],
+  ['emerald', 'Emerald Heist', ['#7cffcb', '#34e5b0', '#00c9a7', '#0aa398', '#067a6f']],
+  ['bloodorange', 'Blood Orange', ['#ffd166', '#ff9f1c', '#ff6b35', '#e63946', '#9d0208']],
+  ['grape', 'Grape Soda', ['#e0aaff', '#c77dff', '#9d4edd', '#7b2cbf', '#5a189a']],
+  ['arctic', 'Arctic', ['#e0fbfc', '#c2dfe3', '#9db4c0', '#5c6b73', '#253237']],
+  ['goldrush', 'Gold Rush', ['#fff3b0', '#ffd60a', '#ffc300', '#ff9500', '#ff5400']],
+  ['midnight', 'Midnight', ['#a5b4fc', '#6366f1', '#4338ca', '#312e81', '#1e1b4b']],
+  ['coral', 'Coral', ['#ffe5ec', '#ffb3c6', '#ff758f', '#ff4d6d', '#c9184a']],
+  ['sakura', 'Sakura', ['#fff0f6', '#ffd6e8', '#ffb3d1', '#f875aa', '#d6336c']],
+  ['toxic', 'Toxic', ['#f4ffb0', '#d9ff4b', '#aeff00', '#7cd600', '#3f8f00']],
+  ['copper', 'Copper', ['#ffdab0', '#e8a25c', '#b5651d', '#8a4a1c', '#4e2a10']],
+  ['glacier', 'Glacier', ['#f0fbff', '#c7f0ff', '#8fdcff', '#4bb8e0', '#1f6f8b']],
+  ['inferno', 'Inferno', ['#ffe66d', '#ffa63d', '#ff5714', '#d62828', '#6a040f']]
+];
 
   function buildThemePane() {
     var wrap = el('div', '');
