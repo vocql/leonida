@@ -48,8 +48,8 @@
     autoplayTrailers: true,
     muteTrailers: false,
     loopTrailer: false,
-    hideFileNames: false,
-    hideCardNumbers: false,
+    hideFileNames: true,
+    hideCardNumbers: true,
     disableImageHoverZoom: false,
     lightboxSpeed: 'normal',
     /* effects */
@@ -72,7 +72,7 @@
     focusOutlines: false,
     /* data */
     rememberLastPage: false,
-    autoSaveOnChange: false,
+    autoSaveOnChange: true,
     confirmBeforeReset: true,
     showDebugInfo: false,
     /* internal (not shown in UI) */
