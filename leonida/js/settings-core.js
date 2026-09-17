@@ -48,8 +48,8 @@
     autoplayTrailers: true,
     muteTrailers: false,
     loopTrailer: false,
-    hideFileNames: false,
-    hideCardNumbers: false,
+    hideFileNames: true,
+    hideCardNumbers: true,
     disableImageHoverZoom: false,
     lightboxSpeed: 'normal',
     /* effects */
