@@ -23,14 +23,14 @@
     /* countdown */
     timezone: 'auto',
     /* theme */
-    theme: 'sunset',
-    customA: '#ffd580',
-    customB: '#ffb347',
-    customC: '#ff8c69',
-    customD: '#e8507a',
-    customE: '#c94b8c',
+    theme: 'sakura',
+    customA: '#fff0f6',
+    customB: '#ffd6e8',
+    customC: '#ffb3d1',
+    customD: '#f875aa',
+    customE: '#d6336c',
     /* appearance */
-    bgDarken: 52,
+    bgDarken: 0,
     hideBackgroundImage: false,
     gridDensity: 'comfortable',
     cardRadius: 'rounded',
