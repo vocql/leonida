@@ -46,7 +46,7 @@
     defaultLandingPage: 'home',
     /* media */
     autoplayTrailers: true,
-    muteTrailers: false,
+    muteTrailers: true,
     loopTrailer: false,
     hideFileNames: true,
     hideCardNumbers: true,
