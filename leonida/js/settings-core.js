@@ -68,7 +68,7 @@
     highContrastText: false,
     largerClickTargets: false,
     underlineLinks: false,
-    disableBlur: false,
+    disableBlur: true,
     focusOutlines: false,
     /* data */
     rememberLastPage: false,
