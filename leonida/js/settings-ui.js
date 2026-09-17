@@ -81,9 +81,8 @@
           ['Pacific/Auckland', 'New Zealand']
         ] }
     ]},
+    { id: 'theme', label: 'Theme', custom: true },
     { id: 'appearance', label: 'Appearance', fields: [
-      { key: 'theme', type: 'select', label: 'Theme', sub: 'Accent color across the site',
-        options: [['sunset', 'Sunset'], ['vice', 'Vice Neon'], ['mono', 'Blackout Mono']] },
       { key: 'bgDarken', type: 'range', label: 'Background Dim', sub: 'How dark the backdrop looks', min: 0, max: 90 },
       { key: 'hideBackgroundImage', type: 'toggle', label: 'Hide Background Image', sub: 'Plain dark background instead' },
       { key: 'gridDensity', type: 'select', label: 'Grid Density', sub: 'Card size in galleries',
@@ -114,6 +113,18 @@
       { key: 'disableImageHoverZoom', type: 'toggle', label: 'Disable Image Zoom', sub: 'No zoom on hover' },
       { key: 'lightboxSpeed', type: 'select', label: 'Lightbox Speed', sub: 'Image transition speed',
         options: [['slow', 'Slow'], ['normal', 'Normal'], ['fast', 'Fast']] }
+    ]},
+    { id: 'effects', label: 'Effects', fields: [
+      { key: 'cursorGlow', type: 'toggle', label: 'Cursor Glow Trail', sub: 'A soft glow follows your cursor' },
+      { key: 'ambientPulse', type: 'toggle', label: 'Ambient Radio Pulse', sub: 'Background pulses gently while the radio plays' },
+      { key: 'scanlineOverlay', type: 'toggle', label: 'Scanline Overlay', sub: 'Retro CRT scanline effect' },
+      { key: 'pageFadeIn', type: 'toggle', label: 'Page Fade-in', sub: 'Smooth fade when a page loads' }
+    ]},
+    { id: 'sound', label: 'Sound', fields: [
+      { key: 'uiClickSounds', type: 'toggle', label: 'UI Click Sounds', sub: 'Soft blip on buttons & toggles' },
+      { key: 'uiHoverSounds', type: 'toggle', label: 'UI Hover Sounds', sub: 'Faint tick when hovering cards' },
+      { key: 'uiSoundVolume', type: 'range', label: 'UI Sound Volume', sub: 'Volume of interface sound effects', min: 0, max: 100 },
+      { key: 'milestoneAlerts', type: 'toggle', label: 'Countdown Milestone Alerts', sub: 'Browser notification at key countdown milestones' }
     ]},
     { id: 'accessibility', label: 'Accessibility', fields: [
       { key: 'reduceMotion', type: 'toggle', label: 'Reduce Motion', sub: 'Turns off most animations' },
@@ -165,6 +176,55 @@
     return btn;
   }
 
+  function syncCustomSelect(sel) {
+    var wrap = sel.closest('.ls-cs'); if (!wrap) return;
+    var valueSpan = wrap.querySelector('.ls-cs-value');
+    var opt = sel.options[sel.selectedIndex];
+    if (valueSpan) valueSpan.textContent = opt ? opt.textContent : '';
+    wrap.querySelectorAll('.ls-cs-option').forEach(function (o) { o.classList.toggle('active', o.dataset.value === sel.value); });
+  }
+
+  function buildCustomSelect(sel, options) {
+    var wrap = el('div', 'ls-cs');
+    wrap.appendChild(sel);
+
+    var trigger = el('button', 'ls-cs-trigger');
+    trigger.type = 'button';
+    trigger.appendChild(el('span', 'ls-cs-value'));
+    trigger.appendChild(el('span', 'ls-cs-arrow', '&#9662;'));
+    wrap.appendChild(trigger);
+
+    var menu = el('div', 'ls-cs-menu');
+    options.forEach(function (o) {
+      var opt = el('button', 'ls-cs-option', o[1]);
+      opt.type = 'button'; opt.dataset.value = o[0];
+      menu.appendChild(opt);
+    });
+    wrap.appendChild(menu);
+
+    syncCustomSelect(sel);
+
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = wrap.classList.contains('open');
+      document.querySelectorAll('.ls-cs.open').forEach(function (w) { w.classList.remove('open', 'open-up'); });
+      if (isOpen) return;
+      wrap.classList.add('open');
+      var rect = wrap.getBoundingClientRect();
+      if (window.innerHeight - rect.bottom < 220) wrap.classList.add('open-up');
+    });
+    menu.addEventListener('click', function (e) {
+      var opt = e.target.closest('.ls-cs-option'); if (!opt) return;
+      sel.value = opt.dataset.value;
+      syncCustomSelect(sel);
+      wrap.classList.remove('open', 'open-up');
+      sel.dispatchEvent(new Event('input', { bubbles: true }));
+      sel.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+
+    return wrap;
+  }
+
   function fieldRow(f, value) {
     var row = el('div', 'ls-row');
     var left = el('div', '', '<div class="ls-row-label">' + f.label + '</div><div class="ls-row-sub">' + f.sub + '</div>');
@@ -178,7 +238,7 @@
       row.appendChild(wrap);
     } else if (f.type === 'select') {
       var sel = document.createElement('select');
-      sel.className = 'ls-select'; sel.dataset.key = f.key;
+      sel.className = 'ls-select-native'; sel.dataset.key = f.key;
       if (f.instant) sel.dataset.instant = '1';
       f.options.forEach(function (o) {
         var opt = document.createElement('option');
@@ -186,7 +246,7 @@
         if (o[0] === value) opt.selected = true;
         sel.appendChild(opt);
       });
-      row.appendChild(sel);
+      row.appendChild(buildCustomSelect(sel, f.options));
     } else if (f.type === 'range') {
       var rng = document.createElement('input');
       rng.type = 'range'; rng.className = 'ls-range'; rng.dataset.key = f.key;
@@ -198,6 +258,82 @@
       row.appendChild(abtn);
     }
     return row;
+  }
+
+  var THEME_PRESETS = [
+    ['sunset', 'Sunset', ['#ffd580', '#ffb347', '#ff8c69', '#e8507a', '#c94b8c']],
+    ['vice', 'Vice Neon', ['#8ff4ff', '#4dd8ff', '#7fe8ff', '#ff5fa8', '#c94bff']],
+    ['mono', 'Blackout Mono', ['#dcdcdc', '#b8b8b8', '#9a9a9a', '#7d7d7d', '#5e5e5e']],
+    ['emerald', 'Emerald Heist', ['#7cffcb', '#34e5b0', '#00c9a7', '#0aa398', '#067a6f']],
+    ['bloodorange', 'Blood Orange', ['#ffd166', '#ff9f1c', '#ff6b35', '#e63946', '#9d0208']],
+    ['grape', 'Grape Soda', ['#e0aaff', '#c77dff', '#9d4edd', '#7b2cbf', '#5a189a']],
+    ['arctic', 'Arctic', ['#e0fbfc', '#c2dfe3', '#9db4c0', '#5c6b73', '#253237']],
+    ['goldrush', 'Gold Rush', ['#fff3b0', '#ffd60a', '#ffc300', '#ff9500', '#ff5400']]
+  ];
+
+  function buildThemePane() {
+    var wrap = el('div', '');
+    var grid = el('div', 'ls-theme-grid');
+
+    THEME_PRESETS.forEach(function (p) {
+      var swatch = el('button', 'ls-swatch');
+      swatch.type = 'button'; swatch.dataset.theme = p[0];
+      swatch.style.background = 'linear-gradient(90deg,' + p[2].join(',') + ')';
+      swatch.appendChild(el('span', 'ls-swatch-label', p[1]));
+      grid.appendChild(swatch);
+    });
+
+    var current = LS.getAll();
+    var customSwatch = el('button', 'ls-swatch ls-swatch-custom');
+    customSwatch.type = 'button'; customSwatch.dataset.theme = 'custom';
+    customSwatch.appendChild(el('span', 'ls-swatch-label', 'Custom'));
+    grid.appendChild(customSwatch);
+    wrap.appendChild(grid);
+
+    function paintCustomSwatch() {
+      var d = LS.getAll();
+      customSwatch.style.background = 'linear-gradient(90deg,' + [d.customA, d.customB, d.customC, d.customD, d.customE].join(',') + ')';
+    }
+    paintCustomSwatch();
+
+    var customPanel = el('div', 'ls-custom-colors');
+    [['customA', '1'], ['customB', '2'], ['customC', '3'], ['customD', '4'], ['customE', '5']].forEach(function (c) {
+      var item = el('div', 'ls-color-item');
+      var input = document.createElement('input');
+      input.type = 'color'; input.className = 'ls-color-input'; input.dataset.customKey = c[0];
+      input.value = current[c[0]];
+      item.appendChild(input);
+      item.appendChild(el('span', 'ls-color-num', c[1]));
+      customPanel.appendChild(item);
+    });
+    wrap.appendChild(customPanel);
+    wrap.appendChild(el('div', 'ls-tz-note', 'Pick a preset above, or choose Custom and set your own 5 colors. Saves instantly.'));
+
+    function refresh() {
+      var theme = LS.get('theme');
+      grid.querySelectorAll('.ls-swatch').forEach(function (s) { s.classList.toggle('active', s.dataset.theme === theme); });
+      customPanel.classList.toggle('show', theme === 'custom');
+    }
+    refresh();
+
+    grid.addEventListener('click', function (e) {
+      var s = e.target.closest('.ls-swatch'); if (!s) return;
+      var draft = LS.getAll();
+      draft.theme = s.dataset.theme;
+      LS.save(draft); LS.apply(draft);
+      refresh();
+    });
+    customPanel.addEventListener('input', function (e) {
+      var input = e.target.closest('.ls-color-input'); if (!input) return;
+      var draft = LS.getAll();
+      draft[input.dataset.customKey] = input.value;
+      draft.theme = 'custom';
+      LS.save(draft); LS.apply(draft);
+      paintCustomSwatch();
+      refresh();
+    });
+
+    return wrap;
   }
 
   function buildRadioPane() {
@@ -307,6 +443,8 @@
       if (tab.custom && tab.id === 'radio') {
         pane.appendChild(buildRadioPane());
         radioPaneEl = pane;
+      } else if (tab.custom && tab.id === 'theme') {
+        pane.appendChild(buildThemePane());
       } else {
         tab.fields.forEach(function (f) { pane.appendChild(fieldRow(f, current[f.key])); });
       }
@@ -358,6 +496,55 @@
     setTimeout(function () { toastEl.classList.remove('show'); }, 1400);
   }
 
+  function initUiSounds() {
+    var ctx = null;
+    function ensureCtx() {
+      if (!ctx) { try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} }
+      if (ctx && ctx.state === 'suspended') { try { ctx.resume(); } catch (e) {} }
+      return ctx;
+    }
+    function blip(freq, dur, gain) {
+      var c = ensureCtx(); if (!c) return;
+      var vol = (LS.get('uiSoundVolume') || 0) / 100 * gain;
+      if (vol <= 0) return;
+      var osc = c.createOscillator(); var g = c.createGain();
+      osc.type = 'sine'; osc.frequency.value = freq;
+      g.gain.value = vol;
+      g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + dur);
+      osc.connect(g); g.connect(c.destination);
+      osc.start(); osc.stop(c.currentTime + dur);
+    }
+    document.addEventListener('click', function (e) {
+      if (!LS.get('uiClickSounds')) return;
+      if (!e.target.closest('button, a, .ls-tab, .ls-cs-trigger, .ls-cs-option, .ls-swatch')) return;
+      blip(720, 0.08, 0.18);
+    });
+    var lastHover = 0;
+    document.addEventListener('mouseover', function (e) {
+      if (!LS.get('uiHoverSounds')) return;
+      if (!e.target.closest('.gallery-item, .place-card, .trailer-card, .pill, .ls-tab, .ls-track-item')) return;
+      var now = Date.now(); if (now - lastHover < 120) return; lastHover = now;
+      blip(1080, 0.05, 0.08);
+    });
+  }
+
+  var MILESTONE_DAYS = [180, 100, 90, 60, 30, 14, 7, 3, 1, 0];
+  function checkMilestones() {
+    if (!LS.get('milestoneAlerts')) return;
+    if (!('Notification' in window) || Notification.permission !== 'granted') return;
+    var targetMs = computeTargetMs(LS.get('timezone'));
+    var daysLeft = Math.ceil((targetMs - Date.now()) / 86400000);
+    if (MILESTONE_DAYS.indexOf(daysLeft) === -1) return;
+    var key = 'ls_milestone_notified_' + daysLeft;
+    if (localStorage.getItem(key)) return;
+    try {
+      new Notification('GTA VI Countdown', {
+        body: daysLeft === 0 ? 'It\u2019s release day!' : daysLeft + ' day' + (daysLeft === 1 ? '' : 's') + ' until GTA VI.'
+      });
+      localStorage.setItem(key, '1');
+    } catch (e) {}
+  }
+
   function initNavAutoHide() {
     var nav = document.getElementById('bottomNav');
     if (!nav) return;
@@ -405,7 +592,7 @@
   function rerenderPanel(refs) {
     var current = LS.getAll();
     refs.body.querySelectorAll('input[type="checkbox"][data-key]').forEach(function (i) { i.checked = !!current[i.dataset.key]; });
-    refs.body.querySelectorAll('select[data-key]').forEach(function (s) { s.value = current[s.dataset.key]; });
+    refs.body.querySelectorAll('select[data-key]').forEach(function (s) { s.value = current[s.dataset.key]; syncCustomSelect(s); });
     refs.body.querySelectorAll('input[type="range"][data-key]').forEach(function (r) { r.value = current[r.dataset.key]; });
     updateDebug(refs.debug);
     updateTzPreview();
@@ -423,6 +610,7 @@
     document.getElementById('lsClose').addEventListener('click', close);
     refs.overlay.addEventListener('click', close);
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && refs.panel.classList.contains('active')) close(); });
+    document.addEventListener('click', function () { document.querySelectorAll('.ls-cs.open').forEach(function (w) { w.classList.remove('open', 'open-up'); }); });
 
     refs.tabs.addEventListener('click', function (e) {
       var t = e.target.closest('.ls-tab'); if (!t) return;
@@ -434,6 +622,10 @@
       var draft = readForm(refs.body);
       LS.apply(draft);
       if (e.target && e.target.dataset.key === 'timezone') updateTzPreview();
+      if (e.target && e.target.dataset.key === 'milestoneAlerts' && e.target.checked &&
+          'Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission();
+      }
       var isInstant = e.target && e.target.dataset.instant === '1';
       if (LS.get('autoSaveOnChange') || isInstant) {
         LS.save(draft);
@@ -470,6 +662,9 @@
     });
 
     initNavAutoHide();
+    initUiSounds();
+    checkMilestones();
+    setInterval(checkMilestones, 60000);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
