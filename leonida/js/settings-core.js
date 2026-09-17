@@ -48,8 +48,8 @@
     autoplayTrailers: true,
     muteTrailers: false,
     loopTrailer: false,
-    hideFileNames: true,
-    hideCardNumbers: true,
+    hideFileNames: false,
+    hideCardNumbers: false,
     disableImageHoverZoom: false,
     lightboxSpeed: 'normal',
     /* effects */
@@ -167,6 +167,29 @@
   radioAudio.addEventListener('play', function () { document.documentElement.classList.add('ls-radio-playing'); });
   radioAudio.addEventListener('pause', function () { document.documentElement.classList.remove('ls-radio-playing'); });
   radioAudio.addEventListener('ended', function () { document.documentElement.classList.remove('ls-radio-playing'); });
+
+  /* ---------- live clock (top-right pill) ----------
+     Reads the same "timezone" setting as the countdown, so changing
+     it in Settings updates the clock too. Only runs if a page has
+     a #lsClockTime element. */
+  function formatClockTime(tz) {
+    var opts = { hour: '2-digit', minute: '2-digit', hour12: true };
+    if (tz && tz !== 'auto') opts.timeZone = tz;
+    try { return new Intl.DateTimeFormat('en-US', opts).format(new Date()); }
+    catch (e) { return new Intl.DateTimeFormat('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date()); }
+  }
+  function tickClock() {
+    var el = document.getElementById('lsClockTime');
+    if (!el) return;
+    el.textContent = formatClockTime(loadSettings().timezone);
+  }
+  function startClock() {
+    if (!document.getElementById('lsClockTime')) return;
+    tickClock();
+    setInterval(tickClock, 1000);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', startClock);
+  else startClock();
 
   /* ---------- cursor glow trail (Effects tab) ----------
      Always tracked; CSS hides it unless html.ls-cursorGlow is set. */
