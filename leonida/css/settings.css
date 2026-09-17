@@ -75,6 +75,7 @@ html[data-ls-theme] .bg-gradient {
     var(--sunset-e)
   );
 }
+
 /* ---------- BACKGROUND DIM / IMAGE ---------- */
 .bg-darken { background: rgba(4, 0, 26, var(--bgd-opacity, 0.52)) !important; }
 html.ls-hideBackgroundImage body { background-image: none !important; background-color: #04001a; }
@@ -150,9 +151,28 @@ html.ls-focusOutlines input:focus, html.ls-focusOutlines select:focus {
 }
 
 /* ==========================================================
-   SETTINGS BUTTON (animated pink/cyan gradient gear)
+   SETTINGS BUTTON (matches bottom-nav icon behavior —
+   gray at rest, white on hover, theme-color when active)
    ========================================================== */
-#ls-settings-btn svg { width: 17px; height: 17px; }
+#ls-settings-btn {
+  color: rgba(255,255,255,0.4);
+  transition: color 0.2s, background 0.2s, transform 0.2s;
+}
+#ls-settings-btn:hover {
+  color: #fff;
+}
+#ls-settings-btn.active {
+  color: var(--sunset-b);
+}
+#ls-settings-btn svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 
 /* ==========================================================
    SETTINGS PANEL
