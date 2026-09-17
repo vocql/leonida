@@ -12,6 +12,13 @@
 
   var LS = window.LeonidaSettings;
 
+  /* ---- MASTER ON/OFF SWITCH ----
+     Set to false to disable the entire Settings feature: hides the gear
+     button and panel on every page. Anyone's already-saved preferences
+     (theme, radio, etc.) from settings-core.js still apply as normal;
+     this just turns off the ability to open/change settings. */
+  var SETTINGS_ENABLED = true;
+
   /* ---- shared with index.html's countdown timer: keep this constant
      in sync with RELEASE_DATE_STR in index.html ---- */
   var RELEASE_DATE_STR = '2026-11-19T00:00:00';
@@ -599,6 +606,7 @@
   }
 
   function init() {
+    if (!SETTINGS_ENABLED) return;
     var btn = injectButton();
     if (!btn) return;
     var refs = buildPanel();
@@ -660,6 +668,17 @@
       refs.radioPane.innerHTML = '';
       refs.radioPane.appendChild(buildRadioPane());
     });
+
+    function openTab(tabId) {
+      open();
+      var t = refs.tabs.querySelector('.ls-tab[data-tab="' + tabId + '"]');
+      if (!t) return;
+      refs.tabs.querySelectorAll('.ls-tab').forEach(function (x) { x.classList.toggle('active', x === t); });
+      refs.body.querySelectorAll('.ls-pane').forEach(function (p) { p.classList.toggle('active', p.dataset.pane === tabId); });
+    }
+    /* lets any page link straight into a specific Settings tab,
+       e.g. window.LeonidaSettingsUI.openTab('countdown') */
+    window.LeonidaSettingsUI = { open: open, openTab: openTab };
 
     initNavAutoHide();
     initUiSounds();
