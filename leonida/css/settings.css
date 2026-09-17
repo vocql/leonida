@@ -34,7 +34,47 @@ html[data-ls-theme="goldrush"] {
   --sunset-a: #fff3b0; --sunset-b: #ffd60a; --sunset-c: #ffc300;
   --sunset-d: #ff9500; --sunset-e: #ff5400;
 }
+html[data-ls-theme="midnight"] {
+  --sunset-a: #a5b4fc; --sunset-b: #6366f1; --sunset-c: #4338ca;
+  --sunset-d: #312e81; --sunset-e: #1e1b4b;
+}
+html[data-ls-theme="coral"] {
+  --sunset-a: #ffe5ec; --sunset-b: #ffb3c6; --sunset-c: #ff758f;
+  --sunset-d: #ff4d6d; --sunset-e: #c9184a;
+}
+html[data-ls-theme="sakura"] {
+  --sunset-a: #fff0f6; --sunset-b: #ffd6e8; --sunset-c: #ffb3d1;
+  --sunset-d: #f875aa; --sunset-e: #d6336c;
+}
+html[data-ls-theme="toxic"] {
+  --sunset-a: #f4ffb0; --sunset-b: #d9ff4b; --sunset-c: #aeff00;
+  --sunset-d: #7cd600; --sunset-e: #3f8f00;
+}
+html[data-ls-theme="copper"] {
+  --sunset-a: #ffdab0; --sunset-b: #e8a25c; --sunset-c: #b5651d;
+  --sunset-d: #8a4a1c; --sunset-e: #4e2a10;
+}
+html[data-ls-theme="glacier"] {
+  --sunset-a: #f0fbff; --sunset-b: #c7f0ff; --sunset-c: #8fdcff;
+  --sunset-d: #4bb8e0; --sunset-e: #1f6f8b;
+}
+html[data-ls-theme="inferno"] {
+  --sunset-a: #ffe66d; --sunset-b: #ffa63d; --sunset-c: #ff5714;
+  --sunset-d: #d62828; --sunset-e: #6a040f;
+}
 
+/* --- shared gradient utility, works across every theme including vice --- */
+
+html[data-ls-theme] .bg-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--sunset-a),
+    var(--sunset-b),
+    var(--sunset-c),
+    var(--sunset-d),
+    var(--sunset-e)
+  );
+}
 /* ---------- BACKGROUND DIM / IMAGE ---------- */
 .bg-darken { background: rgba(4, 0, 26, var(--bgd-opacity, 0.52)) !important; }
 html.ls-hideBackgroundImage body { background-image: none !important; background-color: #04001a; }
