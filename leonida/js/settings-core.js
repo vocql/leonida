@@ -20,6 +20,7 @@
     radioStation: '',
     radioVolume: 25,
     radioPlaying: false,
+    radioPosition: 0,
     /* countdown */
     timezone: 'auto',
     /* theme */
@@ -107,7 +108,7 @@
   function apply(s) {
     var root = document.documentElement;
     Object.keys(s).forEach(function (k) {
-      if (k === 'lastPage' || k === '_savedAt' || k === 'radioStation' || k === 'radioVolume' || k === 'radioPlaying' || CUSTOM_COLOR_KEYS.indexOf(k) !== -1) return;
+      if (k === 'lastPage' || k === '_savedAt' || k === 'radioStation' || k === 'radioVolume' || k === 'radioPlaying' || k === 'radioPosition' || CUSTOM_COLOR_KEYS.indexOf(k) !== -1) return;
       var v = s[k];
       if (typeof v === 'boolean') root.classList.toggle('ls-' + k, v);
       else if (typeof v === 'string') root.setAttribute('data-ls-' + k, v);
@@ -142,20 +143,53 @@
     return RADIO_STATIONS[0] || null;
   }
   function radioApplyVolume(v) { radioAudio.volume = Math.max(0, Math.min(100, v)) / 100; }
+
+  /* Saves how far into the current track we are, so switching pages
+     (which tears down and recreates this whole Audio element) can
+     pick up where it left off instead of restarting at 0:00. Only
+     called for the station that's actually currently loaded. */
+  function radioSavePosition() {
+    current.radioPosition = radioAudio.currentTime || 0;
+    saveSettings(current);
+  }
+
   function radioPlay(id) {
     var st = stationById(id || current.radioStation);
     if (!st) return;
-    if (radioAudio.src.indexOf(st.url) === -1) radioAudio.src = st.url;
+    var isNewSrc = radioAudio.src.indexOf(st.url) === -1;
+    /* Only resume mid-track if this is the same station we last saved
+       a position for - picking a different track always starts at 0. */
+    var resumeTime = (st.id === current.radioStation) ? (current.radioPosition || 0) : 0;
+    if (isNewSrc) {
+      radioAudio.src = st.url;
+      if (resumeTime > 0) {
+        var onLoaded = function () {
+          radioAudio.removeEventListener('loadedmetadata', onLoaded);
+          try { radioAudio.currentTime = resumeTime; } catch (e) {}
+        };
+        radioAudio.addEventListener('loadedmetadata', onLoaded);
+      }
+    }
     radioApplyVolume(current.radioVolume);
     var p = radioAudio.play();
     if (p && p.catch) p.catch(function () { /* blocked until user interacts; retried below */ });
     current.radioStation = st.id;
     current.radioPlaying = true;
-    saveSettings(current);
+    if (!isNewSrc) {
+      /* Same track object already loaded (e.g. re-clicked play) -
+         nothing to seek, just persist the play flag/station. */
+      saveSettings(current);
+    } else if (resumeTime === 0) {
+      current.radioPosition = 0;
+      saveSettings(current);
+    } else {
+      saveSettings(current);
+    }
   }
   function radioPause() {
     radioAudio.pause();
     current.radioPlaying = false;
+    current.radioPosition = radioAudio.currentTime || 0;
     saveSettings(current);
   }
   function radioToggle() { if (radioAudio.paused) radioPlay(); else radioPause(); }
@@ -167,7 +201,32 @@
   radioApplyVolume(current.radioVolume);
   radioAudio.addEventListener('play', function () { document.documentElement.classList.add('ls-radio-playing'); });
   radioAudio.addEventListener('pause', function () { document.documentElement.classList.remove('ls-radio-playing'); });
-  radioAudio.addEventListener('ended', function () { document.documentElement.classList.remove('ls-radio-playing'); });
+  radioAudio.addEventListener('ended', function () {
+    document.documentElement.classList.remove('ls-radio-playing');
+    /* Track finished naturally - next load of this station should
+       start over, not "resume" at the very end. */
+    current.radioPosition = 0;
+    current.radioPlaying = false;
+    saveSettings(current);
+  });
+
+  /* Periodically persist playback position while a track is actually
+     playing, throttled so we're not hitting localStorage every frame.
+     This covers normal page navigation (clicking a link). beforeunload
+     below covers closing the tab/reload. */
+  var lastPositionSave = 0;
+  radioAudio.addEventListener('timeupdate', function () {
+    var now = Date.now();
+    if (now - lastPositionSave < 2000) return;
+    lastPositionSave = now;
+    radioSavePosition();
+  });
+  window.addEventListener('beforeunload', function () {
+    if (!radioAudio.paused) radioSavePosition();
+  });
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden' && !radioAudio.paused) radioSavePosition();
+  });
 
   /* ---------- live clock (top-right pill) ----------
      Reads the same "timezone" setting as the countdown, so changing
