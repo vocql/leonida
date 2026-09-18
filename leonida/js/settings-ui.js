@@ -364,7 +364,7 @@
     var list = el('div', 'ls-radio-tracklist');
     if (radio.stations.length === 0) {
       list.appendChild(el('div', 'ls-radio-empty',
-        'No tracks found in <b>leonida/music/</b> yet. Drop mp3s in there and they\u2019ll show up automatically \u2014 no editing required.'));
+        'No tracks found in <b>leonida/albums/</b> yet. Drop mp3s in there and they\u2019ll show up automatically \u2014 no editing required.'));
     } else {
       radio.stations.forEach(function (st) {
         var b = el('button', 'ls-track-item');
