@@ -237,11 +237,13 @@
     cursorGlowEl.style.transform = 'translate(' + e.clientX + 'px,' + e.clientY + 'px)';
   }, { passive: true });
 
-  /* ---------- auto-load tracks from leonida/music/ via GitHub ----------
+  /* ---------- auto-load tracks from leonida/albums/ via GitHub ----------
      Same repo the photo/character/place galleries already pull from.
-     leonida/music/tracks.js is only used as a fallback if the API call
-     fails (offline, rate-limited, etc.) or turns up nothing. */
-  var GH_USER = 'vocql', GH_REPO = 'leonidagta', GH_BRANCH = 'main', GH_PATH = 'leonida/music';
+     leonida/albums/tracks.js is only used as a fallback if the API call
+     fails (offline, rate-limited, etc.) or turns up nothing. The
+     manifest is also where per-track artist/genre credit lives, since
+     the GitHub file-listing API only gives back filenames. */
+  var GH_USER = 'vocql', GH_REPO = 'leonidagta', GH_BRANCH = 'main', GH_PATH = 'leonida/albums';
   var AUDIO_EXTS = ['.mp3', '.wav', '.m4a', '.ogg', '.flac', '.aac'];
   var RADIO_CACHE_KEY = 'leonida_radio_cache_v1';
 
@@ -253,6 +255,15 @@
     return raw.filter(function (t) { return t && t.file; }).map(function (t) {
       return { id: t.file, name: t.title || titleFromFilename(t.file), genre: t.artist || '', url: GH_PATH + '/' + t.file };
     });
+  }
+  /* When the GitHub listing succeeds we only get filenames back, so we
+     patch in artist/genre credit from the manifest (matched by
+     filename) whenever one is present, instead of leaving it blank. */
+  function manifestCreditsByFile() {
+    var raw = Array.isArray(window.LEONIDA_TRACKS) ? window.LEONIDA_TRACKS : [];
+    var map = {};
+    raw.forEach(function (t) { if (t && t.file) map[t.file] = t; });
+    return map;
   }
   function setStations(list) {
     RADIO_STATIONS.length = 0;
@@ -295,10 +306,19 @@
       .then(function (res) { if (!res.ok) throw new Error('status ' + res.status); return res.json(); })
       .then(function (files) {
         if (!Array.isArray(files)) throw new Error('bad response');
+        var credits = manifestCreditsByFile();
         var tracks = files
           .filter(function (f) { return f.type === 'file' && AUDIO_EXTS.some(function (ext) { return f.name.toLowerCase().indexOf(ext) === f.name.toLowerCase().length - ext.length; }); })
           .sort(function (a, b) { return a.name.localeCompare(b.name); })
-          .map(function (f) { return { id: f.name, name: titleFromFilename(f.name), genre: '', url: GH_PATH + '/' + f.name }; });
+          .map(function (f) {
+            var credit = credits[f.name];
+            return {
+              id: f.name,
+              name: (credit && credit.title) || titleFromFilename(f.name),
+              genre: (credit && credit.artist) || '',
+              url: GH_PATH + '/' + f.name
+            };
+          });
         if (tracks.length) {
           setStations(tracks);
           try { localStorage.setItem(RADIO_CACHE_KEY, JSON.stringify({ stations: tracks, savedAt: Date.now() })); } catch (e) {}
