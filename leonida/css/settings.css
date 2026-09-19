@@ -342,9 +342,18 @@ html.ls-focusOutlines input:focus, html.ls-focusOutlines select:focus {
 .ls-radio-eq.playing span:nth-child(2) { animation-delay: 0.2s; }
 .ls-radio-eq.playing span:nth-child(3) { animation-delay: 0.4s; }
 @keyframes lsEq { 0%, 100% { height: 6px; } 50% { height: 18px; } }
-.ls-radio-nowtext { flex: 1; min-width: 0; }
-.ls-radio-station { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 16px; text-transform: uppercase; letter-spacing: .04em; color: #fff; }
-.ls-radio-genre { font-size: 10px; font-weight: 600; letter-spacing: .08em; color: rgba(255,255,255,0.35); text-transform: uppercase; margin-top: 2px; }
+
+/* track name + artist. Capped so a long title can't squeeze the
+   progress bar out; it truncates with an ellipsis instead. */
+.ls-radio-nowtext { flex: 0 1 auto; min-width: 0; max-width: 46%; }
+.ls-radio-station {
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 16px; text-transform: uppercase;
+  letter-spacing: .04em; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ls-radio-genre {
+  font-size: 10px; font-weight: 600; letter-spacing: .08em; color: rgba(255,255,255,0.35); text-transform: uppercase; margin-top: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 .ls-radio-playbtn {
   width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0; cursor: pointer;
   background: linear-gradient(90deg, var(--sunset-b), var(--sunset-d)); border: none; color: #04001a;
@@ -352,6 +361,51 @@ html.ls-focusOutlines input:focus, html.ls-focusOutlines select:focus {
   transition: transform .15s;
 }
 .ls-radio-playbtn:hover { transform: scale(1.08); }
+
+/* ── RADIO PROGRESS BAR + TIME ──────────────────────
+   Everything here reads the theme's --sunset-* variables, so the bar
+   recolors itself with any preset or custom theme - same gradient as
+   the play button, tabs and Save button. */
+.ls-radio-progress { flex: 1 1 0; min-width: 90px; display: flex; align-items: center; gap: 10px; }
+.ls-radio-bar {
+  position: relative; flex: 1; min-width: 0; height: 20px; cursor: pointer;
+  touch-action: none; user-select: none; -webkit-user-select: none; outline: none;
+}
+.ls-radio-bar-track {
+  position: absolute; left: 0; right: 0; top: 50%; height: 4px; margin-top: -2px;
+  border-radius: 999px; overflow: hidden;
+  background: color-mix(in srgb, var(--sunset-b, #ffb347) 16%, rgba(255,255,255,0.08));
+  transition: height .15s, margin-top .15s;
+}
+.ls-radio-bar:hover .ls-radio-bar-track,
+.ls-radio-bar.dragging .ls-radio-bar-track,
+.ls-radio-bar:focus-visible .ls-radio-bar-track { height: 6px; margin-top: -3px; }
+.ls-radio-bar-fill {
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, var(--sunset-b, #ffb347), var(--sunset-d, #e8507a));
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path .25s linear;
+}
+.ls-radio-bar-knob {
+  position: absolute; top: 50%; left: 0; width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px;
+  border-radius: 50%; background: #fff; pointer-events: none;
+  box-shadow: 0 0 10px color-mix(in srgb, var(--sunset-b, #ffb347) 85%, transparent);
+  opacity: 0; transition: opacity .15s, left .25s linear;
+}
+.ls-radio-bar:hover .ls-radio-bar-knob,
+.ls-radio-bar.dragging .ls-radio-bar-knob,
+.ls-radio-bar:focus-visible .ls-radio-bar-knob { opacity: 1; }
+/* while dragging, follow the cursor instantly instead of easing */
+.ls-radio-bar.dragging .ls-radio-bar-fill { transition: none; }
+.ls-radio-bar.dragging .ls-radio-bar-knob { transition: opacity .15s; }
+.ls-radio-time {
+  flex-shrink: 0; display: flex; align-items: baseline; gap: 4px; white-space: nowrap;
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 12.5px; letter-spacing: .04em;
+  font-variant-numeric: tabular-nums;
+}
+.ls-radio-cur { color: rgba(255,255,255,0.9); }
+.ls-radio-sep, .ls-radio-dur { color: rgba(255,255,255,0.32); }
+
 .ls-radio-tracklist { max-height: 190px; overflow-y: auto; padding: 10px 2px 4px; scrollbar-width: thin; scrollbar-color: rgba(255,140,80,0.25) transparent; }
 .ls-radio-tracklist::-webkit-scrollbar { width: 5px; }
 .ls-radio-tracklist::-webkit-scrollbar-thumb { background: rgba(255,140,80,0.25); border-radius: 4px; }
@@ -379,6 +433,13 @@ html.ls-focusOutlines input:focus, html.ls-focusOutlines select:focus {
   .ls-side-title { font-size: 17px; padding: 2px 8px 14px; }
   .ls-tab { font-size: 9.5px; padding: 9px 8px; }
   .ls-cs-trigger { font-size: 10.5px; min-width: 108px; }
+}
+
+/* narrow screens: keep just the elapsed time so the bar has room */
+@media (max-width: 520px) {
+  .ls-radio-sep, .ls-radio-dur { display: none; }
+  .ls-radio-progress { gap: 8px; }
+  .ls-radio-now { gap: 10px; }
 }
 
 @media (max-width: 420px) {
