@@ -346,7 +346,28 @@
     return wrap;
   }
 
+  /* ---- radio pane ---- */
+
+  /* m:ss (or h:mm:ss for very long tracks) */
+  function fmtTime(sec) {
+    if (!isFinite(sec) || sec < 0) return '0:00';
+    sec = Math.floor(sec);
+    var h = Math.floor(sec / 3600);
+    var m = Math.floor((sec % 3600) / 60);
+    var s = sec % 60;
+    var ss = (s < 10 ? '0' : '') + s;
+    if (h > 0) return h + ':' + (m < 10 ? '0' : '') + m + ':' + ss;
+    return m + ':' + ss;
+  }
+
+  /* The radio pane gets rebuilt whenever the track list finishes
+     loading. This removes the previous build's audio listeners first,
+     so they don't pile up on the (page-long) Audio element. */
+  var radioCleanup = null;
+
   function buildRadioPane() {
+    if (radioCleanup) { radioCleanup(); radioCleanup = null; }
+
     var radio = LS.radio;
     var wrap = el('div', '');
 
@@ -356,9 +377,30 @@
     var nameEl = el('div', 'ls-radio-station');
     var genreEl = el('div', 'ls-radio-genre');
     text.appendChild(nameEl); text.appendChild(genreEl);
+
+    /* progress bar + time, sits between the track name and play button.
+       The bar colors come from the theme's --sunset-* variables in CSS,
+       so they follow whichever theme (or custom colors) is picked. */
+    var progress = el('div', 'ls-radio-progress');
+    var bar = el('div', 'ls-radio-bar');
+    bar.tabIndex = 0;
+    bar.setAttribute('role', 'slider');
+    bar.setAttribute('aria-label', 'Track position');
+    var track = el('div', 'ls-radio-bar-track');
+    var fill = el('div', 'ls-radio-bar-fill');
+    track.appendChild(fill);
+    var knob = el('div', 'ls-radio-bar-knob');
+    bar.appendChild(track); bar.appendChild(knob);
+    var timeEl = el('div', 'ls-radio-time');
+    var curEl = el('span', 'ls-radio-cur', '0:00');
+    var sepEl = el('span', 'ls-radio-sep', '/');
+    var durEl = el('span', 'ls-radio-dur', '--:--');
+    timeEl.appendChild(curEl); timeEl.appendChild(sepEl); timeEl.appendChild(durEl);
+    progress.appendChild(bar); progress.appendChild(timeEl);
+
     var playBtn = el('button', 'ls-radio-playbtn', '&#9658;');
     playBtn.type = 'button';
-    now.appendChild(eq); now.appendChild(text); now.appendChild(playBtn);
+    now.appendChild(eq); now.appendChild(text); now.appendChild(progress); now.appendChild(playBtn);
     wrap.appendChild(now);
 
     var list = el('div', 'ls-radio-tracklist');
@@ -389,7 +431,67 @@
     volRow.appendChild(volLeft); volRow.appendChild(volInput);
     wrap.appendChild(volRow);
 
+    /* ---- progress bar logic ---- */
+    var dragging = false, dragFrac = 0;
+
+    function updateProgress() {
+      var dur = radio.getDuration();
+      var cur = radio.audio.ended ? 0 : radio.getTime();
+      var frac = dur ? Math.max(0, Math.min(1, cur / dur)) : 0;
+      if (dragging) { frac = dragFrac; cur = dragFrac * dur; }
+      var pct = frac * 100;
+      fill.style.clipPath = 'inset(0 ' + (100 - pct).toFixed(2) + '% 0 0)';
+      knob.style.left = pct.toFixed(2) + '%';
+      curEl.textContent = fmtTime(cur);
+      durEl.textContent = dur ? fmtTime(dur) : '--:--';
+      bar.setAttribute('aria-valuemin', '0');
+      bar.setAttribute('aria-valuemax', String(Math.round(dur)));
+      bar.setAttribute('aria-valuenow', String(Math.round(cur)));
+      bar.setAttribute('aria-valuetext', fmtTime(cur) + (dur ? ' of ' + fmtTime(dur) : ''));
+    }
+
+    function fracFromPointer(e) {
+      var r = bar.getBoundingClientRect();
+      if (!r.width) return 0;
+      return Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
+    }
+    bar.addEventListener('pointerdown', function (e) {
+      if (!radio.getDuration()) return; /* nothing loaded yet to seek in */
+      dragging = true;
+      bar.classList.add('dragging');
+      try { bar.setPointerCapture(e.pointerId); } catch (err) {}
+      dragFrac = fracFromPointer(e);
+      updateProgress();
+      e.preventDefault();
+    });
+    bar.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      dragFrac = fracFromPointer(e);
+      updateProgress();
+    });
+    bar.addEventListener('pointerup', function () {
+      if (!dragging) return;
+      dragging = false;
+      bar.classList.remove('dragging');
+      radio.seek(dragFrac * radio.getDuration());
+      updateProgress();
+    });
+    bar.addEventListener('pointercancel', function () {
+      dragging = false;
+      bar.classList.remove('dragging');
+      updateProgress();
+    });
+    bar.addEventListener('keydown', function (e) {
+      if (!radio.getDuration()) return;
+      if (e.key === 'ArrowRight') radio.seek(radio.getTime() + 5);
+      else if (e.key === 'ArrowLeft') radio.seek(radio.getTime() - 5);
+      else return;
+      e.preventDefault();
+      updateProgress();
+    });
+
     function refresh() {
+      updateProgress();
       if (radio.stations.length === 0) { nameEl.textContent = 'No tracks'; genreEl.textContent = ''; return; }
       var st = radio.stations.filter(function (s) { return s.id === radio.getStation(); })[0] || radio.stations[0];
       nameEl.textContent = st.name;
@@ -412,9 +514,15 @@
     });
     playBtn.addEventListener('click', function () { radio.toggle(); refresh(); });
     volInput.addEventListener('input', function () { radio.setVolume(parseInt(volInput.value, 10)); });
-    radio.audio.addEventListener('play', refresh);
-    radio.audio.addEventListener('pause', refresh);
-    radio.audio.addEventListener('error', refresh);
+
+    var stateEvents = ['play', 'pause', 'error', 'ended'];
+    var progressEvents = ['timeupdate', 'loadedmetadata', 'durationchange', 'seeked', 'emptied', 'loadstart'];
+    stateEvents.forEach(function (n) { radio.audio.addEventListener(n, refresh); });
+    progressEvents.forEach(function (n) { radio.audio.addEventListener(n, updateProgress); });
+    radioCleanup = function () {
+      stateEvents.forEach(function (n) { radio.audio.removeEventListener(n, refresh); });
+      progressEvents.forEach(function (n) { radio.audio.removeEventListener(n, updateProgress); });
+    };
 
     refresh();
     return wrap;
@@ -614,7 +722,13 @@
     if (!btn) return;
     var refs = buildPanel();
 
-    function open() { rerenderPanel(refs); updateDebug(refs.debug); refs.overlay.classList.add('active'); refs.panel.classList.add('active'); btn.classList.add('active'); }
+    function open() {
+      rerenderPanel(refs); updateDebug(refs.debug);
+      refs.overlay.classList.add('active'); refs.panel.classList.add('active'); btn.classList.add('active');
+      /* load the selected track's length (no playback) so the progress
+         bar can show "0:00 / 3:12" even before anything is played */
+      LS.radio.prime();
+    }
     function close() { refs.overlay.classList.remove('active'); refs.panel.classList.remove('active'); btn.classList.remove('active'); LS.apply(LS.getAll()); }
 
     btn.addEventListener('click', open);
@@ -670,6 +784,7 @@
       if (!refs.radioPane) return;
       refs.radioPane.innerHTML = '';
       refs.radioPane.appendChild(buildRadioPane());
+      if (refs.panel.classList.contains('active')) LS.radio.prime();
     });
 
     function openTab(tabId) {
