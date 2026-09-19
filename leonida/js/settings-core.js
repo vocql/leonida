@@ -135,7 +135,11 @@
 
   /* ---------- radio engine ---------- */
   var radioAudio = new Audio();
-  radioAudio.preload = 'none';
+  /* 'metadata' (not 'none') so the track length is known as soon as a
+     src is set - the Radio tab's progress bar needs it. Nothing is
+     loaded until a src is actually assigned, so pages that never touch
+     the radio still cost nothing. */
+  radioAudio.preload = 'metadata';
   radioAudio.crossOrigin = 'anonymous';
 
   function stationById(id) {
@@ -151,6 +155,47 @@
   function radioSavePosition() {
     current.radioPosition = radioAudio.currentTime || 0;
     saveSettings(current);
+  }
+
+  /* ---- time helpers (used by the Radio tab's progress bar) ---- */
+  function radioGetTime() {
+    var t = radioAudio.currentTime;
+    return (isFinite(t) && t > 0) ? t : 0;
+  }
+  /* Returns 0 until the browser has read the track's metadata
+     (duration is NaN before that, and Infinity for live streams). */
+  function radioGetDuration() {
+    var d = radioAudio.duration;
+    return (isFinite(d) && d > 0) ? d : 0;
+  }
+  function radioSeek(seconds) {
+    var d = radioGetDuration();
+    if (!d) return;
+    try { radioAudio.currentTime = Math.max(0, Math.min(d, seconds)); } catch (e) {}
+    radioSavePosition();
+  }
+
+  /* Loads the current (or first) track's metadata WITHOUT playing it, and
+     parks it at the saved position, so the progress bar can show
+     "1:03 / 3:12" while paused. Safe to call repeatedly. The Settings
+     panel calls this when it opens, so pages where nobody opens
+     Settings never fetch anything extra. */
+  function radioPrime() {
+    if (!RADIO_STATIONS.length) return false;
+    if (!radioAudio.paused) return true; /* already playing something */
+    var st = stationById(current.radioStation);
+    if (!st) return false;
+    if (radioAudio.src && radioAudio.src.indexOf(st.url) !== -1) return true; /* already loaded */
+    var resumeTime = (st.id === current.radioStation) ? (current.radioPosition || 0) : 0;
+    radioAudio.src = st.url;
+    if (resumeTime > 0) {
+      var onLoaded = function () {
+        radioAudio.removeEventListener('loadedmetadata', onLoaded);
+        try { radioAudio.currentTime = resumeTime; } catch (e) {}
+      };
+      radioAudio.addEventListener('loadedmetadata', onLoaded);
+    }
+    return true;
   }
 
   function radioPlay(id) {
@@ -409,7 +454,12 @@
       toggle: radioToggle,
       setVolume: radioSetVolume,
       isPlaying: function () { return !radioAudio.paused; },
-      getStation: function () { return current.radioStation; }
+      getStation: function () { return current.radioStation; },
+      /* progress bar support */
+      getTime: radioGetTime,
+      getDuration: radioGetDuration,
+      seek: radioSeek,
+      prime: radioPrime
     }
   };
 })();
