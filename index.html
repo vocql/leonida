@@ -191,6 +191,18 @@ body.on-home .home-meta { opacity: 1; pointer-events: all; }
 }
 .bottom-nav-btn:hover .bottom-nav-tip { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+/* ── DOWNLOAD BUTTON (in navbar) ──────────────────── */
+.bottom-nav-btn.nav-dl {
+  color: var(--sunset-b);
+  background: rgba(255,140,80,0.1);
+  box-shadow: 0 0 14px rgba(255,179,71,0.15);
+}
+.bottom-nav-btn.nav-dl:hover {
+  color: #fff;
+  background: rgba(255,140,80,0.25);
+  box-shadow: 0 0 20px rgba(255,179,71,0.35);
+}
+
 /* ── SHARED TEXT SHIMMER ──────────────────────────── */
 @keyframes textShimmer { 0%{background-position:0%} 100%{background-position:300%} }
 
@@ -769,6 +781,8 @@ body.on-home .home-meta { opacity: 1; pointer-events: all; }
   <a class="bottom-nav-btn" href="screenshots" aria-label="Screenshots"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path stroke-linecap="round" stroke-linejoin="round" d="m4 17 5-5 3.5 3.5L17 11l3 3"/></svg><span class="bottom-nav-tip">Screenshots</span></a>
   <div class="bottom-nav-sep"></div>
   <a class="bottom-nav-btn" href="trailers" aria-label="Trailers"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M10 9.5v5l4.5-2.5Z"/></svg><span class="bottom-nav-tip">Trailers</span></a>
+  <div class="bottom-nav-sep"></div>
+  <a class="bottom-nav-btn nav-dl" href="https://github.com/vocql/leonida/releases/download/leonida/Welcome-To-Leonida-1.0.0.exe" download aria-label="Download"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg><span class="bottom-nav-tip">Download</span></a>
   </nav>
 
 <div id="page-home" class="page active">
