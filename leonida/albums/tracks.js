@@ -31,4 +31,6 @@ window.LEONIDA_TRACKS = [
   { file: 'rhyno.mp3', title: 'RHYNO', artist: 'Travis Scott' },
   { file: 'macacoa-2000.mp3', title: 'Macacoa 2000', artist: 'Rauw Alejandro' },
   { file: 'bright-lights-big-city.mp3', title: 'Bright Lights, Big City', artist: 'Keith Richards' },
+  { file: 'suzuki.mp3', title: 'Suzuki', artist: 'Fuerza Regida' },
+
 ];
