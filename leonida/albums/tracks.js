@@ -32,5 +32,5 @@ window.LEONIDA_TRACKS = [
   { file: 'macacoa-2000.mp3', title: 'Macacoa 2000', artist: 'Rauw Alejandro' },
   { file: 'bright-lights-big-city.mp3', title: 'Bright Lights, Big City', artist: 'Keith Richards' },
   { file: 'suzuki.mp3', title: 'Suzuki', artist: 'Fuerza Regida' },
-
+  { file: 'chart.mp3', title: 'Dont Chart', artist: 'Cardi B' },
 ];
